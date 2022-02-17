@@ -44,11 +44,10 @@ Flutter のフレームワーク側でリビルドを必要最小限に抑えや
 **BAD**
 
 ```dart
-class _HogeScreen extends ConsumerWidget {
+class MyScreen extends ConsumerWidget {
   // ...
 
-  final AutoDisposeStateNotifierProvider<WorkspaceViewModel, WorkspaceState>
-      viewModel;
+  final AutoDisposeStateNotifierProvider<MyViewModel, MyState> viewModel;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -58,11 +57,10 @@ class _HogeScreen extends ConsumerWidget {
 **GOOD**
 
 ```dart
-class _HogeScreen extends ConsumerWidget {
+class MyScreen extends ConsumerWidget {
   // ...
 
-  final AutoDisposeStateNotifierProvider<WorkspaceViewModel, WorkspaceState>
-      viewModel;
+  final AutoDisposeStateNotifierProvider<MyViewModel, MyState> viewModel;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -76,13 +74,13 @@ class _HogeScreen extends ConsumerWidget {
 **BAD**
 
 ```dart
-class HogeButton extends StatelessWidget {
+class MyButton extends StatelessWidget {
   // ...
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16), // BAD
+    return Padding( // BAD
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ElevatedButton(
         onPressed: onPressed,
         child: child,
@@ -95,7 +93,7 @@ class HogeButton extends StatelessWidget {
 **GOOD**
 
 ```dart
-class HogeButton extends StatelessWidget {
+class MyButton extends StatelessWidget {
   // ...
 
   @override
@@ -107,16 +105,18 @@ class HogeButton extends StatelessWidget {
   }
 }
 
-  // コンポーネントの利用箇所
-  Center(
-    child = Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16), // GOOD
-      child: HogeButton(
-        onPressed: () => Navigator.pop(context),
-        child: const Text('pop'),
-      ),
+// ...
+
+// コンポーネントの利用箇所
+Center(
+  child = Padding( // GOOD
+    padding: const EdgeInsets.symmetric(horizontal: 16),
+    child: MyButton(
+      onPressed: () => Navigator.pop(context),
+      child: const Text('pop'),
     ),
-  );
+  ),
+);
 ```
 
 ## スクロール可能なウィジェットが画面下側まで表示されている場合は、セーフエリア外までスクロール内容が表示されるようにし、スクロールの下部にセーフエリア外のサイズを余白としてとる
