@@ -21,7 +21,100 @@
 
 # UI の構築
 
-(TBD)
+## プライベートの切り出しはウィジェットとして切り出す
+
+Flutter のフレームワーク側でリビルドを必要最小限に抑えやすくなるため
+
+### 一時変数は、格納されるウィジェットの型を接尾語として優先的に利用する
+
+中身が想像しやすくするため
+
+### Screen で State データの一時変数を作成する際の名前は、 state とする
+
+型に名前を合わせて、中身を想像しやすくするため
+
+**BAD**
+
+```dart
+class _HogeScreen extends ConsumerWidget {
+  // ...
+
+  final AutoDisposeStateNotifierProvider<WorkspaceViewModel, WorkspaceState>
+      viewModel;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final viewModel = ref.watch(viewModel); // BAD
+```
+
+**GOOD**
+
+```dart
+class _HogeScreen extends ConsumerWidget {
+  // ...
+
+  final AutoDisposeStateNotifierProvider<WorkspaceViewModel, WorkspaceState>
+      viewModel;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(viewModel); // GOOD
+```
+
+コンポーネントには外側の余白を持たせない
+再利用性を高めるため
+
+**BAD**
+
+```dart
+class HogeButton extends StatelessWidget {
+  // ...
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16), // BAD
+      child: ElevatedButton(
+        onPressed: onPressed,
+        child: child,
+      ),
+    );
+  }
+}
+```
+
+**GOOD**
+
+```dart
+class HogeButton extends StatelessWidget {
+  // ...
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      child: child,
+    );
+  }
+}
+
+  // コンポーネントの利用箇所
+  Center(
+    child = Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16), // GOOD
+      child: HogeButton(
+        onPressed: () => Navigator.pop(context),
+        child: const Text('pop'),
+      ),
+    ),
+  );
+```
+
+## スクロール可能なウィジェットが画面下側まで表示されている場合は、セーフエリア外までスクロール内容が表示されるようにし、スクロールの下部にセーフエリア外のサイズを余白としてとる
+
+画面サイズ最大までスクロール表示が見えた方がユーザビリティが上がるため
+
+余白を取るのは、スクロールを最下部まで行った際に部品がセーフエリア外のホームバーなどと被ってタップできなくなるのを防ぐため
 
 # コンポーネント設計
 
