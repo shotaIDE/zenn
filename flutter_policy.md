@@ -61,7 +61,8 @@ class _HogeScreen extends ConsumerWidget {
     final state = ref.watch(viewModel); // GOOD
 ```
 
-コンポーネントには外側の余白を持たせない
+## コンポーネントには外側の余白を持たせない
+
 再利用性を高めるため
 
 **BAD**
