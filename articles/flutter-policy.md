@@ -76,6 +76,62 @@ Flutter のリビルドを必要最小限に抑える仕組みの恩恵が受け
 
 上から順に読んでいく際に、構造が理解しやすいため
 
+:::details コードサンプル
+
+**BAD**
+
+```dart
+const firstText = Text('1st');
+const secondText = Text('2nd');
+const thirdText = Text('3rd');
+
+final body = Column(
+  children: [
+    const Padding(
+      padding: EdgeInsets.only(bottom: 16), // BAD
+      child: firstText,
+    ),
+    Row(
+      children: const [
+        Padding(
+          padding: EdgeInsets.only(right: 16), // BAD
+          child: secondText,
+        ),
+        thirdText,
+      ],
+    ),
+  ],
+);
+```
+
+**GOOD**
+
+```dart
+const firstText = Text('1st');
+const secondText = Text('2nd');
+const thirdText = Text('3rd');
+
+final body = Column(
+  children: [
+    firstText,
+    Padding(
+      padding: const EdgeInsets.only(top: 16), // GOOD
+      child: Row(
+        children: const [
+          secondText,
+          Padding(
+            padding: EdgeInsets.only(left: 16), // GOOD
+            child: thirdText,
+          ),
+        ],
+      ),
+    ),
+  ],
+);
+```
+
+:::
+
 ### スクロール可能なウィジェットはセーフエリア外までスクロール内容が表示されるようにする
 
 この際、スクロールの下部にセーフエリア外のサイズを余白としてとる。スクロールを最下部まで行った際に部品がセーフエリア外のホームバーなどと被ってタップできなくなるのを防ぐため
