@@ -136,7 +136,7 @@ Flutter のリビルドを必要最小限に抑える仕組みの恩恵が受け
 
 **BAD**
 
-```dart
+```dart:member_screen.dart
 class MemberScreen extends StatelessWidget {
   const MemberScreen({
     Key? key,
@@ -173,7 +173,7 @@ class MemberScreen extends StatelessWidget {
 
 **GOOD**
 
-```dart
+```dart:member_screen.dart
 class MemberScreen extends StatelessWidget {
   const MemberScreen({
     Key? key,
@@ -357,29 +357,29 @@ final body = Column(
 **BAD**
 
 ```dart
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: SafeArea( // BAD
-        child: SingleChildScrollView(
-          child: Column(
-            children: List.generate(
-              20,
-              (index) => Center(
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  child: OutlinedButton(
-                    onPressed: () {},
-                    child: Text('Button ${index + 1}'),
-                  ),
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(),
+    body: SafeArea( // BAD
+      child: SingleChildScrollView(
+        child: Column(
+          children: List.generate(
+            20,
+            (index) => Center(
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: OutlinedButton(
+                  onPressed: () {},
+                  child: Text('Button ${index + 1}'),
                 ),
               ),
-            ).toList(),
-          ),
+            ),
+          ).toList(),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 ```
 
 ![](/images/flutter-policy/01_scroll-view-with-safe-area.gif)
@@ -387,33 +387,33 @@ final body = Column(
 **GOOD**
 
 ```dart
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: SafeArea(
-        bottom: false, // GOOD
-        child: SingleChildScrollView(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewPadding.bottom, // GOOD
-          ),
-          child: Column(
-            children: List.generate(
-              20,
-              (index) => Center(
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  child: OutlinedButton(
-                    onPressed: () {},
-                    child: Text('Button ${index + 1}'),
-                  ),
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(),
+    body: SafeArea(
+      bottom: false, // GOOD
+      child: SingleChildScrollView(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewPadding.bottom, // GOOD
+        ),
+        child: Column(
+          children: List.generate(
+            20,
+            (index) => Center(
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: OutlinedButton(
+                  onPressed: () {},
+                  child: Text('Button ${index + 1}'),
                 ),
               ),
-            ).toList(),
-          ),
+            ),
+          ).toList(),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 ```
 
 ![](/images/flutter-policy/02_scroll-view-without-safe-area.gif)
