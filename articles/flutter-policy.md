@@ -3,7 +3,7 @@ title: "Flutterの開発ポリシー"
 emoji: "🚀"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["flutter"]
-published: false
+published: true
 ---
 
 Flutter でアプリ開発する際、コードレビューで指摘するポリシーをまとめてみます。
