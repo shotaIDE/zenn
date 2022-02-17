@@ -84,6 +84,8 @@ Flutter のリビルドを必要最小限に抑える仕組みの恩恵が受け
 
 画面サイズ最大までスクロール表示が見えた方がユーザビリティが高いため
 
+:::details コードサンプル
+
 **BAD**
 
 ```dart
@@ -147,6 +149,8 @@ Flutter のリビルドを必要最小限に抑える仕組みの恩恵が受け
 ```
 
 ![](/images/flutter-policy/02_scroll-view-without-safe-area.gif)
+
+:::
 
 ### `StatefulWidget` または `ConsumerStatefulWidget` では、プライベートメソッドに `context` を渡さないようにする
 
