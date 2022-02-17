@@ -15,6 +15,38 @@ Flutter でのアプリ開発におけるポリシーをメモしてみます。
 
 固定値での指定は可能な限り避ける
 
+:::details コードサンプル
+
+**BAD**
+
+```dart
+return Scaffold(
+  appBar: AppBar(),
+  body: const SizedBox(
+    width: 320, // BAD
+    child: ListTile(
+      title: Text('Alice'),
+    ),
+  ),
+);
+```
+
+**GOOD**
+
+```dart
+return Scaffold(
+  appBar: AppBar(),
+  body: const Padding(
+    padding: EdgeInsets.symmetric(horizontal: 16), // GOOD
+    child: ListTile(
+      title: Text('Alice'),
+    ),
+  ),
+);
+```
+
+:::
+
 **理由**
 
 各端末の画面サイズや、端末の文字サイズ設定、データによるレイアウト崩れを避けるため
