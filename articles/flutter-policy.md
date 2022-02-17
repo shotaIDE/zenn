@@ -26,6 +26,26 @@ Flutter でのアプリ開発におけるポリシーをメモしてみます。
 - デザインシステムで定義された色のみが適用されるようにするため
 - ダークモードのように実行時に動的に色が変わる挙動に対応するため
 
+:::details コードサンプル
+
+**BAD**
+
+```dart
+final colorContainer = Container(
+  color: Colors.blue, // BAD
+);
+```
+
+**GOOD**
+
+```dart
+final colorContainer = Container(
+  color: Theme.of(context).primaryColor, // GOOD
+);
+```
+
+:::
+
 ## テキストスタイルは `Theme` に定義されているものを利用する
 
 **理由**
