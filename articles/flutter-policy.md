@@ -52,13 +52,98 @@ Flutter でのアプリ開発におけるポリシーをメモしてみます。
 
 ## 画面の構築
 
-### UI 要素をファイル内で切り出す際は、プライベートウィジェットとして切り出す
+### 複数のウィジェットをグルーピングしてファイル内で切り出す際は、プライベートウィジェットとして切り出す
 
 **理由**
 
 Flutter のリビルドを必要最小限に抑える仕組みの恩恵が受けやすいため
 
-### 複雑な画面の構築は、ウィジェットのローカル変数への格納 → ウィジェットを余白をつけて組み合わせる、の２ステップで段落分けする
+:::details コードサンプル
+
+**BAD**
+
+```dart
+class MemberScreen extends StatelessWidget {
+  const MemberScreen({
+    Key? key,
+    required this.member,
+  }) : super(key: key);
+
+  final String member;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: Column(
+        children: [
+          _headerTile(context), // BAD
+          Container(
+            alignment: Alignment.center,
+            child: Text(member),
+          )
+        ],
+      ),
+    );
+  }
+
+   // BAD
+  Widget _headerTile(BuildContext context) {
+    return ListTile(
+      title: const Text('Header'),
+      onTap: () => Navigator.push(context, MemberScreen.route()),
+    );
+  }
+}
+```
+
+**GOOD**
+
+```dart
+class MemberScreen extends StatelessWidget {
+  const MemberScreen({
+    Key? key,
+    required this.member,
+  }) : super(key: key);
+
+  final String member;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: Column(
+        children: [
+          const _HeaderTile(), // GOOD
+          Container(
+            alignment: Alignment.center,
+            child: Text(member),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+ // GOOD
+class _HeaderTile extends StatelessWidget {
+  const _HeaderTile({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: const Text('Header'),
+      onTap: () => Navigator.push(context, MemberScreen.route()),
+    );
+  }
+}
+```
+
+:::
+
+### 複雑な画面では、ウィジェットのローカル変数への格納 → ウィジェットを余白をつけて組み合わせる、の２ステップで段落分けする
 
 **理由**
 
