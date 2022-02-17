@@ -1,6 +1,6 @@
 ---
 title: "Flutterの開発ポリシー"
-emoji: "👌"
+emoji: "🚀"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["flutter"]
 published: false
@@ -8,48 +8,68 @@ published: false
 
 # デザインシステム
 
-## 1 つ以上の要素を囲むウィジェットのサイズ指定は可能な限り避け、内部ウィジェットの余白や親ウィジェットによる相対配置の結果自動でサイズが決定されるようにする
+## 1 つ以上の要素を囲むウィジェットのサイズは、内部ウィジェットのマージンや親ウィジェット内の相対関係により決定されるようにする
+
+固定値での指定は可能な限り避ける
+
+**理由**
 
 各端末の画面サイズや、端末の文字サイズ設定、データによるレイアウト崩れを避けるため
 
 ## 色は必ず `Theme.of(context).primaryColor` のように定義されたものを利用する
 
-デザインシステムに則った色のみが利用されるようにするため
+**理由**
+
+- デザインシステムで定義された色のみが適用されるようにするため
+- ダークモードのように実行時に動的に色が変わる挙動に対応するため
 
 ## テキストスタイルは必ず `Theme.of(context).textThemes.caption1` のように定義されたものを利用する
 
-デザインシステムに則った色のみが利用されるようにするため
+**理由**
+
+デザインシステムで定義された Typography 定義のスタイルのみが適用されるようにするため
 
 ## 画面に表示する文字列は `*.arb` ファイルに定義して利用する
 
-表記ゆれに気付きやすくするため
-
-## 変動する値を含む文字列も `*.arb` ファイルに定義して利用することを優先する
-
-- 表記ゆれに気付きやすくするため
+- 変数する含む文字列も `*.arb` ファイルに定義して利用することを優先する
 - 部分的に太字などフォーマットが異なる場合は、分けて定義するしかない
 
-# UI と状態管理
+**理由**
 
-## State は画面生成に必要最小限のデータを持つようにする
+- 表記ゆれに気付きやすくするため
+- 多言語対応するため
 
-## State と ViewModel のメンバー変数は重複がないようにする
+# UI 設計
 
-## StatefulWidget または ConsumerStatefulWidget では、プライベートメソッドに context を渡さないようにする
+## 画面と状態管理
+
+### State は画面生成に必要最小限のデータを持つようにする
+
+### State と ViewModel のメンバー変数は重複がないようにする
+
+### StatefulWidget または ConsumerStatefulWidget では、プライベートメソッドに context を渡さないようにする
+
+**理由**
 
 これらの中ではいつでも context を取得できるため
 
-# UI の構築
+## 画面の構築
 
-## プライベートの切り出しはウィジェットとして切り出す
+### プライベートの切り出しはウィジェットとして切り出す
+
+**理由**
 
 Flutter のフレームワーク側でリビルドを必要最小限に抑えやすくなるため
 
 ### 一時変数は、格納されるウィジェットの型を接尾語として優先的に利用する
 
+**理由**
+
 中身が想像しやすくするため
 
-### Screen で State データの一時変数を作成する際の名前は、 state とする
+### State データの一時変数を作成する際の名前は、 state とする
+
+**理由**
 
 型に名前を合わせて、中身を想像しやすくするため
 
@@ -79,62 +99,13 @@ class MyScreen extends ConsumerWidget {
     final state = ref.watch(viewModel); // GOOD
 ```
 
-## コンポーネントには外側の余白を持たせない
+### スクロール可能なウィジェットはセーフエリア外までスクロール内容が表示されるようにする
 
-再利用性を高めるため
+この際、スクロールの下部にセーフエリア外のサイズを余白としてとる。スクロールを最下部まで行った際に部品がセーフエリア外のホームバーなどと被ってタップできなくなるのを防ぐため
 
-**BAD**
+**理由**
 
-```dart
-class MyButton extends StatelessWidget {
-  // ...
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding( // BAD
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: ElevatedButton(
-        onPressed: onPressed,
-        child: child,
-      ),
-    );
-  }
-}
-```
-
-**GOOD**
-
-```dart
-class MyButton extends StatelessWidget {
-  // ...
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      child: child,
-    );
-  }
-}
-
-// ...
-
-// コンポーネントの利用箇所
-Center(
-  child = Padding( // GOOD
-    padding: const EdgeInsets.symmetric(horizontal: 16),
-    child: MyButton(
-      onPressed: () => Navigator.pop(context),
-      child: const Text('pop'),
-    ),
-  ),
-);
-```
-
-## スクロール可能なウィジェットが画面下側まで表示されている場合は、セーフエリア外までスクロール内容が表示されるようにし、スクロールの下部にセーフエリア外のサイズを余白としてとる
-
-- 画面サイズ最大までスクロール表示が見えた方がユーザビリティが上がるため
-- 余白を取るのは、スクロールを最下部まで行った際に部品がセーフエリア外のホームバーなどと被ってタップできなくなるのを防ぐため
+画面サイズ最大までスクロール表示が見えた方がユーザビリティが上がるため
 
 **BAD**
 
@@ -200,9 +171,65 @@ Center(
 
 ![](/images/flutter-policy/02_scroll-view-without-safe-area.gif)
 
-# コンポーネント設計
+## コンポーネント
 
-## コンポーネントでは UI の表示のみを実装し、画面遷移などのイベントは外部から渡せるようにしておく
+### コンポーネントには外側の余白を持たせない
+
+**理由**
+
+再利用性を高めるため
+
+**BAD**
+
+```dart
+class MyButton extends StatelessWidget {
+  // ...
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding( // BAD
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: ElevatedButton(
+        onPressed: onPressed,
+        child: child,
+      ),
+    );
+  }
+}
+```
+
+**GOOD**
+
+```dart
+class MyButton extends StatelessWidget {
+  // ...
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      child: child,
+    );
+  }
+}
+
+// ...
+
+// コンポーネントの利用箇所
+Center(
+  child = Padding( // GOOD
+    padding: const EdgeInsets.symmetric(horizontal: 16),
+    child: MyButton(
+      onPressed: () => Navigator.pop(context),
+      child: const Text('pop'),
+    ),
+  ),
+);
+```
+
+### コンポーネントでは UI の表示のみを実装し、画面遷移などのイベントは外部から渡せるようにしておく
+
+**理由**
 
 責務を整理し、再利用性を高めるため
 
@@ -213,32 +240,41 @@ Center(
 - 実装者が対象コードのロジックを冷静に見直すことで、実装時点での間違いや考慮もれを発見するため
 - デグレ発生時に早期発見するため
 
-# 命名
+# 一般
 
-## メソッド名から容易に想像がつく引数以外は、名前付きにしておく
+## 命名
 
-可読性を高めるため
+### メソッド名から容易に想像がつく引数以外は、名前付きにしておく
 
-## 利用者が引数の内容を明確に認知し、利用ミスを防ぐため
+**理由**
 
-## 無名関数における利用していない引数は `_` で無効化する
+- 可読性を高めるため
+- 利用者が引数の内容を明確に認知し、利用ミスを防ぐため
+
+### 無名関数における利用していない引数は `_` で無効化する
+
+**理由**
 
 利用しないことを最初に明記し、可読性を高めるため
 
 ## “info” という単語は利用は避け、より具体的な語彙を利用する
 
+**理由**
+
 全てのクラスやメンバー変数は何かしらの情報を持つという前提があり、”info”という単語がその中身を説明することに寄与しないため
 
-# コメント
+## コメント
 
-## コードを見ても分からない背景や意図をマストで優先的に書く
+### コードを見ても分からない背景や意図をマストで優先的に書く
 
-## コードを見る際に補足となる説明事項は書いてもいい
+### コードを見る際に補足となる説明事項は書いてもいい
 
-## コードを見るとすぐに分かることは書かない
+### コードを見るとすぐに分かることは書かない
 
-# 一般
+## 一般
 
-## インデントが深くならない書き方を優先する
+### インデントが深くならない書き方を優先する
+
+**理由**
 
 可読性を高めるため
