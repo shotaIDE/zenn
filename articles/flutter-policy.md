@@ -152,6 +152,8 @@ Center(
   }
 ```
 
+![](/images/flutter-policy/01_scroll-view-with-safe-area.gif)
+
 **GOOD**
 
 ```dart
@@ -183,6 +185,8 @@ Center(
     );
   }
 ```
+
+![](/images/flutter-policy/02_scroll-view-without-safe-area.gif)
 
 # コンポーネント設計
 
