@@ -164,6 +164,8 @@ Flutter のリビルドを必要最小限に抑える仕組みの恩恵が受け
 
 型に名前を合わせて、中身を想像しやすくするため
 
+:::details コードサンプル
+
 **BAD**
 
 ```dart
@@ -190,6 +192,8 @@ class MyScreen extends ConsumerWidget {
     final state = ref.watch(viewModel); // GOOD
 ```
 
+:::
+
 ## コンポーネント
 
 ### 外側に余白を持たせない
@@ -197,6 +201,8 @@ class MyScreen extends ConsumerWidget {
 **理由**
 
 再利用性を高めるため
+
+:::details コードサンプル
 
 **BAD**
 
@@ -245,6 +251,8 @@ Center(
   ),
 );
 ```
+
+:::
 
 ### UI 表示のみを実装し、画面遷移などのイベントは外部から渡せるようにする
 
