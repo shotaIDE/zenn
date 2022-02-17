@@ -70,6 +70,22 @@ Flutter のリビルドを必要最小限に抑える仕組みの恩恵が受け
 
 中身が想像しやすくするため
 
+:::details コードサンプル
+
+**BAD**
+
+```dart
+const nameLabel = Text('Alice');
+```
+
+**GOOD**
+
+```dart
+const nameText = Text('Alice');
+```
+
+:::
+
 ### ウィジェット間の余白は、ウィジェットの上または左に付与する
 
 **理由**
