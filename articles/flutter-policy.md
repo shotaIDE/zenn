@@ -50,12 +50,6 @@ Flutter でアプリ開発する際、コードレビューで指摘するポリ
 
 ### State と ViewModel のメンバー変数は重複がないようにする
 
-### StatefulWidget または ConsumerStatefulWidget では、プライベートメソッドに context を渡さないようにする
-
-**理由**
-
-これらの中ではいつでも context を取得できるため
-
 ## 画面の構築
 
 ### プライベートの切り出しはウィジェットとして切り出す
@@ -173,6 +167,12 @@ class MyScreen extends ConsumerWidget {
 ```
 
 ![](/images/flutter-policy/02_scroll-view-without-safe-area.gif)
+
+### StatefulWidget または ConsumerStatefulWidget では、プライベートメソッドに context を渡さないようにする
+
+**理由**
+
+これらの中ではいつでも context を取得できるため
 
 ## コンポーネント
 
