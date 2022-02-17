@@ -152,7 +152,7 @@ Flutter のリビルドを必要最小限に抑える仕組みの恩恵が受け
 
 :::
 
-### `StatefulWidget` または `ConsumerStatefulWidget` では、プライベートメソッドに `context` を渡さないようにする
+### `StatefulWidget` または `ConsumerStatefulWidget` 内では、プライベートメソッドに `context` を渡さないようにする
 
 **理由**
 
