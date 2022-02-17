@@ -113,9 +113,68 @@ class HogeButton extends StatelessWidget {
 
 ## スクロール可能なウィジェットが画面下側まで表示されている場合は、セーフエリア外までスクロール内容が表示されるようにし、スクロールの下部にセーフエリア外のサイズを余白としてとる
 
-画面サイズ最大までスクロール表示が見えた方がユーザビリティが上がるため
+- 画面サイズ最大までスクロール表示が見えた方がユーザビリティが上がるため
+- 余白を取るのは、スクロールを最下部まで行った際に部品がセーフエリア外のホームバーなどと被ってタップできなくなるのを防ぐため
 
-余白を取るのは、スクロールを最下部まで行った際に部品がセーフエリア外のホームバーなどと被ってタップできなくなるのを防ぐため
+**BAD**
+
+```dart
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: SafeArea( // BAD
+        child: SingleChildScrollView(
+          child: Column(
+            children: List.generate(
+              20,
+              (index) => Center(
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: OutlinedButton(
+                    onPressed: () {},
+                    child: Text('Button ${index + 1}'),
+                  ),
+                ),
+              ),
+            ).toList(),
+          ),
+        ),
+      ),
+    );
+  }
+```
+
+**GOOD**
+
+```dart
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: SafeArea(
+        bottom: false, // GOOD
+        child: SingleChildScrollView(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewPadding.bottom, // GOOD
+          ),
+          child: Column(
+            children: List.generate(
+              20,
+              (index) => Center(
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: OutlinedButton(
+                    onPressed: () {},
+                    child: Text('Button ${index + 1}'),
+                  ),
+                ),
+              ),
+            ).toList(),
+          ),
+        ),
+      ),
+    );
+  }
+```
 
 # コンポーネント設計
 
