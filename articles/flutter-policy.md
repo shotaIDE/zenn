@@ -440,11 +440,11 @@ Widget build(BuildContext context) {
 class MyScreen extends ConsumerWidget {
   // ...
 
-  final AutoDisposeStateNotifierProvider<MyViewModel, MyState> viewModel;
+  final AutoDisposeStateNotifierProvider<MyViewModel, MyState> _viewModel;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final viewModel = ref.watch(viewModel); // BAD
+    final viewModel = ref.watch(_viewModel); // BAD
 ```
 
 **GOOD**
@@ -453,11 +453,11 @@ class MyScreen extends ConsumerWidget {
 class MyScreen extends ConsumerWidget {
   // ...
 
-  final AutoDisposeStateNotifierProvider<MyViewModel, MyState> viewModel;
+  final AutoDisposeStateNotifierProvider<MyViewModel, MyState> _viewModel;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(viewModel); // GOOD
+    final state = ref.watch(_viewModel); // GOOD
 ```
 
 :::
