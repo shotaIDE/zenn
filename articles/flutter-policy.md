@@ -19,18 +19,40 @@ Flutter でのアプリ開発におけるポリシーをメモしてみます。
 
 各端末の画面サイズや、端末の文字サイズ設定、データによるレイアウト崩れを避けるため
 
-## 色は必ず `Theme.of(context).primaryColor` のように定義されたものを利用する
+## 色は `Theme` に定義されているものを利用する
 
 **理由**
 
 - デザインシステムで定義された色のみが適用されるようにするため
 - ダークモードのように実行時に動的に色が変わる挙動に対応するため
 
-## テキストスタイルは必ず `Theme.of(context).textThemes.caption1` のように定義されたものを利用する
+## テキストスタイルは `Theme` に定義されているものを利用する
 
 **理由**
 
 デザインシステムで定義された Typography 定義のスタイルのみが適用されるようにするため
+
+:::details コードサンプル
+
+**BAD**
+
+```dart
+const nameText = Text(
+  'Alice',
+  style: TextStyle(fontSize: 14), // BAD
+);
+```
+
+**GOOD**
+
+```dart
+final nameText = Text(
+  'Alice',
+  style: Theme.of(context).textTheme.caption, // GOOD
+);
+```
+
+:::
 
 ## 画面に表示する文字列は `*.arb` ファイルに定義して利用する
 
