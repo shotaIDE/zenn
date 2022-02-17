@@ -52,49 +52,29 @@ Flutter でアプリ開発する際、コードレビューで指摘するポリ
 
 ## 画面の構築
 
-### プライベートの切り出しはウィジェットとして切り出す
+### UI 要素をファイル内で切り出しす際は、プライベートウィジェットとして切り出す
 
 **理由**
 
-Flutter のフレームワーク側でリビルドを必要最小限に抑えやすくなるため
+Flutter のリビルドを必要最小限に抑える仕組みの恩恵が受けやすいため
+
+### UI 要素のローカル変数への格納 → 組み合わせて余白を付与、の２ステップで段落分けして記載する
+
+**理由**
+
+可読性を向上させるため
+
+### ウィジェット間の余白は、ウィジェットの上または左に付与する
+
+**理由**
+
+上から順に読んでいく際に、構造が理解しやすいため
 
 ### 一時変数は、格納されるウィジェットの型を接尾語として優先的に利用する
 
 **理由**
 
 中身が想像しやすくするため
-
-### State データの一時変数を作成する際の名前は、 `state` とする
-
-**理由**
-
-型に名前を合わせて、中身を想像しやすくするため
-
-**BAD**
-
-```dart
-class MyScreen extends ConsumerWidget {
-  // ...
-
-  final AutoDisposeStateNotifierProvider<MyViewModel, MyState> viewModel;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final viewModel = ref.watch(viewModel); // BAD
-```
-
-**GOOD**
-
-```dart
-class MyScreen extends ConsumerWidget {
-  // ...
-
-  final AutoDisposeStateNotifierProvider<MyViewModel, MyState> viewModel;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(viewModel); // GOOD
-```
 
 ### スクロール可能なウィジェットはセーフエリア外までスクロール内容が表示されるようにする
 
@@ -173,6 +153,38 @@ class MyScreen extends ConsumerWidget {
 **理由**
 
 これらの中ではいつでも context を取得できるため
+
+### State データの一時変数を作成する際の名前は、 `state` とする
+
+**理由**
+
+型に名前を合わせて、中身を想像しやすくするため
+
+**BAD**
+
+```dart
+class MyScreen extends ConsumerWidget {
+  // ...
+
+  final AutoDisposeStateNotifierProvider<MyViewModel, MyState> viewModel;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final viewModel = ref.watch(viewModel); // BAD
+```
+
+**GOOD**
+
+```dart
+class MyScreen extends ConsumerWidget {
+  // ...
+
+  final AutoDisposeStateNotifierProvider<MyViewModel, MyState> viewModel;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(viewModel); // GOOD
+```
 
 ## コンポーネント
 
