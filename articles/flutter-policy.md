@@ -58,11 +58,48 @@ Flutter でのアプリ開発におけるポリシーをメモしてみます。
 
 Flutter のリビルドを必要最小限に抑える仕組みの恩恵が受けやすいため
 
-### ウィジェットのローカル変数への格納 → ウィジェットを余白をつけて組み合わせる、の２ステップで段落分けして記載する
+### 複雑な画面の構築は、ウィジェットのローカル変数への格納 → ウィジェットを余白をつけて組み合わせる、の２ステップで段落分けする
 
 **理由**
 
 可読性を向上させるため
+
+:::details コードサンプル
+
+**BAD**
+
+```dart
+final body = Column(
+  children: const [
+    Text('1st'),
+    Padding(
+      padding: EdgeInsets.only(top: 16),
+      child: Text('2nd'),
+    ),
+  ],
+);
+```
+
+**GOOD**
+
+```dart
+// ウィジェットのローカル変数への格納
+const firstText = Text('1st');
+const secondText = Text('2nd');
+
+// ウィジェットを余白をつけて組み合わせる
+final body = Column(
+  children: const [
+    firstText,
+    Padding(
+      padding: EdgeInsets.only(top: 16),
+      child: secondText,
+    ),
+  ],
+);
+```
+
+:::
 
 ### ローカル変数名は、格納されるウィジェットの型を接尾語にする
 
