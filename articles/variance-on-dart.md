@@ -89,20 +89,44 @@ if (F.flavor == Flavor.mock) {
 派生クラスが基底クラスの振る舞いをできるから、成り立つ。
 リスコフの置換原則が成り立つ。
 
-```dart
-final String Function(TextArticle) _getIdString = getIdString;
+```dart:article.dart
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-// ...
+part 'article.freezed.dart';
 
-String getIdString(Article article) {
-  return '${article.id}';
+/// 記事の内容を格納するクラス
+@freezed
+class Article with _$Article {
+  /// テキストのみの記事
+  const factory Article.text({
+    required String id,
+    required String content,
+  }) = TextArticle;
+
+  /// 写真のみの記事
+  const factory Article.picture({
+    required String id,
+    required Uri url,
+  }) = PictureArticle;
+}
+
+/// IDをBase64化した値を取得
+String getBase64IdFromArticle(Article article) {
+  final id = article.id;
+  final bytes = utf8.encode('$id');
+  return base64.encode(bytes);
 }
 ```
 
-# freezed で生成した Union class における例
+```dart:main.dart
+class TextArticleUseCase {
+  const TextArticleUseCase();
 
-(TBD)
+  final String Function(TextArticle) _getBase64Id = getBase64IdFromArticle;
 
-# 素の Dart における例
-
-(TBD)
+  Future<void> deleteArticle(TextArticle textArticle) async {
+    final base64Id = _getBase64Id(textArticle);
+    await _articleApi.delete(base64Id: base64Id);
+  }
+}
+```
