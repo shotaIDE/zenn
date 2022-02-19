@@ -52,7 +52,7 @@ class ApiProd implements Api {
   @override
   Future<String> fetch() async {
     final response = await http.get('https://www.example.com/data');
-    return response.response.body;
+    return response.body;
   }
 }
 
