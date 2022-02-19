@@ -6,33 +6,31 @@ topics: ["dart", "flutter"]
 published: false
 ---
 
-# 一言でまとめると
+# 共変性と反変性の簡単な説明
 
-リスコフの置換原則は前提とすると、
+以下、基本原則（リスコフの置換原則）を前提とし、
 
-基底型でできることは派生型もでき、そこから導き出される定理。
+:::message
+基底型でできることは派生型でもでき、基底型変数は中身を派生型に置き換えても動作する
+:::
 
-派生型の引数を持つ関数型やクラスの型に、基底型の引数を持つ関数やクラスのインスタンスが代入できる
-→ 引数の派生型が基底型に置き換えられる。
-→ 引数に**反変性**がある
+原則と同じく、基底型変数を派生型に置き換えられることを**共変**(きょうへん)と呼ぶ。
+
+一方で、呼び出し構造により、見かけ上、互換性の向きが反対になっていて、派生型変数に基底型に置き換えられることを**反変**(はんぺん)と呼ぶ。
+
+## 具体的な用例
 
 基底型の戻り値を持つ関数型やクラスの型に、派生型の戻り値を持つ関数やクラスのインスタンスが代入できる
 → 戻り値の基底型が派生型に置き換えられる
 → 戻り値に**共変性**がある
 
-個人的な感想として、定義方法を変えることで反変の関係だったものを共変の関係に変えることもでき、また、共変の関係の方が設計しやすいと感じるので、あまり反変の関係は意識することないかもしれない。
+派生型の引数を持つ関数型やクラスの型に、基底型の引数を持つ関数やクラスのインスタンスが代入できる
+→ 引数の派生型が基底型に置き換えられる。
+→ 引数に**反変性**がある
 
-基底型には派生型を代入できる互換性があり、
+# Dart における例
 
-これと同じ方向に、派生型に対して互換性を持つことを「共変」
-反対の方向に、基底型に対して互換性を持つことを「反変」
-どちらの互換もない場合は「不変」
-
-## 共変性
-
-基底クラスに派生クラスを代入しても成り立つ性質。
-
-外部に基底クラスしか返さないため、成り立つ。
+## 共変
 
 ```dart:repository.dart
 class Repository {
@@ -80,30 +78,33 @@ if (F.flavor == Flavor.mock) {
 }
 ```
 
-## 反変性
+## 反変
 
-派生クラスに基底クラスを代入しても成り立つ性質。
-
-内部で基底クラスのメソッドしか利用していないため、成り立つ。
-基底クラスが持つメソッドは派生クラスも持つから、成り立つ。
-派生クラスが基底クラスの振る舞いをできるから、成り立つ。
-リスコフの置換原則が成り立つ。
+:::message
+Dart に Union class を導入する言語パッチライブラリ[freezed](https://pub.dev/packages/freezed)の利用を前提としています。
+:::
 
 ```dart:article.dart
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'article.freezed.dart';
 
-/// 記事の内容を格納するクラス
+/// 記事の内容を格納するUnionクラス
+///
+/// 基底クラス
 @freezed
 class Article with _$Article {
   /// テキストのみの記事
+  ///
+  /// 派生クラスその1
   const factory Article.text({
     required String id,
     required String content,
   }) = TextArticle;
 
   /// 写真のみの記事
+  ///
+  /// 派生クラスその2
   const factory Article.picture({
     required String id,
     required Uri url,
@@ -111,6 +112,8 @@ class Article with _$Article {
 }
 
 /// IDとタイトルを合わせてBase64化し、ローカルにキャッシュするファイル名を生成
+///
+/// 派生クラス間で生成方法は変わらないため、基底クラス [Article] を引数に取る
 String generateFileNameFromArticle(Article article) {
   final seed = '${article.id}:${article.title}';
   final bytes = utf8.encode(seed);
@@ -120,6 +123,8 @@ String generateFileNameFromArticle(Article article) {
 
 ```dart:main.dart
 /// 派生クラス [TextArticle] をフェッチし、ローカルにキャッシュして返すメソッド
+///
+/// ファイル名生成の関数の引数は、派生クラス [TextArticle] を引数に取る
 Future<TextArticle> _fetchTextArticle({
   required String id,
   required String Function(TextArticle) generateFileName,
@@ -139,3 +144,7 @@ await _fetchTextArticle(
   generateFileName: generateFileNameFromArticle,
 );
 ```
+
+_個人的な感想として、定義方法を変えることで反変の関係だったものを共変の関係に変えることもでき、また、共変の関係の方が設計しやすいと感じるので、あまり反変の関係で設計することはないように感じる。_
+
+# 参考
