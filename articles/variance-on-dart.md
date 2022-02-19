@@ -34,12 +34,14 @@ published: false
 
 外部に基底クラスしか返さないため、成り立つ。
 
-```dart
+```dart:repository.dart
 class Repository {
   const Repository(Api api);
   final Api api;
 }
+```
 
+```dart:api.dart
 // 基底クラス
 abstract class Api {
   Future<String> fetch();
@@ -61,7 +63,9 @@ class ApiMock implements Api {
     return '{"code":"OK"}';
   }
 }
+```
 
+```dart:main.dart
 final Repository repository;
 if (F.flavor == Flavor.mock) {
   repository = Repository(
