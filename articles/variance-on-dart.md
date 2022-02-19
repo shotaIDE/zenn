@@ -148,3 +148,11 @@ await _fetchTextArticle(
 _個人的な感想として、定義方法を変えることで反変の関係だったものを共変の関係に変えることもでき、また、共変の関係の方が直感的で設計しやすいと感じるので、あまり反変の関係で設計することはないように思う。_
 
 # 参考
+
+https://medium.com/dartlang/dart-declaration-site-variance-5c0e9c5f18a5
+
+https://qiita.com/CodeOne/items/730480791c2e98b40d66#%E5%8F%8D%E5%A4%89%E6%80%A7%E3%81%8C%E3%82%B5%E3%83%9D%E3%83%BC%E3%83%88%E3%81%95%E3%82%8C%E3%82%8B%E3%81%A8
+
+https://zenn.dev/suin/scraps/adf781330c9888
+
+https://qiita.com/mkosuke/items/42c19d7edbf111f7fb71#futureort%E3%81%AF%E6%88%BB%E3%82%8A%E5%80%A4%E3%81%AB%E4%BD%BF%E7%94%A8%E3%81%97%E3%81%AA%E3%81%84
