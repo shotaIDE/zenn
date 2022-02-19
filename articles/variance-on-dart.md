@@ -143,8 +143,8 @@ Future<TextArticle> _fetchTextArticle({
 
 await _fetchTextArticle(
   id: id,
-  // 反変: 引数が派生クラス [TextArticle] のコールバック引数に、
-  //  引数が基底クラス [Article]のコールバックを指定している
+  // 反変: 引数が派生クラス [TextArticle] の関数の引数 [generateFileName] に、
+  //  引数が基底クラス [Article] の関数 [generateFileNameFromArticle] を指定している
   generateFileName: generateFileNameFromArticle,
 );
 ```
