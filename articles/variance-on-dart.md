@@ -13,10 +13,14 @@ published: false
 基底型でできることは派生型もでき、そこから導き出される定理。
 
 派生型の引数を持つ関数型やクラスの型に、基底型の引数を持つ関数やクラスのインスタンスが代入できる
-→ 引数の派生型に基底型を置き換えられる。引数に**反変性**がある
+→ 引数の派生型が基底型に置き換えられる。
+→ 引数に**反変性**がある
 
 基底型の戻り値を持つ関数型やクラスの型に、派生型の戻り値を持つ関数やクラスのインスタンスが代入できる
-→ 戻り値の基底型に派生型を置き換えられる。戻り値に**共変性**がある
+→ 戻り値の基底型が派生型に置き換えられる
+→ 戻り値に**共変性**がある
+
+個人的な感想として、定義方法を変えることで反変の関係だったものを共変の関係に変えることもでき、また、共変の関係の方が設計しやすいと感じるので、あまり反変の関係は意識することないかもしれない。
 
 基底型には派生型を代入できる互換性があり、
 
@@ -30,6 +34,48 @@ published: false
 
 外部に基底クラスしか返さないため、成り立つ。
 
+```dart
+class Repository {
+  const Repository(Api api);
+  final Api api;
+}
+
+// 基底クラス
+abstract class Api {
+  Future<String> fetch();
+}
+
+// 派生クラスその1
+class ApiProd implements Api {
+  @override
+  Future<String> fetch() async {
+    final response = await http.get('https://www.example.com/data');
+    return response.response.body;
+  }
+}
+
+// 派生クラスその2
+class ApiMock implements Api {
+  @override
+  Future<String> fetch() async {
+    return '{"code":"OK"}';
+  }
+}
+
+final Repository repository;
+if (F.flavor == Flavor.mock) {
+  repository = Repository(
+    // 共変: 基底クラス [Api] の引数に派生クラス [ApiMock] を指定している
+    ApiMock(),
+  );
+} else {
+  repository = Repository(
+    // 共変: 基底クラス [Api] の引数に派生クラス [ApiProd] を指定している
+    ApiProd(),
+  );
+}
+```
+
 ## 反変性
 
 派生クラスに基底クラスを代入しても成り立つ性質。
@@ -38,6 +84,16 @@ published: false
 基底クラスが持つメソッドは派生クラスも持つから、成り立つ。
 派生クラスが基底クラスの振る舞いをできるから、成り立つ。
 リスコフの置換原則が成り立つ。
+
+```dart
+final String Function(TextArticle) _getIdString = getIdString;
+
+// ...
+
+String getIdString(Article article) {
+  return '${article.id}';
+}
+```
 
 # freezed で生成した Union class における例
 
