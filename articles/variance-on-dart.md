@@ -128,7 +128,7 @@ String generateFileNameFromArticle(Article article) {
 ```dart:main.dart
 /// 派生クラス [TextArticle] をフェッチし、ローカルにキャッシュして返すメソッド
 ///
-/// ファイル名生成の関数の引数は、派生クラス [TextArticle] を引数に取る
+/// ファイル名生成の関数の引数 [generateFileName] は、派生クラス [TextArticle] を引数に取る
 Future<TextArticle> _fetchTextArticle({
   required String id,
   required String Function(TextArticle) generateFileName,
