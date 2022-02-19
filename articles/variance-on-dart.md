@@ -11,7 +11,9 @@ published: true
 以下、基本原則（リスコフの置換原則）を前提とし、
 
 :::message
+
 基底型でできることは派生型でもでき、基底型変数は中身を派生型に置き換えても動作する
+
 :::
 
 原則と同じく、基底型変数を派生型に置き換えられることを**共変**(きょうへん)と呼ぶ。
@@ -81,7 +83,9 @@ if (F.flavor == Flavor.mock) {
 ## 反変
 
 :::message
+
 Dart に Union class を導入する言語パッチライブラリ[freezed](https://pub.dev/packages/freezed)の利用を前提としています。
+
 :::
 
 ```dart:article.dart
