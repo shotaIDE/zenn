@@ -3,7 +3,7 @@ title: "共変性と反変性の簡単な説明とDartにおける例"
 emoji: "🎃"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["dart", "flutter"]
-published: false
+published: true
 ---
 
 # 共変性と反変性の簡単な説明
