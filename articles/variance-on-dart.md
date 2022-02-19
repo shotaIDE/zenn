@@ -110,23 +110,32 @@ class Article with _$Article {
   }) = PictureArticle;
 }
 
-/// IDをBase64化した値を取得
-String getBase64IdFromArticle(Article article) {
-  final id = article.id;
-  final bytes = utf8.encode('$id');
+/// IDとタイトルを合わせてBase64化し、ローカルにキャッシュするファイル名を生成
+String generateFileNameFromArticle(Article article) {
+  final seed = '${article.id}:${article.title}';
+  final bytes = utf8.encode(seed);
   return base64.encode(bytes);
 }
 ```
 
 ```dart:main.dart
-class TextArticleUseCase {
-  const TextArticleUseCase();
+/// 派生クラス [TextArticle] をフェッチし、ローカルにキャッシュして返すメソッド
+Future<TextArticle> _fetchTextArticle({
+  required String id,
+  required String Function(TextArticle) generateFileName,
+}) async {
+  final article = await _remoteDataSource.fetchTextArticle(id: id);
 
-  final String Function(TextArticle) _getBase64Id = getBase64IdFromArticle;
+  final fileName = generateFileName(article);
+  await _localDataSource.save(article: article, fileName: fileName);
 
-  Future<void> deleteArticle(TextArticle textArticle) async {
-    final base64Id = _getBase64Id(textArticle);
-    await _articleApi.delete(base64Id: base64Id);
-  }
+  return article;
 }
+
+await _fetchTextArticle(
+  id: id,
+  // 反変: 引数が派生クラス [TextArticle] のコールバック引数に、
+  //  引数が基底クラス [Article]のコールバックを指定している
+  generateFileName: generateFileNameFromArticle,
+);
 ```
