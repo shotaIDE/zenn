@@ -1,0 +1,15 @@
+{
+  "filters": {},
+  "rules": {
+    "@textlint-rule/no-unmatched-pair": true,
+    "date-weekday-mismatch": true,
+    "doubled-spaces": true,
+    "no-nfd": true,
+    "no-start-duplicated-conjunction": true,
+    "preset-ja-technical-writing": {
+      "ja-no-mixed-period": false
+    },
+    "preset-japanese": true,
+    "spellcheck-tech-word": true
+  }
+}
