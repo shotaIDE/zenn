@@ -1,0 +1,7 @@
+{
+  "dictionaryDefinitions": [
+    { "name": "dependencies", "path": "./dictionaries/dependencies.txt" }
+  ],
+  "dictionaries": ["meow-music", "dependencies"],
+  "enabledLanguageIds": ["markdown"]
+}
