@@ -1,0 +1,7 @@
+{
+  "dictionaryDefinitions": [
+    { "name": "dependencies", "path": "./dictionaries/dependencies.txt" }
+  ],
+  "dictionaries": ["dependencies"],
+  "enabledLanguageIds": ["markdown"]
+}
