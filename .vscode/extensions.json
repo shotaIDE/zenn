@@ -1,6 +1,3 @@
 {
-    "recommendations": [
-        "esbenp.prettier-vscode",
-        "taichi.vscode-textlint"
-    ]
+  "recommendations": ["esbenp.prettier-vscode", "taichi.vscode-textlint"]
 }
