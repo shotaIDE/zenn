@@ -6,8 +6,8 @@ topics: ["iOS", "Android"]
 published: false
 ---
 
-こんにちは。モバイルアプリエンジニアをやっている、[shotaIDE](https://github.com/shotaIDE) です。
-この記事は、Advent Calendar 2022 の 6 日目の記事です。
+こんにちは。[Sun Asterisk](https://sun-asterisk.com/)でモバイルアプリエンジニアをやっている、井手 将太(いで しょうた)です。
+この記事は、[Sun\* Advent Calendar 2022](https://adventar.org/calendars/8211) の 6 日目の記事です。
 
 会社ではモバイルアプリエンジニアとして iOS と Android のアプリ開発プロジェクトに参画しています。
 より魅力的なアプリを素早く世の中に届けるためエンジニアの領域から何ができるか、ということをミッションに過ごしています。
@@ -203,5 +203,5 @@ Android の Google Play での表明に関しては、「[アプリのプライ�
 
 技術視点で細かい仕様漏れを防ぎ、体験を良くしていくというのは、エンジニアだからこそできることだと考えますので、これからも同様の知見があればどんどんまとめていきたいです。
 
-さて、Advent Calendar 2022 の明日の記事は、さんによる「」です。
+さて、[Sun\* Advent Calendar 2022](https://adventar.org/calendars/8211) の明日の記事は、後藤さんによる業務フローに関する記事です。
 ぜひお楽しみに。
