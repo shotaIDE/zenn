@@ -205,5 +205,5 @@ Android の Google Play での表明に関しては、「[アプリのプライ�
 
 技術視点で細かい仕様漏れを防ぎ、体験を良くしていくというのは、エンジニアだからこそできることだと考えますので、これからも同様の知見があればどんどんまとめていきたいです。
 
-さて、[Sun\* Advent Calendar 2022](https://adventar.org/calendars/8211) の明日の記事は、後藤さんによる業務フローに関する記事です。
-ぜひお楽しみに。
+さて、[Sun\* Advent Calendar 2022](https://adventar.org/calendars/8211) の明日の記事は、デザイナーのせーなさんによる記事です。
+本 Advent Calendar で最初のデザイナーによる記事ですので、ぜひお楽しみに。
