@@ -1,7 +1,8 @@
 {
   "dictionaryDefinitions": [
-    { "name": "dependencies", "path": "./dictionaries/dependencies.txt" }
+    { "name": "dependencies", "path": "./dictionaries/dependencies.txt" },
+    { "name": "profile", "path": "./dictionaries/profile.txt" }
   ],
-  "dictionaries": ["dependencies"],
+  "dictionaries": ["dependencies", "profile"],
   "enabledLanguageIds": ["markdown"]
 }
