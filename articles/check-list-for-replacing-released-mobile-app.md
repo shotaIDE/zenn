@@ -3,6 +3,7 @@ title: "リリース済みモバイルアプリをリプレイスするときの
 emoji: "📱"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["iOS", "Android"]
+publication_name: "sun_asterisk"
 published: true
 ---
 
