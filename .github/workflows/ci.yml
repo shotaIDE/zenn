@@ -1,21 +1,28 @@
-name: CI/textlint
+name: CI
 
 on:
   pull_request:
-    branches: [main]
+    branches:
+      - "main"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
 
 jobs:
-  check:
+  text-lint:
+    name: Text lint
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
-
       - name: Install reviewdog
         uses: reviewdog/action-setup@v1
         with:
           reviewdog_version: latest
-
       - name: Cache node modules always
         uses: pat-s/always-upload-cache@v3
         env:
@@ -25,13 +32,10 @@ jobs:
           key: node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             node-
-
       - name: Install dependencies
         run: npm install
-
       - name: Run textlint on articles
         run: npx textlint -f checkstyle "articles/*.md" >> .textlint.log
-
       - name: Run reviewdog
         if: failure()
         env:
