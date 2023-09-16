@@ -6,7 +6,7 @@ topics: ["dependabot", "gradle", "android"]
 published: true
 ---
 
-# 背景
+# 達成したいこと
 
 Android の Gradle ファイルにおいて、複数のライブラリのバージョンを固定させるためにバージョンの変数を用いることがあります。
 
@@ -21,7 +21,7 @@ testImplementation "io.mockk:mockk-android:$mockk_version"
 
 本記事では、複数のライブラリバージョンの共通化を強制しつつ、dependabot を利用した自動ライブラリ更新を実現する方法を紹介します。
 
-# 結論
+# やり方の概要
 
 **バージョンカタログという仕組みを利用**して定義します。
 
@@ -29,7 +29,7 @@ https://developer.android.com/build/migrate-to-catalogs
 
 [Gradle 7.0 以上が必要](https://docs.gradle.org/7.0/release-notes.html)です。
 
-# 手順
+# 具体的な手順
 
 まず、Gradle 8.0 未満を利用している場合は、`settings.gradle` に以下の行を追加して機能を有効化します。
 
