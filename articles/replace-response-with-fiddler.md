@@ -8,15 +8,23 @@ published: true
 
 クライアント開発において、サーバーからのレスポンスを細かく書き換えて動作確認したいことがあります。
 
-本記事では、Fiddler を利用し、レスポンス中の JSON における特定のキーに対するバリューを書き換える方法を記載します。
+本記事では、Fiddler を利用し、レスポンス中の JSON における特定のキーに対するバリューを書き換える方法をメモしておきます。
 
 # 対象の読者
 
-Fiddler でクライアント側における証明書の信頼設定を追加し、HTTPS 通信のレスポンスを閲覧する方法を知っている方が対象です。
+Fiddler をある程度利用したことがある方を対象としています。
+
+https://www.telerik.com/fiddler
+
+また、Fiddler を利用した **HTTPS 通信のリクエスト・レスポンスを復号して閲覧する方法を知っている**前提で手順を記載しています。
+
+https://blog.14nigo.net/2022/11/fiddlerclassicpcandsmartphone.html
 
 # 具体的な手順
 
 Fiddler にはプロキシーとしての動作をカスタムできるスクリプトが用意されているので、そのスクリプトにレスポンスを書き換える処理を追記することで実現します。
+
+https://docs.telerik.com/fiddler/extend-fiddler/addrules
 
 ## 解説する書き換え内容
 
@@ -75,7 +83,7 @@ static function OnBeforeResponse(oSession: Session) {
 
 ![](/images/replace-response-with-fiddler/02_fiddler-script-editor.png)
 
-### スクリプトをデバッグする
+## スクリプトをデバッグする
 
 もし、スクリプト書き換え後にうまく動作しない場合は、"Log"タブを確認すると解決のヒントが得られます。
 
