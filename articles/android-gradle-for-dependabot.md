@@ -1,6 +1,6 @@
 ---
 title: "AndroidのGradleファイルにおけるバージョンの共通化をdependabotが反応するように構築する"
-emoji: "😎"
+emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["dependabot", "gradle", "android"]
 published: true
