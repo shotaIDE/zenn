@@ -47,7 +47,7 @@ API `https://your.domain/v1/environment` のレスポンスにおける特定の
 
 Fiddler を起動し、メニューの "Rules" > "Customize Rules..." をクリックします。
 
-ここに図を追加します。
+![](/images/replace-response-with-fiddler/01_fiddler-customize-rules-menu.png)
 
 以下の通りに書き換え、上書き保存します。上書き保存すると、すぐに書き換え機能が動作します。
 
@@ -73,8 +73,10 @@ static function OnBeforeResponse(oSession: Session) {
 // ...
 ```
 
+![](/images/replace-response-with-fiddler/02_fiddler-script-editor.png)
+
 ### スクリプトをデバッグする
 
-もし、スクリプト書き換え後にうまく動作しない場合は、デバッグログを見ると解決方法が判明する可能性があります。
+もし、スクリプト書き換え後にうまく動作しない場合は、"Log"タブを確認すると解決のヒントが得られます。
 
-ここに図を追加します。
+![](/images/replace-response-with-fiddler/03_fiddler-log.png)
