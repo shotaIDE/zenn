@@ -53,12 +53,12 @@ mockkAndroid = { group = "io.mockk", name = "mockk-android", version.ref = "mock
 さらに、`app/build.gradle` にて、以下のように修正します。
 
 ```diff gradle:app/build.gradle
-- mockk_version = '1.12.5' // バージョンの変数
+-mockk_version = '1.12.5' // バージョンの変数
 -
-- testImplementation "io.mockk:mockk:$mockk_version"
-+ testImplementation libs.mockk
-- testImplementation "io.mockk:mockk-android:$mockk_version"
-+ testImplementation libs.mockkAndroid
+-testImplementation "io.mockk:mockk:$mockk_version"
++testImplementation libs.mockk
+-testImplementation "io.mockk:mockk-android:$mockk_version"
++testImplementation libs.mockkAndroid
 ```
 
 これをマージすると、dependabot が反応し、以下のような PR が自動で作成されるようになります。
