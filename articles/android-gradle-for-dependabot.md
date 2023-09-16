@@ -21,7 +21,7 @@ testImplementation "io.mockk:mockk-android:$mockk_version"
 
 本記事では、複数のライブラリバージョンの共通化を強制しつつ、dependabot を利用した自動ライブラリ更新を実現する方法を紹介します。
 
-# やり方の概要
+# 解決方法の概要
 
 **バージョンカタログという仕組みを利用**して定義します。
 
