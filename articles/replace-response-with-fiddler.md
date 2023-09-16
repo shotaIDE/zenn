@@ -47,6 +47,8 @@ API `https://your.domain/v1/environment` のレスポンスにおける特定の
 
 Fiddler を起動し、メニューの "Rules" > "Customize Rules..." をクリックします。
 
+ここに図を追加します。
+
 以下の通りに書き換え、上書き保存します。上書き保存すると、すぐに書き換え機能が動作します。
 
 ```diff javascript
