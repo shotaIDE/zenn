@@ -17,7 +17,7 @@ testImplementation "io.mockk:mockk:$mockk_version"
 testImplementation "io.mockk:mockk-android:$mockk_version"
 ```
 
-しかし、上記の定義方法だと、**[dependabot](https://docs.github.com/ja/code-security/dependabot/dependabot-version-updates) が反応せず、ライブラリ更新の自動化を導入することができません**。
+しかし、上記の定義方法だと、**[dependabot](https://docs.github.com/ja/code-security/dependabot/dependabot-version-updates) が反応せず、ライブラリ更新の自動化を導入できません**。
 
 本記事では、複数のライブラリバージョンの共通化を強制しつつ、dependabot を利用した自動ライブラリ更新を実現する方法を紹介します。
 
