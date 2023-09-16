@@ -1,5 +1,5 @@
 ---
-title: "AndroidのGradleファイルにおけるバージョンの共通化をdependabotが反応するように構築する"
+title: "AndroidのGradleファイルにおける複数ライブラリのバージョン固定をdependabotが反応するように指定する"
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["dependabot", "gradle", "android"]
