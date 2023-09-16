@@ -61,7 +61,7 @@ mockkAndroid = { group = "io.mockk", name = "mockk-android", version.ref = "mock
 + testImplementation libs.mockkAndroid
 ```
 
-これをマージすると、dependabot がバージョン定義を解析することができ、以下のような PR が自動で作成されるようになります。
+これをマージすると、dependabot が反応し、以下のような PR が自動で作成されるようになります。
 
 ![](/images/android-gradle-for-dependabot/01_pr-summary.png)
 ![](/images/android-gradle-for-dependabot/02_pr-diff.png)
