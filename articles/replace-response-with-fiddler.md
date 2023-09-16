@@ -20,7 +20,7 @@ Fiddler にはプロキシーとしての動作をカスタムできるスクリ
 
 ## 解説する書き換え内容
 
-API `https://your.domain/v1/environment` を叩いた際のレスポンスにおける特定のキー `planCode` に対応するバリューを、`2` に書き換えたい、という状況を想定します。
+API `https://your.domain/v1/environment` のレスポンスにおける特定のキー `planCode` に対応するバリューを、`2` に書き換えたい、という状況を想定します。
 
 ```json:Before
 {
