@@ -1,6 +1,6 @@
 ---
 title: "Fiddlerを利用してAPIのレスポンス中におけるJSONの一部のバリューを書き換える"
-emoji: "🛞"
+emoji: "💂‍♂️"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["fiddler", "api"]
 published: true
