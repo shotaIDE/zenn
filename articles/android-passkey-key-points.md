@@ -8,9 +8,10 @@ published: true
 
 Android ネイティブでパスキー認証(FIDO2)を実装するため方法を調査しましたが、引っかかる部分が多かったので記事を書いてみることにしました。
 
-iOS の記事も以下に書きました。
+本記事は Android のみの内容になります。
+iOS の内容を確認したい場合は以下をご覧ください。
 
-https://zenn.dev/colomney/articles/android-passkey-key-points
+https://zenn.dev/colomney/articles/ios-passkey-key-points
 
 # 本記事で書くこと
 
