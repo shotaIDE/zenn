@@ -123,4 +123,6 @@ jobs:
 
 以上のように設定することで、 `functions/**` の差分に関わらずチェックステータスが記録されるので、必須設定が適切に動作します。
 
-（図を挿入する）
+![](/images/required-job-depends-on-diffs-for-github-actions/check-result-on-needed.png)
+
+![](/images/required-job-depends-on-diffs-for-github-actions/check-result-on-no-need.png)
