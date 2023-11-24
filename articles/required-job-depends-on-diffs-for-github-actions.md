@@ -63,7 +63,7 @@ jobs:
         run: pytest
 ```
 
-`paths` フィルターを削除し、修正が入ったパスを判定するジョブを追加します。
+`paths` フィルターを削除し、修正が入ったパスを判定するジョブ `check-impact` を追加します。
 
 https://github.com/marketplace/actions/changed-files
 
@@ -91,3 +91,36 @@ jobs:
 +        with:
 +          files: "functions/**"
 ```
+
+`if` 構文により、チェックを行うジョブと、チェックが不要なので何もせずに終了するジョブのいずれかが実行されるようにします。
+
+```diff yaml:.github/workflows/ci_api.yaml
+  test:
+    name: Test API
++    needs: check-impact
++    if: needs.check-impact.outputs.has-changed-related-files == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+      - name: Test
+        run: pytest
++  test-no-need:
++    name: Test API (no need)
++    needs: check-impact
++    if: needs.check-impact.outputs.has-changed-related-files == 'false'
++    runs-on: ubuntu-latest
++    steps:
++      - name: Skip
++        run: echo "No changes in files related to API, skipping."
+```
+
+リポジトリの設定から "Branch protection rule" を開き、以下のように 2 つのジョブを両方とも設定します。
+ジョブは GitHub Actions 上で一度以上実行されないと候補として表示されないので、試しに動作させた後でこの設定は行います。
+
+![](/images/required-job-depends-on-diffs-for-github-actions/required-check-settings.png)
+
+以上のように設定することで、 `functions/**` の差分に関わらずチェックステータスが記録されるので、必須設定が適切に動作します。
+
+（図を挿入する）
