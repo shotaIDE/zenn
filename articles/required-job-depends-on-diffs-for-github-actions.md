@@ -37,3 +37,25 @@ https://docs.github.com/ja/repositories/configuring-branches-and-merges-in-your-
 ステータスチェック必須設定では、2 つのジョブを両方とも必須として設定します。
 
 # 詳細な方法
+
+```yaml:.github/workflows/ci_api.yaml
+name: CI / API
+
+on:
+  pull_request:
+    branches:
+      - "main"
+    paths:
+      - "functions/**"
+
+jobs:
+  test:
+    name: Test API
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+      - name: Test
+        run: pytest
+```
