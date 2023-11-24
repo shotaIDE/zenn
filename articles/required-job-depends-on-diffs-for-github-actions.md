@@ -24,7 +24,9 @@ https://docs.github.com/ja/repositories/configuring-branches-and-merges-in-your-
 
 ところが、`paths` フィルターを利用すると、ステータスチェックの結果がそもそも残らず、チェックが「実行不要で満たしている」という状態であることを GitHub Actions が認識してくれません。
 
-（ここに図を挿入します）
+![](/images/required-job-depends-on-diffs-for-github-actions/required-check-settings-before.png)
+
+![](/images/required-job-depends-on-diffs-for-github-actions/check-result-with-paths.png)
 
 本記事では、この解決方法を記載します。
 
@@ -119,7 +121,7 @@ jobs:
 リポジトリの設定から "Branch protection rule" を開き、以下のように 2 つのジョブを両方とも設定します。
 ジョブは GitHub Actions 上で一度以上実行されないと候補として表示されないので、試しに動作させた後でこの設定は行います。
 
-![](/images/required-job-depends-on-diffs-for-github-actions/required-check-settings.png)
+![](/images/required-job-depends-on-diffs-for-github-actions/required-check-settings-after.png)
 
 以上のように設定することで、 `functions/**` の差分に関わらずチェックステータスが記録されるので、必須設定が適切に動作します。
 
