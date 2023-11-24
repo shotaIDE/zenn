@@ -38,6 +38,9 @@ https://docs.github.com/ja/repositories/configuring-branches-and-merges-in-your-
 
 # 詳細な方法
 
+以下のような Python のテスト実行の CI が組まれていたとします。
+これに対して、修正を適用していきます。
+
 ```yaml:.github/workflows/ci_api.yaml
 name: CI / API
 
@@ -58,4 +61,33 @@ jobs:
         run: pip install -r requirements.txt
       - name: Test
         run: pytest
+```
+
+`paths` フィルターを削除し、修正が入ったパスを判定するジョブを追加します。
+
+https://github.com/marketplace/actions/changed-files
+
+```diff yaml:.github/workflows/ci_api.yaml
+on:
+  pull_request:
+    branches:
+      - "main"
+-    paths:
+-      - "functions/**"
+
+jobs:
++  check-impact:
++    name: Check impact
++    runs-on: ubuntu-latest
++    outputs:
++      has-changed-related-files: ${{ steps.check-related-files.outputs.any_changed == 'true' }}
++    steps:
++      - uses: actions/checkout@v4
++        with:
++          fetch-depth: 0
++      - name: Check related files
++        id: check-related-files
++        uses: tj-actions/changed-files@v40
++        with:
++          files: "functions/**"
 ```
