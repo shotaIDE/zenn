@@ -1,6 +1,13 @@
+bitrise
+fileutils
 githubactions
+pgrep
 pytest
+simctl
 siri
+udid
 xcodeproj
+xcrun
+xcui
 xcworkspace
 zenn
