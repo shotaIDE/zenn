@@ -88,6 +88,83 @@ end
 
 ## テストケースの開始・終了時に、ローカルサーバーに録画の指示を出す
 
+以下のように、テストケースの親クラスを作成します。
+
+```swift:XCTestCaseWithRecording.swift
+import ImageIO
+import MobileCoreServices
+import XCTest
+
+class XCTestCaseWithRecording: XCTestCase {
+    static private let recordingServerOrigin = "http://localhost:4567"
+
+    override func setUpWithError() throws {
+        try super.setUpWithError()
+        recordVideo()
+    }
+
+    override func tearDownWithError() throws {
+        recordVideo(stop: true)
+        try super.tearDownWithError()
+    }
+
+    private func recordVideo(stop: Bool = false) {
+        let udid = ProcessInfo.processInfo.environment["SIMULATOR_UDID"] ?? ""
+
+        // `name` is of the form, c.g. "-[AccountTests testLogin]"
+        let parts = name.components(separatedBy: " ")
+        let testClassName = String(parts[0].dropFirst(2))
+        let testCaseName = String(parts[1].dropLast(1))
+
+        let urlString = "\(XCTestCaseWithRecording.recordingServerOrigin)/record_video/\(udid)/\(testClassName).\(testCaseName)"
+        guard let url = URL(string: urlString) else { return }
+
+        let json: [String: Any] = ["delete": !isTestFailed(), "stop": stop]
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = try? JSONSerialization.data(withJSONObject: json, options: [])
+        URLSession.shared.dataTask(with: request).resume()
+    }
+
+    private func isTestFailed() -> Bool {
+        if let testRun = testRun {
+            let failureCount = testRun.failureCount + testRun.unexpectedExceptionCount
+            return failureCount > 0
+        }
+        return false
+    }
+}
+```
+
+上記のクラスを各テストケースで利用します。
+
+```swift
+import XCTest
+
+final class AccountTests: XCTestCaseWithRecording {
+    func testLogin() throws {
+        let app = XCUIApplication()
+        app.launch()
+
+        // ここにテスト処理を実装する
+    }
+}
+```
+
+## 残った録画を CI 実行結果の成果物として残す
+
+サーバーを以下のコマンドで実行します。
+
+```shell
+ruby recording_server.rb
+```
+
+この状態で XCUITest を実行します。
+これにより、 `recording` フォルダーに失敗時の録画が残されます。
+
+`recording` フォルダーをビルドの成果物として残しておけば、原因調査に利用できます。
+
 # 参考
 
 https://testableapple.com/video-recording-of-failed-tests-on-ios/
