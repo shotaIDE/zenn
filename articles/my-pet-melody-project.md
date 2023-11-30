@@ -3,7 +3,7 @@ title: "個人アプリ「うちのコメロディー」をリリースしまし
 emoji: "🤖"
 type: "idea" # tech: 技術記事 / idea: アイデア
 topics: ["dependabot", "gradle", "android"]
-published: true
+published: false
 ---
 
 # コンセプトメイキング
