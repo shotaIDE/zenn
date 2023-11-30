@@ -6,46 +6,47 @@ topics: ["ios", "android"]
 published: false
 ---
 
-この記事では、GitHub Actions でファイルの差分に基づいて CI（継続的インテグレーション）を効率よく、かつ安全に実行する方法について探求し、必須ジョブを設定する方法を説明します。
+この記事では、GitHub Actions を使用して、ファイルの差分に基づく継続的インテグレーション（CI）の効率化と、必須ジョブの安全な設定を両立させる方法について探求します。
+CI の効率化は、リソースの節約と迅速なフィードバックの提供に不可欠ですが、安全なプロセスの保持も同様に重要です。
+この記事では、この 2 つの要素のバランスをとる方法を解説します。
 
 # 背景
 
-GitHub Actions では、PR の差分に応じてワークフローを実行させるか否かを選択できる `paths` や `paths-ignore` フィルターが用意されています。
+GitHub Actions では、`paths`や`paths-ignore`フィルターを使って、プルリクエスト（PR）の差分に応じてワークフローを実行するかどうかを選択できます。
 
 https://docs.github.com/ja/actions/using-workflows/workflow-syntax-for-github-actions#onpushpull_requestpull_request_targetpathspaths-ignore
 
-これにより、差分の内容から影響を受けず確認の必要がないワークフローをスキップし、CI の実行時間や経済的コストを削減できます。
+この機能により、影響を受けないワークフローをスキップし、CI の実行時間とコストを削減できます。
 
-一方で、PR で実行されるべきワークフローやジョブを指定し、そのチェックがパスしていないと PR をマージできないようにするブランチに対する「ステータスチェック必須」設定が用意されています。
+また、「ステータスチェック必須」設定を用いて、特定のワークフローやジョブの完了を PR のマージ条件に設定できます。
 
 https://docs.github.com/ja/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/managing-a-branch-protection-rule
 
-これにより、PR マージにより、マージ先のブランチが壊れてしまうことを防ぐことができ、安全な開発プロセスにつながります。
+この機能により、安全な開発プロセスを確保できます。
 
-上記の 2 つの設定は併用して開発することが望ましいです。
+しかし、`paths`フィルターや`paths-ignore`フィルターを利用すると、必要なステータスチェックが実行されず、GitHub Actions が「実行不要」と判断する問題が生じます。
 
-ところが、`paths` フィルターを利用すると、ステータスチェックの結果がそもそも残らず、チェックが「実行不要で満たしている」という状態であることを GitHub Actions が認識してくれません。
+例えば、以下のように `Test API` というジョブを PR のマージ条件に設定します。
 
 ![](/images/required-job-depends-on-diffs-for-github-actions/required-check-settings-before.png)
 
+この状況下で、``paths`フィルターや`paths-ignore`フィルターにより`Test API`ジョブがスキップされると、必要なチェックステータスが満たされない状態のままとなってしまいます。
+
 ![](/images/required-job-depends-on-diffs-for-github-actions/check-result-with-paths.png)
 
-不要なワークフローをスキップして CI を効率化する必要性と、PR マージのために必須ジョブを確実にする要件のバランスをとることです。
-
-本記事では、この解決方法を記載します。
+本記事では、CI の効率化と安全性を両立させるための解決策を提案します。
 
 # やり方の概要
 
-`paths` や `paths-ignore` フィルターの代わりに、ジョブ内で `if` 条件を使用して、ジョブが実行する必要性を決定します。
+`paths`や`paths-ignore`フィルターの代わりに、`if`構文を使用してジョブの実行必要性を決定します。
 
-`if` 構文により、チェックを行うジョブと、チェックが不要なので何もせずに終了するジョブのいずれかが実行されるようにします。
+この方法では、ファイルの変更がある場合にのみ重要なチェックを実行し、変更がない場合はチェックをスキップします。
 
-ステータスチェック必須設定では、2 つのジョブを両方とも必須として設定します。
+これにより、不要なジョブの実行を避けつつ、必要なステータスチェックを確実に行うことが可能になります。
 
 # 詳細な方法
 
-以下のような Python のテスト実行の CI が組まれていたとします。
-これに対して、修正を適用していきます。
+たとえば、以下のような Python のテスト実行 CI が設定されているとします。
 
 ```yaml:.github/workflows/ci_api.yaml
 name: CI / API
@@ -69,11 +70,13 @@ jobs:
         run: pytest
 ```
 
-`paths` フィルターを削除し、修正が入ったパスを判定するジョブ `check-impact` を追加します。
+ここで、`paths`フィルターを削除し、変更があるかどうかを判定する`check-impact`ジョブを追加します。
 
 https://github.com/marketplace/actions/changed-files
 
-```diff yaml:.github/workflows/ci_api.yaml
+```diff yaml
+
+:.github/workflows/ci_api.yaml
 on:
   pull_request:
     branches:
@@ -98,7 +101,7 @@ jobs:
 +          files: "functions/**"
 ```
 
-`if` 構文により、チェックを行うジョブと、チェックが不要なので何もせずに終了するジョブのいずれかが実行されるようにします。
+`if`構文を用いて、関連ファイルに変更がある場合のみテストジョブを実行し、そうでない場合は何もしない（`Test API (no need)`）というジョブを実行します。
 
 ```diff yaml:.github/workflows/ci_api.yaml
   test:
@@ -122,12 +125,11 @@ jobs:
 +        run: echo "No changes in files related to API, skipping."
 ```
 
-リポジトリの設定から "Branch protection rule" を開き、以下のように 2 つのジョブを両方とも設定します。
-ジョブは GitHub Actions 上で一度以上実行されないと候補として表示されないので、試しに動作させた後でこの設定は行います。
+リポジトリの設定で、2 つのジョブを両方必須として設定します。
 
 ![](/images/required-job-depends-on-diffs-for-github-actions/required-check-settings-after.png)
 
-以上のように設定することで、 `functions/**` の差分に関わらずチェックステータスが記録されるので、必須設定が適切に動作します。
+以上の設定により、`functions/**`の差分に関わらず、必要なチェックが適切に記録され、PR のマージが安全に行えるようになります。
 
 ![](/images/required-job-depends-on-diffs-for-github-actions/check-result-on-needed.png)
 
