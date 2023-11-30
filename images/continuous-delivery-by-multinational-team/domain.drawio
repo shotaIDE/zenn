@@ -1,0 +1,25 @@
+<mxfile host="app.diagrams.net" modified="2023-11-28T13:47:26.120Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36" etag="6ao-IqLHdL-XdwmCWqln" version="22.1.4" type="device">
+  <diagram name="ページ1" id="44k2AwJgWq7LITa2MMVN">
+    <mxGraphModel dx="753" dy="478" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="DeSURFavH04fWO_Z-Beb-1" value="設計" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="150" width="40" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="DeSURFavH04fWO_Z-Beb-2" value="実装" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="220" width="40" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="DeSURFavH04fWO_Z-Beb-3" value="リグレッションテスト" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="70" y="260" width="130" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="DeSURFavH04fWO_Z-Beb-4" value="継続的な&lt;br&gt;リファクタリング" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="300" width="110" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="DeSURFavH04fWO_Z-Beb-5" value="バグ分析" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="200" y="300" width="110" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
