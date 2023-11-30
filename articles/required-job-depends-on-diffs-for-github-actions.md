@@ -6,6 +6,8 @@ topics: ["ios", "android"]
 published: false
 ---
 
+この記事では、GitHub Actions でファイルの差分に基づいて CI（継続的インテグレーション）を効率よく、かつ安全に実行する方法について探求し、必須ジョブを設定する方法を説明します。
+
 # 背景
 
 GitHub Actions では、PR の差分に応じてワークフローを実行させるか否かを選択できる `paths` や `paths-ignore` フィルターが用意されています。
@@ -28,11 +30,13 @@ https://docs.github.com/ja/repositories/configuring-branches-and-merges-in-your-
 
 ![](/images/required-job-depends-on-diffs-for-github-actions/check-result-with-paths.png)
 
+不要なワークフローをスキップして CI を効率化する必要性と、PR マージのために必須ジョブを確実にする要件のバランスをとることです。
+
 本記事では、この解決方法を記載します。
 
 # やり方の概要
 
-`paths` や `paths-ignore` フィルターは利用せず、ジョブにおける `if` 構文を利用します。
+`paths` や `paths-ignore` フィルターの代わりに、ジョブ内で `if` 条件を使用して、ジョブが実行する必要性を決定します。
 
 `if` 構文により、チェックを行うジョブと、チェックが不要なので何もせずに終了するジョブのいずれかが実行されるようにします。
 
