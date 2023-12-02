@@ -110,7 +110,7 @@ Sun\*はベトナム側の拠点に 1000 名以上のエンジニアが在籍し
 
 実際には、特定の地点ではデグレが発生しているので、追加コミットが必要など、微調整が必要ではあります。
 
-（トランクベース開発の図を掲載する。）
+![](/images/continuous-delivery-by-multinational-team/trunk-based-development.png)
 
 ## 開発チームの定性的評価
 
