@@ -52,7 +52,7 @@ https://docs.github.com/ja/repositories/configuring-branches-and-merges-in-your-
 
 本記事では、上記の課題を解決し、CI の効率化と安全性を両立させるための代替案を提案します。
 
-# 詳細な方法
+# やり方の詳細
 
 ## 前提となる CI
 
