@@ -143,7 +143,7 @@ jobs:
 
 ![](/images/required-job-depends-on-diffs-for-github-actions/required-check-settings-after.png)
 
-## ジョブの実行結果
+## ジョブの実行結果を確認する
 
 以上の設定により、`functions/**`の差分に関わらず、必要なチェックが適切に記録され、PR のマージが安全に行えるようになります。
 
