@@ -46,11 +46,11 @@ https://docs.github.com/ja/repositories/configuring-branches-and-merges-in-your-
 
 ![](/images/required-job-depends-on-diffs-for-github-actions/required-check-settings-before.png)
 
-この状況下で、``paths`フィルターや`paths-ignore`フィルターにより`Test API`ジョブがスキップされると、必要なチェックステータスが満たされない状態のままとなってしまいます。
+この状況下で、`paths`フィルターや`paths-ignore`フィルターにより`Test API`ジョブがスキップされると、必要なチェックステータスが満たされない状態のままとなってしまいます。
 
 ![](/images/required-job-depends-on-diffs-for-github-actions/check-result-with-paths.png)
 
-本記事では、CI の効率化と安全性を両立させるための解決策を提案します。
+本記事では、上記の課題を解決し、CI の効率化と安全性を両立させるための代替案を提案します。
 
 # 詳細な方法
 
@@ -80,9 +80,9 @@ jobs:
         run: pytest
 ```
 
-ここで、`paths`フィルターを削除し、変更があるかどうかを判定する`check-impact`ジョブを追加します。
+## 差分フィルターを changed-files アクションを利用したものに差し替える
 
-https://github.com/marketplace/actions/changed-files
+ここで、`paths`フィルターを削除し、変更があるかどうかを判定する`check-impact`ジョブを追加します。
 
 ```diff yaml
 
@@ -111,6 +111,8 @@ jobs:
 +          files: "functions/**"
 ```
 
+## チェックをスキップするジョブを追加する
+
 `if`構文を用いて、関連ファイルに変更がある場合のみテストジョブを実行し、そうでない場合は何もしない（`Test API (no need)`）というジョブを実行します。
 
 ```diff yaml:.github/workflows/ci_api.yaml
@@ -135,9 +137,13 @@ jobs:
 +        run: echo "No changes in files related to API, skipping."
 ```
 
+## ブランチの必須ジョブ設定を変更する
+
 リポジトリの設定で、2 つのジョブを両方必須として設定します。
 
 ![](/images/required-job-depends-on-diffs-for-github-actions/required-check-settings-after.png)
+
+## ジョブの実行結果
 
 以上の設定により、`functions/**`の差分に関わらず、必要なチェックが適切に記録され、PR のマージが安全に行えるようになります。
 
