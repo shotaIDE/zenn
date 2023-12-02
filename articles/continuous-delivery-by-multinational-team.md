@@ -6,8 +6,11 @@ topics: ["ios", "android"]
 published: false
 ---
 
+:::message
+本記事は、[Sun\* Advent Calendar 2023](https://adventar.org/calendars/9043) の 12 日目の記事です。
+:::
+
 こんにちは。[Sun Asterisk](https://sun-asterisk.com/)でモバイルアプリエンジニアをやっている、井手 将太です。
-本記事は、[Sun\* Advent Calendar 2023](https://adventar.org/calendars/9043) の n 日目の記事です。
 
 私は、Sun Asterisk でモバイルアプリエンジニアとして iOS と Android のアプリ開発プロジェクトに参画しています。
 より魅力的なアプリを素早く世の中に届けるためエンジニアの領域から何ができるか、ということをミッションとして業務に取り組んでいます。
