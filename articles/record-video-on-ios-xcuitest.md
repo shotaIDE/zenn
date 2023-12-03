@@ -3,7 +3,7 @@ title: "CI環境でiOSのUIテストを自動実行する際、失敗したテ�
 emoji: "📸"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["ios", "xcode", "test", "ci"]
-published: false
+published: true
 ---
 
 :::message
