@@ -3,8 +3,12 @@ title: "CI環境でiOSのUIテストを自動実行する際、失敗したテ�
 emoji: "📸"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["ios", "xcode", "test", "ci"]
-published: true
+published: false
 ---
+
+:::message
+この記事は、[ソフトウェアテストアドベントカレンダー 2023](https://qiita.com/advent-calendar/2023/softwaretesting) の 6 日目の記事です。
+:::
 
 CI 環境で UI テストを自動実行する際に、テストが失敗した原因を調査するための情報をできるだけ多く用意しておくことは重要です。
 特に、テストが失敗した際の画面録画は、強力な助けとなります。
