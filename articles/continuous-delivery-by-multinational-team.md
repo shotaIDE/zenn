@@ -2,7 +2,7 @@
 title: "多国籍チームでタッグを組み、スピード感ある継続的な価値提供を実現する"
 emoji: "🕌"
 type: "idea" # tech: 技術記事 / idea: アイデア
-topics: ["ios", "android"]
+topics: ["チーム開発", "要件定義", "リリース"]
 published: false
 ---
 
