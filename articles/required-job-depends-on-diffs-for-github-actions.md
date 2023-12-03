@@ -57,7 +57,7 @@ https://docs.github.com/ja/repositories/configuring-branches-and-merges-in-your-
 
 # やり方の詳細
 
-## 前提となる CI
+## 前提となるチェックジョブ
 
 たとえば、以下のような Python のテスト実行 CI が設定されているとします。
 
@@ -83,7 +83,7 @@ jobs:
         run: pytest
 ```
 
-## 差分フィルターを changed-files アクションを利用したものに差し替える
+## paths フィルターを changed-files アクションに差し替える
 
 ここで、`paths`フィルターを削除し、変更があるかどうかを判定する`check-impact`ジョブを追加します。
 
@@ -112,14 +112,16 @@ jobs:
 +        uses: tj-actions/changed-files@v40
 +        with:
 +          files: "functions/**"
+# ...
 ```
 
-## チェックをスキップするジョブを追加する
+## チェックジョブの発動条件を if に差し替え、かつ、何もしないジョブを追加する
 
 `if`構文を用いて、関連ファイルに変更がある場合のみテストジョブを実行し、そうでない場合は何もしない（`Test API (no need)`）というジョブを実行します。
 
 ```diff yaml:.github/workflows/ci_api.yaml
   test:
+    # ...
     name: Test API
 +    needs: check-impact
 +    if: needs.check-impact.outputs.has-changed-related-files == 'true'
@@ -140,13 +142,13 @@ jobs:
 +        run: echo "No changes in files related to API, skipping."
 ```
 
-## ブランチの必須ジョブ設定を変更する
+## PR マージにおける必須ジョブ設定を変更する
 
 リポジトリの設定で、2 つのジョブを両方必須として設定します。
 
 ![](/images/required-job-depends-on-diffs-for-github-actions/required-check-settings-after.png)
 
-## ジョブの実行結果を確認する
+## GitHub Actions の実行結果を確認する
 
 以上の設定により、`functions/**`の差分に関わらず、必要なチェックが適切に記録され、PR のマージが安全に行えるようになります。
 
