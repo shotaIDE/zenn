@@ -39,7 +39,7 @@ Simulator を実行する Mac で、リクエストに応じて画面録画の�
 
 # やり方の詳細
 
-## 画面録画の開始と終了、破棄の機能を持ったサーバーを立てる
+## リクエストに応じて画面録画の開始と終了、破棄の機能を持ったサーバーを立てる
 
 サーバーはどのような技術を利用しても問題ないですが、今回は Ruby を利用したスクリプト例を紹介します。
 
@@ -112,7 +112,7 @@ class XCTestCaseWithRecording: XCTestCase {
     private func recordVideo(stop: Bool = false) {
         let udid = ProcessInfo.processInfo.environment["SIMULATOR_UDID"] ?? ""
 
-        // `name` は "-[(テストクラス名) (テストケース名)]" のような形式
+        // プロパティの `name` が "-[(テストクラス名) (テストケース名)]" のような形式なので、パースする
         let parts = name.components(separatedBy: " ")
         let testClassName = String(parts[0].dropFirst(2))
         let testCaseName = String(parts[1].dropLast(1))
@@ -158,9 +158,9 @@ final class AccountTests: XCTestCaseWithRecording {
 }
 ```
 
-## 残った録画を CI 実行結果の成果物として残す
+## 破棄されず残った画面録画を CI 実行結果の成果物として保持する
 
-サーバーを以下のコマンドで実行します。
+定義したサーバーを以下のコマンドで実行します。
 
 ```shell
 ruby recording_server.rb
@@ -169,7 +169,7 @@ ruby recording_server.rb
 この状態で XCUITest を実行します。
 これにより、 `recording` フォルダーに失敗時の録画が残されます。
 
-`recording` フォルダーをビルドの成果物として残しておけば、原因調査に利用できます。
+`recording` フォルダーを CI 実行結果の成果物として保持しておきます。
 
 # 参考
 
