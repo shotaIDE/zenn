@@ -26,7 +26,7 @@ jobs:
       - name: Setup node
         uses: ./.github/actions/setup-node
       - name: Check Code Spell
-        run: cspell '**/*.md' > cspell.log
+        run: npx cspell '**/*.md' > cspell.log
       - name: Run reviewdog for Code Spell Checker
         if: failure()
         env:
