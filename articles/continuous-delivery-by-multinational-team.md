@@ -133,8 +133,12 @@ Sun\*はベトナム側の拠点に 1000 名以上のエンジニアが在籍し
 
 内容としては、開発チームのコード、各種開発プロセスや、チームに対する満足度や自由記述の意見などを回答してもらっています。
 
-こうした背景には、[DevOps の能力](https://cloud.google.com/architecture/devops?hl=ja)や、SPACE 指標を参考にしています。
+こうした背景には、DevOps の能力や、SPACE 指標を参考にしています。
 測定したいキャパシティや指標を選択し、それが測定できるように質問を構築しています。
+
+https://cloud.google.com/architecture/devops?hl=ja
+
+https://queue.acm.org/detail.cfm?id=3454124
 
 スプリントごとの振り返りでは、「感謝したいこと(Thanks)」「課題(Issue)」の 2 分類で意見を出す単純なフレームワークなどを利用し、ベトナムチーム内で実施してもらいます。
 
