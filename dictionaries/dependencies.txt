@@ -1,3 +1,5 @@
+githubactions
+pytest
 siri
 xcodeproj
 xcworkspace
