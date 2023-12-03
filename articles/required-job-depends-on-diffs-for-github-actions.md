@@ -1,38 +1,43 @@
 ---
-title: "GitHub Actionsで差分に応じたCIの選択実行と必須ジョブ設定を両立させる"
+title: "GitHub Actionsで差分に応じたジョブの選択実行とPRマージにおける必須ジョブ設定を両立させる"
 emoji: "🎯"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["github", "githubactions"]
 published: false
 ---
 
-この記事では、GitHub Actions を使用して、ファイルの差分に基づく継続的インテグレーション（CI）の効率化と、必須ジョブの安全な設定を両立させる方法について紹介します。
+本記事では、GitHub Actions 利用時における、PR の差分に基づくジョブの選択実行と、PR マージ時の必須ジョブ設定を両立させる方法について紹介します。
 
-CI の効率化は、リソースの節約と迅速なフィードバックの提供に不可欠ですが、安全なプロセスの保持も同様に重要です。
+通常、PR の差分に基づいてジョブを選択実行する際は、`paths`や`paths-ignore`フィルターが利用されます。
+一方でこの方法では、PR マージ時の必須ジョブ設定と競合を起こしてしまうことがあります。
 
-この記事では、この 2 つの要素のバランスをとる方法を解説します。
+以下では、上記問題の回避策をご紹介します。
 
 # やり方の概要
 
-`paths`や`paths-ignore`フィルターの代わりに、`changed-files` アクションと `if` 構文を組み合わせて選択実行します。
+`paths`や`paths-ignore`フィルターの代わりに、**Changed Files アクションを利用**します。
 
 https://github.com/marketplace/actions/changed-files
 
-ファイル差分を確認し、影響範囲だった場合は、チェックジョブを実行します。
+Changed Files アクションにてファイル差分を確認し、**チェックジョブの影響範囲内のファイルが含まれていた場合は、`if`構文によりチェックジョブを実行**します。
 
-一方で、ファイル差分を確認し、影響範囲外だった場合は、何もしないというジョブを実行します。
+一方で、**チェックジョブの影響範囲内のファイルが含まれていなかった場合は、同じく`if`構文により何もしないというジョブを実行**します。
 
-さらに、ブランチ保護ルールでは、上記両方のチェックジョブを必須として設定します。
+さらに、PR マージ時の必須ジョブ設定では、上記の**チェックジョブと何もしないジョブを両方とも必須として設定**します。
 
 これにより、不要なチェック実行を避けつつ、必要なステータスチェックを確実に行うことが可能になります。
 
 # 背景となる課題
 
-GitHub Actions では、`paths`や`paths-ignore`フィルターを使って、プルリクエスト（PR）の差分に応じてワークフローを実行するかどうかを選択できます。
+:::message
+以下では背景となる課題をより詳細に記載します。回避策を確認したい場合は、次の章まで読み飛ばしてください。
+:::
+
+GitHub Actions では、`paths`や`paths-ignore`フィルターを使って、PR の差分に応じてワークフローを実行するかどうかを選択できます。
 
 https://docs.github.com/ja/actions/using-workflows/workflow-syntax-for-github-actions#onpushpull_requestpull_request_targetpathspaths-ignore
 
-この機能により、影響を受けないワークフローをスキップし、CI の実行時間とコストを削減できます。
+この機能により、影響を受けないワークフローをスキップし、GitHub Actions の実行時間とコストを削減できます。
 
 また、「ステータスチェック必須」設定を用いて、特定のワークフローやジョブの完了を PR のマージ条件に設定できます。
 
@@ -40,17 +45,15 @@ https://docs.github.com/ja/repositories/configuring-branches-and-merges-in-your-
 
 この機能により、安全な開発プロセスを確保できます。
 
-しかし、`paths`フィルターや`paths-ignore`フィルターを利用すると、必要なステータスチェックが実行されず、GitHub Actions が「実行不要」と判断する問題が生じます。
+しかし、`paths`フィルターや`paths-ignore`フィルターを利用すると、**スキップされたチェックジョブが「待機状態」となり、GitHub が「マージ不可」と判断する**問題が生じます。
 
 例えば、以下のように `Test API` というジョブを PR のマージ条件に設定します。
 
 ![](/images/required-job-depends-on-diffs-for-github-actions/required-check-settings-before.png)
 
-この状況下で、`paths`フィルターや`paths-ignore`フィルターにより`Test API`ジョブがスキップされると、必要なチェックステータスが満たされない状態のままとなってしまいます。
+この状況下で、`paths`フィルターや`paths-ignore`フィルターにより`Test API`ジョブがスキップされると、必要なチェックステータスが待機状態のままとなってしまい、マージがブロックされます。
 
 ![](/images/required-job-depends-on-diffs-for-github-actions/check-result-with-paths.png)
-
-本記事では、上記の課題を解決し、CI の効率化と安全性を両立させるための代替案を提案します。
 
 # やり方の詳細
 
