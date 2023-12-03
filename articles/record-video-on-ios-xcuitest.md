@@ -68,8 +68,11 @@ post '/record_video/:udid/:test_name' do
   end
 
   if body['stop']
+    # 録画の終了
     simctl_processes = `pgrep simctl`.strip.split("\n")
     simctl_processes.each { |pid| `kill -s SIGINT #{pid}` }
+
+    # リクエストに削除パラメーターが含まれていたら、録画を削除する
     File.delete(video_file) if body['delete'] && File.exist?(video_file)
   else
     # 録画の開始
@@ -82,9 +85,11 @@ end
 
 また、サーバーのプロセスで、Simulator に対するコマンド `xcrun simctl` の実行や中断をしています。
 
+加えて、録画ファイルの削除をしています。
+
 ## テストケースの開始・終了時に、ローカルサーバーに録画の指示を出す
 
-以下のように、`XCUITest` のテストケースの親クラスを作成します。
+以下のように、`XCUITest` を継承したテストケースの親クラスを作成します。
 
 ```swift:XCTestCaseWithRecording.swift
 import ImageIO
@@ -134,7 +139,11 @@ class XCTestCaseWithRecording: XCTestCase {
 }
 ```
 
-上記のクラスを各テストケースで利用します。
+上記では、現在のテストクラス名とテストケース名を取得し、先ほど立てたサーバーにリクエストを投げています。
+テストケースの開始前に録画開始をリクエストし、テストケースの終了後に録画終了をリクエストしています。
+また、テストが成功した場合は、録画終了のリクエスト時に録画の削除パラメーターを付与しています。
+
+このように作成したテストケースの親ケースを各テストケースで継承して利用します。
 
 ```swift
 import XCTest
