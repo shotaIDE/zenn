@@ -3,8 +3,12 @@ title: "GitHub Actionsで差分に応じたジョブの選択実行とPRマー�
 emoji: "🎯"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["github", "githubactions"]
-published: false
+published: true
 ---
+
+:::message
+この記事は [GitHub Actions Advent Calendar 2023](https://qiita.com/advent-calendar/2023/github-actions) の 7 日目の記事です 🎄
+:::
 
 本記事では、GitHub Actions 利用時における、PR の差分に基づくジョブの選択実行と、PR マージ時の必須ジョブ設定を両立させる方法について紹介します。
 
