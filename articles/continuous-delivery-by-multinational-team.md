@@ -57,7 +57,7 @@ Sun\*はベトナム側の拠点に 1000 名以上のエンジニアが在籍し
 
 そのため、コミュニケーションパスを制限し、取り決めによりお互い干渉せずに各々業務を進められるようにしておくという動きも必要です。
 
-（翻訳する際のフロー効率が悪いということを図に示す）
+![](/images/continuous-delivery-by-multinational-team/translation-flow-efficiency.png)
 
 # 業務ドメインの分担
 
