@@ -8,22 +8,22 @@ published: false
 
 本記事では、GitHub Actions 利用時における、PR の差分に基づくジョブの選択実行と、PR マージ時の必須ジョブ設定を両立させる方法について紹介します。
 
-通常、PR の差分に基づいてジョブを選択実行する際は、`paths`や`paths-ignore`フィルターが利用されます。
+通常、PR の差分に基づいてジョブを選択実行する際は、`paths` や `paths-ignore` フィルターが利用されます。
 一方でこの方法では、PR マージ時の必須ジョブ設定と競合を起こしてしまうことがあります。
 
-以下では、上記問題の回避策をご紹介します。
+以下では、この問題の回避策を紹介します。
 
 # やり方の概要
 
-`paths`や`paths-ignore`フィルターの代わりに、**Changed Files アクションを利用**します。
+`paths` や `paths-ignore` フィルターの代わりに、Changed Files アクションを利用します。
 
 https://github.com/marketplace/actions/changed-files
 
-Changed Files アクションにてファイル差分を確認し、**チェックジョブの影響範囲内のファイルが含まれていた場合は、`if`構文によりチェックジョブを実行**します。
+Changed Files アクションにてファイル差分を確認し、チェックジョブの影響範囲内のファイルが含まれていた場合は、`if` 構文によりチェックジョブを実行します。
 
-一方で、**チェックジョブの影響範囲内のファイルが含まれていなかった場合は、同じく`if`構文により何もしないというジョブを実行**します。
+一方で、チェックジョブの影響範囲内のファイルが含まれていなかった場合は、同じく `if` 構文により何もしないというジョブを実行します。
 
-さらに、PR マージ時の必須ジョブ設定では、上記の**チェックジョブと何もしないジョブを両方とも必須として設定**します。
+さらに、PR マージ時の必須ジョブ設定では、上記のチェックジョブと何もしないジョブを両方とも必須として設定します。
 
 これにより、不要なチェック実行を避けつつ、必要なステータスチェックを確実に行うことが可能になります。
 
@@ -33,11 +33,11 @@ Changed Files アクションにてファイル差分を確認し、**チェッ�
 以下では背景となる課題をより詳細に記載します。回避策を確認したい場合は、次の章まで読み飛ばしてください。
 :::
 
-GitHub Actions では、`paths`や`paths-ignore`フィルターを使って、PR の差分に応じてワークフローを実行するかどうかを選択できます。
+GitHub Actions では、`paths` や `paths-ignore` フィルターを使って、PR の差分に応じてワークフローを実行するかどうかを選択できます。
 
 https://docs.github.com/ja/actions/using-workflows/workflow-syntax-for-github-actions#onpushpull_requestpull_request_targetpathspaths-ignore
 
-この機能により、影響を受けないワークフローをスキップし、GitHub Actions の実行時間とコストを削減できます。
+この機能により、影響を受けないワークフローやジョブをスキップし、GitHub Actions の実行時間とコストを削減できます。
 
 また、「ステータスチェック必須」設定を用いて、特定のワークフローやジョブの完了を PR のマージ条件に設定できます。
 
@@ -45,17 +45,19 @@ https://docs.github.com/ja/repositories/configuring-branches-and-merges-in-your-
 
 この機能により、安全な開発プロセスを確保できます。
 
-しかし、`paths`フィルターや`paths-ignore`フィルターを利用すると、**スキップされたチェックジョブが「待機状態」となり、GitHub が「マージ不可」と判断する**問題が生じます。
+しかし、`paths` フィルターや `paths-ignore` フィルターを利用すると、**スキップされたチェックジョブが「待機状態」となり、GitHub が「マージ不可」と判断する**問題が生じます。
 
 例えば、以下のように `Test API` というジョブを PR のマージ条件に設定します。
 
 ![](/images/required-job-depends-on-diffs-for-github-actions/required-check-settings-before.png)
 
-この状況下で、`paths`フィルターや`paths-ignore`フィルターにより`Test API`ジョブがスキップされると、必要なチェックステータスが待機状態のままとなってしまい、マージがブロックされます。
+この状況下で、`paths` フィルターや `paths-ignore` フィルターにより `Test API` ジョブがスキップされると、必要なチェックステータスが待機状態のままとなりマージがブロックされます。
 
 ![](/images/required-job-depends-on-diffs-for-github-actions/check-result-with-paths.png)
 
 # やり方の詳細
+
+以下では具体的な回避策を紹介します。
 
 ## 前提となるチェックジョブ
 
@@ -85,11 +87,9 @@ jobs:
 
 ## paths フィルターを changed-files アクションに差し替える
 
-ここで、`paths`フィルターを削除し、変更があるかどうかを判定する`check-impact`ジョブを追加します。
+ここで、`paths` フィルターを削除し、変更があるかどうかを判定する `check-impact` ジョブを追加します。
 
-```diff yaml
-
-:.github/workflows/ci_api.yaml
+```diff yaml:.github/workflows/ci_api.yaml
 on:
   pull_request:
     branches:
@@ -117,7 +117,7 @@ jobs:
 
 ## チェックジョブの発動条件を if に差し替え、かつ、何もしないジョブを追加する
 
-`if`構文を用いて、関連ファイルに変更がある場合のみテストジョブを実行し、そうでない場合は何もしない（`Test API (no need)`）というジョブを実行します。
+`if` 構文を用いて、関連ファイルに変更がある場合のみテストジョブを実行し、そうでない場合は何もしない `Test API (no need)` ジョブを実行します。
 
 ```diff yaml:.github/workflows/ci_api.yaml
   test:
@@ -150,7 +150,7 @@ jobs:
 
 ## GitHub Actions の実行結果を確認する
 
-以上の設定により、`functions/**`の差分に関わらず、必要なチェックが適切に記録され、PR のマージが安全に行えるようになります。
+以上の設定により、`functions/**` の差分に関わらず、必要なチェックが適切に記録され、PR のマージが安全に行えるようになります。
 
 ![](/images/required-job-depends-on-diffs-for-github-actions/check-result-on-needed.png)
 
