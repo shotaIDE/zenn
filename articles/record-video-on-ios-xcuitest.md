@@ -1,56 +1,52 @@
 ---
-title: "iOSでE2Eテストの自動実行環境を構築する際、失敗したテストケースのキャプチャ動画を残す"
+title: "CI環境でiOSのUIテストを自動実行する際、失敗したテストケースの画面録画を残す"
 emoji: "📸"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["dependabot", "gradle", "android"]
+topics: ["ios", "xcode", "test", "ci"]
 published: true
 ---
 
-CI 環境で E2E テストを自動実行する際に、テストがコケた原因を調査するための情報をできるだけ多く用意しておくことは重要です。
-特に、テストがコケた際のキャプチャ動画は、強力な助けとなります。
+CI 環境で UI テストを自動実行する際に、テストが失敗した原因を調査するための情報をできるだけ多く用意しておくことは重要です。
+特に、テストが失敗した際の画面録画は、強力な助けとなります。
 
-Firebase Test Lab や Bitrise などを利用すると自動でキャプチャ動画を収集してくれる機能があります。
-ただ、GitHub Actions や Circle CI などの利用している場合は、自前でその環境を構築する必要があります。
+Firebase Test Lab や Bitrise などを利用すると自動で画面録画を収集してくれる機能があります。
+ただ、GitHub Actions や Circle CI などの利用している場合は、自前でその機能を構築する必要があります。
 
-本記事ではその方法を解説します。
+本記事では GitHub Actions や Circle CI などで利用できる、画面録画を残す方法を解説します。
 
 # 前提
 
-XCUITest を用いて E2E テストケースを実装している状況を想定しています。
+XCUITest を用いて UI テストケースを実装している状況を想定します。
 
-また、CI 環境としては CircleCI を想定しています。
-
-iOS の Simulator には、Simulator を動作させている Mac から画面のキャプチャ動画を撮影できる機能があります。
+また、iOS の Simulator には、Simulator が動作している Mac からコマンドにより画面録画を収集する機能が提供されています。
 
 ```shell
 xcrun simctl io booted recordVideo "test-video.mov"
 ```
 
-今回はこの機能を利用して、テストケース実行時のキャプチャを残します。
+本記事では、上記の機能を利用して、テストケース実行時の画面録画を収集します。
 
-# 概要
+# やり方の概要
 
-Simulator を実行するマシンで、キャプチャ動画を録画開始・終了するサーバーを立てます。
+Simulator を実行する Mac で、リクエストに応じて画面録画の開始と終了、破棄の機能を持ったサーバーを立てます。
 
-テストケースの開始時に、サーバーに録画開始を指示し、テストケースの終了時に、サーバーに録画終了を指示します。
-この際、テストケースが成功した場合録画を破棄し、失敗した場合録画を残します。
+テストケースの開始時に、サーバーに画面録画の開始をリクエストします。
 
-残った録画を CI 実行結果の成果物として残します。
+また、テストケースの終了時に、サーバーに画面録画の終了をリクエストします。
+この際、テストケースが成功した場合、画面録画の破棄をリクエストします。
 
-# 詳細
+破棄されず残った画面録画を CI 実行結果の成果物として保持します。
 
-## キャプチャ動画を録画開始・終了するサーバーを立てる
+# やり方の詳細
 
-サーバーのスクリプトはどのような技術でも問題ないですが、今回は Ruby を用いたスクリプトを紹介します。
+## 画面録画の開始と終了、破棄の機能を持ったサーバーを立てる
+
+サーバーはどのような技術を利用しても問題ないですが、今回は Ruby を利用したスクリプト例を紹介します。
 
 ```ruby:recording_server.rb
 require 'fileutils'
 require 'sinatra'
 
-# Server to start and stop recording screen of `XCUITest` running on Simulator on Mac.
-#
-# Called before the start and after the end of each test case in XCUITest,
-# leaving the screen recording only if it fails.
 post '/record_video/:udid/:test_name' do
   recordings_dir = 'recording'
   video_base_name = "#{recordings_dir}/#{params['test_name']}"
@@ -76,19 +72,19 @@ post '/record_video/:udid/:test_name' do
     simctl_processes.each { |pid| `kill -s SIGINT #{pid}` }
     File.delete(video_file) if body['delete'] && File.exist?(video_file)
   else
+    # 録画の開始
     puts `xcrun simctl io #{params['udid']} recordVideo --codec h264 --force #{video_file} &`
   end
 end
 ```
 
-スクリプトのポイントは以下です。
+上記のスクリプトでは、Simulator から HTTP 通信を受信するサーバーを立てています。
 
-- Simulator から HTTP 通信を受信するサーバーを立てる
-- サーバーのプロセスで Simulator に対するコマンド `xcrun simctl` を実行する
+また、サーバーのプロセスで、Simulator に対するコマンド `xcrun simctl` の実行や中断をしています。
 
 ## テストケースの開始・終了時に、ローカルサーバーに録画の指示を出す
 
-以下のように、テストケースの親クラスを作成します。
+以下のように、`XCUITest` のテストケースの親クラスを作成します。
 
 ```swift:XCTestCaseWithRecording.swift
 import ImageIO
@@ -111,7 +107,7 @@ class XCTestCaseWithRecording: XCTestCase {
     private func recordVideo(stop: Bool = false) {
         let udid = ProcessInfo.processInfo.environment["SIMULATOR_UDID"] ?? ""
 
-        // `name` is of the form, c.g. "-[AccountTests testLogin]"
+        // `name` は "-[(テストクラス名) (テストケース名)]" のような形式
         let parts = name.components(separatedBy: " ")
         let testClassName = String(parts[0].dropFirst(2))
         let testCaseName = String(parts[1].dropLast(1))
@@ -119,6 +115,7 @@ class XCTestCaseWithRecording: XCTestCase {
         let urlString = "\(XCTestCaseWithRecording.recordingServerOrigin)/record_video/\(udid)/\(testClassName).\(testCaseName)"
         guard let url = URL(string: urlString) else { return }
 
+        // テストケースが成功していたら、画面録画は削除する
         let json: [String: Any] = ["delete": !isTestFailed(), "stop": stop]
 
         var request = URLRequest(url: url)
