@@ -170,8 +170,7 @@ final class AccountTests: XCTestCaseWithRecording {
 ruby recording_server.rb
 ```
 
-この状態で XCUITest を実行します。
-これにより、 `recording` フォルダーに失敗時の録画が残されます。
+この状態で XCUITest を実行すると、`recording` フォルダーに失敗時の画面録画ファイルが残されます。
 
 `recording` フォルダーを CI 実行結果の成果物として保持しておきます。
 
