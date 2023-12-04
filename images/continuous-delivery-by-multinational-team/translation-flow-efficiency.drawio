@@ -1,74 +1,68 @@
-<mxfile host="app.diagrams.net" modified="2023-12-03T07:18:57.182Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36" etag="204Z40mq7bUukV8MYZXL" version="22.1.5" type="device">
+<mxfile host="app.diagrams.net" modified="2023-12-04T13:34:58.758Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36" etag="lwhA4_XikOU6gwKUljsD" version="22.1.5" type="device">
   <diagram name="ページ1" id="fu776fGeynSo5gwmmyIW">
     <mxGraphModel dx="994" dy="631" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="cA42I65lkPS70WluOvvI-128" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#fad9d5;" vertex="1" parent="1">
-          <mxGeometry x="10" y="110" width="230" height="170" as="geometry" />
+        <mxCell id="K5PCvoEAgfI1N-hL6Kno-3" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#eeeeee;" parent="1" vertex="1">
+          <mxGeometry x="490" y="10" width="170" height="360" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-127" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#fad9d5;" vertex="1" parent="1">
-          <mxGeometry x="490" y="30" width="230" height="80" as="geometry" />
+        <mxCell id="K5PCvoEAgfI1N-hL6Kno-2" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#eeeeee;" parent="1" vertex="1">
+          <mxGeometry x="250" y="10" width="170" height="360" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-126" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="490" y="360" as="sourcePoint" />
-            <mxPoint x="490" y="10" as="targetPoint" />
-          </mxGeometry>
+        <mxCell id="K5PCvoEAgfI1N-hL6Kno-1" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#eeeeee;" parent="1" vertex="1">
+          <mxGeometry x="10" y="10" width="170" height="360" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-125" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="240" y="360" as="sourcePoint" />
-            <mxPoint x="240" y="10" as="targetPoint" />
-          </mxGeometry>
+        <mxCell id="cA42I65lkPS70WluOvvI-128" value="待ってる時間" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#fad9d5;" parent="1" vertex="1">
+          <mxGeometry x="10" y="110" width="170" height="180" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-2" value="Dev・Mobile（日本）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
-          <mxGeometry x="50" y="10" width="150" height="20" as="geometry" />
+        <mxCell id="cA42I65lkPS70WluOvvI-127" value="待ってる時間" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#fad9d5;" parent="1" vertex="1">
+          <mxGeometry x="490" y="40" width="170" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-3" value="Dev・Mobile（ベトナム）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="530" y="10" width="150" height="20" as="geometry" />
+        <mxCell id="cA42I65lkPS70WluOvvI-2" value="開発・Mobile（日本）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+          <mxGeometry x="20" y="20" width="150" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-7" value="" style="verticalLabelPosition=bottom;sketch=0;html=1;fillColor=#282828;strokeColor=none;verticalAlign=top;pointerEvents=1;align=center;shape=mxgraph.cisco_safe.people_places_things_icons.icon9;" vertex="1" parent="1">
-          <mxGeometry x="100" y="310" width="50" height="45" as="geometry" />
+        <mxCell id="cA42I65lkPS70WluOvvI-3" value="開発・Mobile（ベトナム）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="500" y="20" width="150" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-88" value="" style="verticalLabelPosition=bottom;sketch=0;html=1;fillColor=#282828;strokeColor=none;verticalAlign=top;pointerEvents=1;align=center;shape=mxgraph.cisco_safe.people_places_things_icons.icon9;" vertex="1" parent="1">
-          <mxGeometry x="340" y="310" width="50" height="45" as="geometry" />
+        <mxCell id="cA42I65lkPS70WluOvvI-7" value="" style="verticalLabelPosition=bottom;sketch=0;html=1;fillColor=#282828;strokeColor=none;verticalAlign=top;pointerEvents=1;align=center;shape=mxgraph.cisco_safe.people_places_things_icons.icon9;" parent="1" vertex="1">
+          <mxGeometry x="70" y="320" width="50" height="45" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-108" value="ブリッジSE" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fad7ac;strokeColor=#b46504;" vertex="1" parent="1">
-          <mxGeometry x="290" y="10" width="150" height="20" as="geometry" />
+        <mxCell id="cA42I65lkPS70WluOvvI-88" value="" style="verticalLabelPosition=bottom;sketch=0;html=1;fillColor=#282828;strokeColor=none;verticalAlign=top;pointerEvents=1;align=center;shape=mxgraph.cisco_safe.people_places_things_icons.icon9;" parent="1" vertex="1">
+          <mxGeometry x="310" y="320" width="50" height="45" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-109" value="" style="verticalLabelPosition=bottom;sketch=0;html=1;fillColor=#282828;strokeColor=none;verticalAlign=top;pointerEvents=1;align=center;shape=mxgraph.cisco_safe.people_places_things_icons.icon9;" vertex="1" parent="1">
-          <mxGeometry x="580" y="310" width="50" height="45" as="geometry" />
+        <mxCell id="cA42I65lkPS70WluOvvI-108" value="ブリッジSE（通訳）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fad7ac;strokeColor=#b46504;" parent="1" vertex="1">
+          <mxGeometry x="260" y="20" width="150" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-110" value="【日本語】〇〇って機能、&lt;br&gt;実装コストどれくらいになりそう？" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;size=30;position=0.06;position2=0;align=left;" vertex="1" parent="1">
-          <mxGeometry x="130" y="40" width="210" height="60" as="geometry" />
+        <mxCell id="cA42I65lkPS70WluOvvI-109" value="" style="verticalLabelPosition=bottom;sketch=0;html=1;fillColor=#282828;strokeColor=none;verticalAlign=top;pointerEvents=1;align=center;shape=mxgraph.cisco_safe.people_places_things_icons.icon9;" parent="1" vertex="1">
+          <mxGeometry x="550" y="320" width="50" height="45" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-112" value="【日本語】聞いてみる！" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;size=30;position=0.85;position2=1;align=left;" vertex="1" parent="1">
-          <mxGeometry x="155" y="80" width="205" height="50" as="geometry" />
+        <mxCell id="cA42I65lkPS70WluOvvI-110" value="【日本語】〇〇って機能、&lt;br&gt;実装コストどれくらいになりそう？" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;size=30;position=0.06;position2=0;align=left;" parent="1" vertex="1">
+          <mxGeometry x="100" y="50" width="210" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-113" value="【ベトナム語】〇〇って機能、&lt;br&gt;実装コストどれくらいになりそう？" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;size=30;position=0.06;position2=0;align=left;" vertex="1" parent="1">
-          <mxGeometry x="370" y="110" width="210" height="60" as="geometry" />
+        <mxCell id="cA42I65lkPS70WluOvvI-112" value="【日本語】聞いてみる！" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;size=30;position=0.85;position2=1;align=left;" parent="1" vertex="1">
+          <mxGeometry x="125" y="90" width="205" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-114" value="【ベトナム語】そうそう" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;size=30;position=0.06;position2=0;align=left;" vertex="1" parent="1">
-          <mxGeometry x="370" y="190" width="210" height="50" as="geometry" />
+        <mxCell id="cA42I65lkPS70WluOvvI-113" value="【ベトナム語】〇〇って機能、&lt;br&gt;実装コストどれくらいになりそう？" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;size=30;position=0.06;position2=0;align=left;" parent="1" vertex="1">
+          <mxGeometry x="340" y="120" width="210" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-115" value="【ベトナム語】〇〇って、〇〇の画面&lt;br&gt;のところに作る機能？" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;size=30;position=0.85;position2=1;align=left;" vertex="1" parent="1">
-          <mxGeometry x="400" y="150" width="210" height="60" as="geometry" />
+        <mxCell id="cA42I65lkPS70WluOvvI-114" value="【ベトナム語】そうそう" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;size=30;position=0.06;position2=0;align=left;" parent="1" vertex="1">
+          <mxGeometry x="340" y="200" width="210" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-118" value="待機時間" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="95" y="180" width="60" height="30" as="geometry" />
+        <mxCell id="cA42I65lkPS70WluOvvI-115" value="【ベトナム語】〇〇って、〇〇の画面&lt;br&gt;のところに作る機能？" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;size=30;position=0.85;position2=1;align=left;" parent="1" vertex="1">
+          <mxGeometry x="370" y="160" width="210" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-119" value="【ベトナム語】多分2ポイントくらい" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;size=30;position=0.85;position2=1;align=left;" vertex="1" parent="1">
-          <mxGeometry x="400" y="220" width="210" height="50" as="geometry" />
+        <mxCell id="cA42I65lkPS70WluOvvI-119" value="【ベトナム語】多分2ポイントくらい" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;size=30;position=0.85;position2=1;align=left;" parent="1" vertex="1">
+          <mxGeometry x="370" y="230" width="210" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-121" value="待機時間" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="575" y="55" width="60" height="30" as="geometry" />
+        <mxCell id="cA42I65lkPS70WluOvvI-123" value="【日本語】2ポイントくらいだって" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;size=30;position=0.85;position2=1;align=left;" parent="1" vertex="1">
+          <mxGeometry x="125" y="290" width="205" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-122" value="【ベトナム語】OK！" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;size=30;position=0.06;position2=0;align=left;" vertex="1" parent="1">
-          <mxGeometry x="370" y="250" width="210" height="50" as="geometry" />
+        <mxCell id="K5PCvoEAgfI1N-hL6Kno-4" value="待ってる時間" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#fad9d5;" parent="1" vertex="1">
+          <mxGeometry x="490" y="280" width="170" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-123" value="【日本語】2ポイントくらいだって" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;size=30;position=0.85;position2=1;align=left;" vertex="1" parent="1">
-          <mxGeometry x="155" y="280" width="205" height="50" as="geometry" />
+        <mxCell id="cA42I65lkPS70WluOvvI-122" value="【ベトナム語】OK！" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;size=30;position=0.06;position2=0;align=left;" parent="1" vertex="1">
+          <mxGeometry x="340" y="260" width="210" height="50" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
