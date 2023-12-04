@@ -1,67 +1,67 @@
-<mxfile host="app.diagrams.net" modified="2023-12-02T09:02:21.654Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36" etag="O5KiBUzGMbkosq7UuPlj" version="22.1.5" type="device">
+<mxfile host="app.diagrams.net" modified="2023-12-04T13:39:40.693Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36" etag="qtRuQEIT6bGASbj6xRpD" version="22.1.5" type="device">
   <diagram name="ページ1" id="fu776fGeynSo5gwmmyIW">
     <mxGraphModel dx="887" dy="564" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="cA42I65lkPS70WluOvvI-1" value="" style="verticalLabelPosition=bottom;sketch=0;html=1;fillColor=#282828;strokeColor=none;verticalAlign=top;pointerEvents=1;align=center;shape=mxgraph.cisco_safe.people_places_things_icons.icon9;" vertex="1" parent="1">
+        <mxCell id="cA42I65lkPS70WluOvvI-1" value="" style="verticalLabelPosition=bottom;sketch=0;html=1;fillColor=#282828;strokeColor=none;verticalAlign=top;pointerEvents=1;align=center;shape=mxgraph.cisco_safe.people_places_things_icons.icon9;" parent="1" vertex="1">
           <mxGeometry x="60" y="140" width="50" height="45" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-2" value="Dev・Mobile（日本）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+        <mxCell id="cA42I65lkPS70WluOvvI-2" value="開発・Mobile（日本）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
           <mxGeometry x="10" y="190" width="150" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-3" value="Dev・Mobile（ベトナム）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+        <mxCell id="cA42I65lkPS70WluOvvI-3" value="開発・Mobile（ベトナム）" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
           <mxGeometry x="300" y="190" width="150" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-4" value="このストーリーチケットは、〇〇の機能のうち、&lt;br&gt;〇〇部分を実装すれば完了するやつっす。" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;size=40;position=0.04;position2=0;" vertex="1" parent="1">
+        <mxCell id="cA42I65lkPS70WluOvvI-4" value="このストーリーチケットは、〇〇の機能のうち、&lt;br&gt;〇〇部分を実装すれば完了するやつっす。" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;size=40;position=0.04;position2=0;" parent="1" vertex="1">
           <mxGeometry x="80" y="10" width="270" height="70" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-5" value="プロダクトの意図としては〇〇みたいな感じ。" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;size=40;position=0.04;position2=0;" vertex="1" parent="1">
+        <mxCell id="cA42I65lkPS70WluOvvI-5" value="プロダクトの意図としては〇〇みたいな感じ。" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;size=40;position=0.04;position2=0;" parent="1" vertex="1">
           <mxGeometry x="80" y="50" width="270" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-7" value="" style="verticalLabelPosition=bottom;sketch=0;html=1;fillColor=#282828;strokeColor=none;verticalAlign=top;pointerEvents=1;align=center;shape=mxgraph.cisco_safe.people_places_things_icons.icon9;" vertex="1" parent="1">
+        <mxCell id="cA42I65lkPS70WluOvvI-7" value="" style="verticalLabelPosition=bottom;sketch=0;html=1;fillColor=#282828;strokeColor=none;verticalAlign=top;pointerEvents=1;align=center;shape=mxgraph.cisco_safe.people_places_things_icons.icon9;" parent="1" vertex="1">
           <mxGeometry x="350" y="140" width="50" height="45" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-8" value="この部分って〇〇ってことで認識合ってる？" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;size=40;position=0.89;position2=1;" vertex="1" parent="1">
+        <mxCell id="cA42I65lkPS70WluOvvI-8" value="この部分って〇〇ってことで認識合ってる？" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;size=40;position=0.89;position2=1;" parent="1" vertex="1">
           <mxGeometry x="110" y="80" width="270" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-9" value="合ってる！" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;size=40;position=0.04;position2=0;" vertex="1" parent="1">
+        <mxCell id="cA42I65lkPS70WluOvvI-9" value="合ってる！" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;size=40;position=0.04;position2=0;" parent="1" vertex="1">
           <mxGeometry x="80" y="110" width="270" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-11" value="" style="verticalLabelPosition=bottom;sketch=0;html=1;fillColor=#282828;strokeColor=none;verticalAlign=top;pointerEvents=1;align=center;shape=mxgraph.cisco_safe.people_places_things_icons.icon9;" vertex="1" parent="1">
-          <mxGeometry x="82.5" y="320" width="50" height="45" as="geometry" />
+        <mxCell id="cA42I65lkPS70WluOvvI-11" value="" style="verticalLabelPosition=bottom;sketch=0;html=1;fillColor=#282828;strokeColor=none;verticalAlign=top;pointerEvents=1;align=center;shape=mxgraph.cisco_safe.people_places_things_icons.icon9;" parent="1" vertex="1">
+          <mxGeometry x="82.5" y="330" width="50" height="45" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-12" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+        <mxCell id="cA42I65lkPS70WluOvvI-12" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="230" y="210" as="sourcePoint" />
             <mxPoint x="230" y="240" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-13" value="2" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="cA42I65lkPS70WluOvvI-13" value="2" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="92.5" y="280" width="30" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-14" value="1" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="cA42I65lkPS70WluOvvI-14" value="1" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="132.5" y="280" width="30" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-15" value="2" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="cA42I65lkPS70WluOvvI-15" value="2" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="172.5" y="280" width="30" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-16" value="2" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="cA42I65lkPS70WluOvvI-16" value="2" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="212.5" y="280" width="30" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-17" value="3" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="cA42I65lkPS70WluOvvI-17" value="3" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="252.5" y="280" width="30" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-18" value="2" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="cA42I65lkPS70WluOvvI-18" value="2" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="292.5" y="280" width="30" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-19" value="" style="verticalLabelPosition=bottom;sketch=0;html=1;fillColor=#282828;strokeColor=none;verticalAlign=top;pointerEvents=1;align=center;shape=mxgraph.cisco_safe.people_places_things_icons.icon9;" vertex="1" parent="1">
-          <mxGeometry x="322.5" y="320" width="50" height="45" as="geometry" />
+        <mxCell id="cA42I65lkPS70WluOvvI-19" value="" style="verticalLabelPosition=bottom;sketch=0;html=1;fillColor=#282828;strokeColor=none;verticalAlign=top;pointerEvents=1;align=center;shape=mxgraph.cisco_safe.people_places_things_icons.icon9;" parent="1" vertex="1">
+          <mxGeometry x="322.5" y="330" width="50" height="45" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-20" value="プランニングポーカー" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="cA42I65lkPS70WluOvvI-20" value="プランニングポーカー" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="160" y="240" width="135" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="cA42I65lkPS70WluOvvI-21" value="2" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="cA42I65lkPS70WluOvvI-21" value="2" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="332.5" y="280" width="30" height="40" as="geometry" />
         </mxCell>
       </root>
