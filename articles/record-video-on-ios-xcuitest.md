@@ -3,7 +3,7 @@ title: "CI環境でiOSのUIテストを自動実行する際、失敗したテ�
 emoji: "📸"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["ios", "xcode", "test", "ci"]
-published: false
+published: true
 ---
 
 :::message
@@ -91,7 +91,7 @@ end
 
 加えて、録画ファイルの削除をしています。
 
-## テストケースの開始・終了時に、サーバーにリクエストする
+## テストケースの開始・終了時にサーバーへリクエストする
 
 以下のように、`XCUITest` を継承したテストケースの親クラスを作成します。
 
