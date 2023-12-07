@@ -3,7 +3,7 @@ title: "GitHub Actionsで差分に応じたジョブの選択実行とPRマー�
 emoji: "🎯"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["github", "githubactions"]
-published: false
+published: true
 ---
 
 :::message
