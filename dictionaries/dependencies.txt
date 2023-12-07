@@ -3,6 +3,7 @@ bitrise
 creds
 efjn
 fileutils
+firestore
 githubactions
 mockk
 pgrep
