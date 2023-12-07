@@ -1,9 +1,9 @@
 ---
 title: "個人アプリ「うちのコメロディー」の技術構成"
-emoji: "🤖"
+emoji: "⚒️"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["dependabot", "gradle", "android"]
-published: true
+published: false
 ---
 
 以下のようなモバイルアプリをリリースしたので、技術的な話をまとめておきます。

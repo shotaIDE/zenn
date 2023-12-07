@@ -5,6 +5,7 @@ efjn
 fileutils
 firestore
 githubactions
+jasrac
 mockk
 pgrep
 plgvd
