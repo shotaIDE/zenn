@@ -4,7 +4,7 @@ emoji: "🕌"
 type: "idea" # tech: 技術記事 / idea: アイデア
 topics: ["チーム開発", "要件定義", "リリース"]
 publication_name: "sun_asterisk"
-published: false
+published: true
 ---
 
 :::message
