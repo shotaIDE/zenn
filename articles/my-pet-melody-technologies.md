@@ -71,6 +71,10 @@ Firebase Crashlytics を利用しています。
 
 RevenueCat を利用し、モバイルアプリ側の課金処理と、サーバー側の課金状態チェックを実装しています。
 
+# プッシュ通知
+
+Firebase Cloud Messaging を利用しています。
+
 # 認証
 
 Firebase Authentication を使っています。
