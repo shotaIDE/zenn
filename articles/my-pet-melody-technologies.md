@@ -19,7 +19,16 @@ https://play.google.com/store/apps/details?id=ide.shota.colomney.MyPetMelody
 
 # モバイルアプリ
 
+Flutter を使い、iOS/Android 両方とも実装しています。
+
 # サーバー
+
+## ローカル開発用
+
+Firebase の Emulator を使い、普段の開発時には、ローカルのみで完結するようにしています。
+ローカル PC の IP アドレスはよく変化します。
+また、個人開発なのでないですが、チームメンバーにこれらの IP アドレスを記載したファイルを共有するのはイケてないです。
+Flutter で Dart-Defines を使い、そのファイルを Git の管理対象外としています。
 
 ## API
 
@@ -32,14 +41,21 @@ https://play.google.com/store/apps/details?id=ide.shota.colomney.MyPetMelody
 ## ストレージ
 
 Firebase Storage を利用しています。
+クライアントからアップロード、ダウンロードする際は、モバイルアプリから直接アクセスしています。
+そのために、Storage のセキュリティルールにより、各ユーザーはそのユーザー専用のディレクトリ階層のみ読み書きできるように制限しています。
 
 ## データベース
 
 Firebase Firestore を利用しています。
+クライアントから参照する際は、モバイルアプリから直接 Firestore にアクセスしています。
+そのために、Firestore のセキュリティルールにより、各ユーザーはそのユーザー専用のコレクション配下のみ読み取れるように制限しています。
 
 ## 分析
 
 Firebase Analytics を利用しています。
+基本的に自動で収集されるイベントを収集するだけにしています。
+ただし、最も体験して欲しい一連の機能の流れの中で、どの段階でユーザーが脱落したかを分析できるように、カスタムイベントを一部だけ埋め込んでいます。
+また、画面遷移は収集しています。
 
 ## 鳴き声検知
 
@@ -48,6 +64,8 @@ Firebase Analytics を利用しています。
 ## 監視
 
 Firebase Crashlytics を利用しています。
+自動で収集されるイベントを収集するだけにしています。
+また、Flutter における例外発生をキャッチできるようにしています。
 
 # サブスクリプション課金
 
@@ -56,6 +74,20 @@ RevenueCat を利用し、モバイルアプリ側の課金処理と、サーバ
 # 認証
 
 Firebase Authentication を使っています。
+匿名認証を利用し、アカウント作成せずにアプリの機能が使えるようにしています。
+また、Google アカウントと X(Twitter)アカウント、Apple でサインインが利用できるようにしています。
+
+# IaC
+
+Terraform を使い、Firebase プロジェクトの作成をはじめとする以下の構築を自動化しています。
+
+- Google Cloud プロジェクトと、それに紐づく Firebase プロジェクトの作成
+- Firebase Authentication の匿名認証の有効化
+- Firebase Storage の有効化とセキュリティルールの設定
+- Firebase Firestore の有効化とセキュリティルールの設定
+- Cloud Tasks におけるタスクキューの作成と設定
+
+Terraform の Firebase のプロバイダー自体がまだベータ機能なので、一部手の届かない部分があります。
 
 # CI/CD
 
