@@ -8,9 +8,7 @@ published: false
 
 先日、「うちのコメロディー」というアプリをリリースしました。
 
-https://apps.apple.com/us/app/%E3%81%86%E3%81%A1%E3%81%AE%E3%82%B3%E3%83%A1%E3%83%AD%E3%83%87%E3%82%A3%E3%83%BC/id6450181110
-
-https://play.google.com/store/apps/details?id=ide.shota.colomney.MyPetMelody
+https://twitter.com/colomney/status/1730919744558293034
 
 まだ必要最小限の機能しかない価値検証のアプリ風のものですが、ファーストリリースまでにやったことと考えたことなどをまとめてみます。
 

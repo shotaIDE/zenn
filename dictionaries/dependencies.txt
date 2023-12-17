@@ -11,6 +11,7 @@ mockk
 pgrep
 plgvd
 println
+pydub
 pytest
 recmw
 sigint
