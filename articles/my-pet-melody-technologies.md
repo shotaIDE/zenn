@@ -2,7 +2,7 @@
 title: "個人アプリ「うちのコメロディー」の技術構成"
 emoji: "⚒️"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["dependabot", "gradle", "android"]
+topics: ["firebase", "gcp", "flutter", "dart", "個人開発"]
 published: false
 ---
 
@@ -52,6 +52,17 @@ Firebase Storage を利用しています。
 モバイルアプリから動画などをアップロード、ダウンロードする際は、API を介さず直接アクセスしています。
 そのために、Storage のセキュリティルールにより、各ユーザーはそのユーザー専用のディレクトリ階層のみ読み書きできるように制限しています。
 
+```firestore-security-rules:firestore.rules
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /userMedia/{userId}/pieces/{allPaths=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}
+```
+
 Cloud Functions からも動画生成の際にユーザーがアップロードした動画を参照するために、アクセスしています。
 
 ## データベース
@@ -61,7 +72,18 @@ Firebase Firestore を利用しています。
 モバイルアプリで UI 表示のために参照する際やプッシュ通知のトークンを登録する際に、API を介さず直接アクセスしています。
 そのために、Firestore のセキュリティルールにより、各ユーザーはそのユーザー専用のコレクション配下のみ読み書きできるように制限しています。
 
-モバイルアプリからアクセスする際は、監視のコネクションを張り、変更をリアルタイムで UI へ反映できるようにしています。
+```firestore-security-rules:firestore.rules
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}
+```
+
+モバイルアプリからアクセスする際は、リアルタイム更新のコネクションを張り、データ更新時の変更を即時 UI へ反映しています。
 
 Cloud Functions からは、生成された動画のメタデータを書き込んだり、プッシュ通知のトークンを取得するために、アクセスしています。
 
@@ -113,10 +135,13 @@ Firebase App Distribution を利用しています。
 
 ## 単体テスト
 
-鳴き声検知のアルゴリズムのベンチマークと、モバイルアプリのロジック周りの単体テストを書いています。
+API における、鳴き声検知の認識スコアが落ちていないかを確認する単体テストを書いています。
 
-鳴き声検知のアルゴリズムのベンチマークは、ある時点のアルゴリズムで叩き出せる評価値から変化がないかというのをチェックするものです。
-サンプルの動画を 6 つほど用意し、それらの鳴き声がもっともらしく検知できたかどうかを評価する数値を計算しています。
+猫の鳴き声が含まれるサンプルの動画を 6 つほど用意し、それらの鳴き声が過不足なく検知できたかを数値化し、全サンプルの数値の平均を認識スコアとしています。
+この数値が初期実装時の値から変化していないかをテストとして確認します。
+API の修正やライブラリのアップデートなどにより変動した場合、アプリ内の鳴き声検知機能の使い勝手に影響を与える可能性があります。
+
+また、モバイルアプリにおける複雑なロジックが発生する部分だけ単体テストを書いています。
 
 モバイルアプリのロジック周りの単体テストは Flutter の標準のテストフレームワークを利用しています。
 
