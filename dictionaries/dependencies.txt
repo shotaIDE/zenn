@@ -6,6 +6,7 @@ fileutils
 firestore
 githubactions
 jasrac
+materialdesign
 mockk
 pgrep
 plgvd
@@ -16,6 +17,7 @@ sigint
 simctl
 siri
 udid
+uiuxdesign
 webcredentials
 xcodeproj
 xcrun
