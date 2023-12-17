@@ -1,5 +1,5 @@
 ---
-title: "個人アプリ「うちのコメロディー」をリリースするまでにしたことすべて"
+title: "個人アプリ「うちのコメロディー」をサービスデザインする際に考えたことすべて"
 emoji: "🐈"
 type: "idea" # tech: 技術記事 / idea: アイデア
 topics: ["個人開発", "uiuxdesign", "materialdesign"]
