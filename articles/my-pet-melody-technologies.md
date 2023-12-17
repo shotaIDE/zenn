@@ -142,6 +142,10 @@ https://firebase.google.com/docs/emulator-suite?hl=ja
 }
 ```
 
+```bash
+flutter run --dart-define-from-file "dart-defines.json"
+```
+
 ## IaC
 
 Terraform を使い、Firebase プロジェクトの作成をはじめとする以下の構築を自動化しています。
