@@ -89,11 +89,11 @@ https://m2.material.io/
 
 動物の温かみを感じられるよう、コンセプトカラーを茶色に設定しました。
 
-![](/images/my-pet-melody-project/color-palette.png)
+![](/images/my-pet-melody-service-design/color-palette.png)
 
 オリジナル曲を作るフローの画面のタイトルバーは透明とし、動画選択などのアクションボタンが相対的に目立つようにしました。
 
-![](/images/my-pet-melody-project/title-bar-of-design-system.png)
+![](/images/my-pet-melody-service-design/title-bar-of-design-system.png)
 
 これらの画面では、オリジナル曲を作るフローを先に進めるという観点では、タイトルバーに表示されているテキストや戻るボタンは、動画選択などのアクションボタンよりも重要度が低いです。
 そのため、先に進める際にユーザーが操作に迷わないようにすることで、最重要なユーザー体験に辿り着く可能性をあげることに寄与できると考えたため、上記のデザインルールを導入しました。
@@ -105,7 +105,7 @@ https://m2.material.io/
 
 あとは、ただの思いつきですが猫がアニメーションして動くと可愛いなと思い、パラパラ漫画風にアニメーションできるように体勢や角度違いのイラストを複数枚描いてもらいました。
 
-![](/images/my-pet-melody-project/flicking-image.gif)
+![](/images/my-pet-melody-service-design/flicking-image.gif)
 
 # ユーザーテスト
 
