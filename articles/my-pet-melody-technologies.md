@@ -6,6 +6,10 @@ topics: ["firebase", "gcp", "flutter", "dart", "個人開発"]
 published: false
 ---
 
+:::message
+この記事は[個人開発 Advent Calendar 2023](https://qiita.com/advent-calendar/2023/personal-developement) の 22 日目の記事です。
+:::
+
 以下のようなモバイルアプリをリリースしたので、技術的な話をまとめておきます。
 
 https://apps.apple.com/us/app/%E3%81%86%E3%81%A1%E3%81%AE%E3%82%B3%E3%83%A1%E3%83%AD%E3%83%87%E3%82%A3%E3%83%BC/id6450181110

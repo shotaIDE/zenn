@@ -6,6 +6,10 @@ topics: ["個人開発", "uiuxdesign", "materialdesign"]
 published: false
 ---
 
+:::message
+この記事は[個人開発 Advent Calendar 2023](https://qiita.com/advent-calendar/2023/personal-developement) の 21 日目の記事です。
+:::
+
 先日、「うちのコメロディー」というアプリをリリースしました。
 
 https://twitter.com/colomney/status/1730919744558293034
