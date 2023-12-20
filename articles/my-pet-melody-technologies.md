@@ -55,7 +55,7 @@ API のフレームワークは Flask を利用しています。
 Cloud Storage for Firebase を利用しています。
 
 モバイルアプリから動画などをアップロード、ダウンロードする際は、API を介さず直接アクセスしています。
-そのために、Storage のセキュリティルールにより、各ユーザーはそのユーザー専用のディレクトリ階層のみ読み書きできるように制限しています。
+そのため、以下のような Storage のセキュリティルールを設定し、各ユーザーはそのユーザー専用のディレクトリ階層のみ読み書きできるように制限しています。
 
 ```firestore-security-rules:firestore.rules
 rules_version = '2';
@@ -75,7 +75,7 @@ Cloud Functions からも動画生成の際にユーザーがアップロード�
 Firebase の Cloud Firestore を利用しています。
 
 モバイルアプリで UI 表示のために参照する際やプッシュ通知のトークンを登録する際に、API を介さず直接アクセスしています。
-そのために、Firestore のセキュリティルールにより、各ユーザーはそのユーザー専用のコレクション配下のみ読み書きできるように制限しています。
+そのため、以下のような Firestore のセキュリティルールを設定し、各ユーザーはそのユーザー専用のドキュメントのみ読み書きできるように制限しています。
 
 ```firestore-security-rules:firestore.rules
 rules_version = '2';
@@ -126,7 +126,7 @@ Firebase Analytics を利用しています。
 
 デフォルト設定で自動的に収集してくれるものの他に、画面遷移のイベントを収集するようにしています。
 
-また、アプリ中最も重要なユーザー体験の一連の流れにおいて、どの段階でユーザーが離脱したかを分析できるように、カスタムイベントを一部だけ埋め込んでいます。
+また、アプリ中最も重要なユーザー体験の一連の流れにおいて、どの段階でユーザーが離脱したかを分析できるように、カスタムイベントを一部だけ収集しています。
 
 ## 監視
 
@@ -138,7 +138,7 @@ Firebase Crashlytics を利用しています。
 
 Firebase App Distribution を利用しています。
 
-少数の端末しかインストールする必要がないので、iOS は事前にインストールする端末の UDID を収集して Ad Hoc ビルドを利用しています。
+少数の端末しかインストールする必要がないので、iOS は事前にインストールする端末の UDID を収集する前提の Ad Hoc ビルドで配布しています。
 
 ## 単体テスト
 
@@ -190,13 +190,13 @@ flutter run --dart-define-from-file "dart-defines.json"
 Terraform を使い、Firebase プロジェクトの作成をはじめとする以下の構築を自動化しています。
 
 - Google Cloud プロジェクトと、それに紐づく Firebase プロジェクトの作成
-- Firebase Authentication の匿名認証の有効化
-- Firebase Storage の有効化とセキュリティルールの設定
+- Firebase Authentication の有効化と匿名認証の有効化
 - Firebase Firestore の有効化とセキュリティルールの設定
-- Cloud Tasks におけるタスクキューの作成と設定
+- Firebase Storage の有効化とセキュリティルールの設定
+- Cloud Tasks におけるタスクキューの作成
 
 Terraform の Firebase のプロバイダー自体がまだベータ機能なので、一部手の届かない部分があります。
-そうした部分は手動で構築しています。
+そうした部分は手動のコマンド実行や Web ダッシュボードの操作により構築しています。
 
 https://firebase.google.com/docs/projects/terraform/get-started?hl=ja
 
