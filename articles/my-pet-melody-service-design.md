@@ -16,6 +16,10 @@ https://twitter.com/colomney/status/1730919744558293034
 
 まだ必要最小限の機能しかない価値検証のアプリ風のものですが、ファーストリリースまでにやったことと考えたことなどをメモしてみます。
 
+技術的な話は以下にまとめましたので、こちらもよろしければどうぞ。
+
+https://zenn.dev/colomney/articles/my-pet-melody-technologies
+
 # 着想
 
 私は趣味で作曲をしています。

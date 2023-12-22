@@ -3,18 +3,22 @@ title: "個人アプリ「うちのコメロディー」の技術構成"
 emoji: "⚒️"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["firebase", "gcp", "flutter", "dart", "個人開発"]
-published: false
+published: true
 ---
 
 :::message
 この記事は[個人開発 Advent Calendar 2023](https://qiita.com/advent-calendar/2023/personal-developement) の 22 日目の記事です。
 :::
 
-以下のようなモバイルアプリをリリースしたので、技術的な話をまとめておきます。
+以下のモバイルアプリをリリースしたので、技術的な話をまとめておきます。
 
 https://apps.apple.com/us/app/%E3%81%86%E3%81%A1%E3%81%AE%E3%82%B3%E3%83%A1%E3%83%AD%E3%83%87%E3%82%A3%E3%83%BC/id6450181110
 
 https://play.google.com/store/apps/details?id=ide.shota.colomney.MyPetMelody
+
+技術的な話以外の内容は以下にまとめましたので、こちらもよろしければどうぞ。
+
+https://zenn.dev/colomney/articles/my-pet-melody-service-design
 
 # どういったアプリか？
 
