@@ -61,8 +61,10 @@ GitHub の PR に対し、リリース管理のためのラベルを用意し、
 以下のコマンドにより、トランクブランチにおけるコミット履歴のうちリリースブランチにマージしていないものを古い順に精査していく。
 
 ```bash
-git log -date=iso --pretty=format:"%s" release..main
+git log -date=iso --pretty=format:"%s" release...main
 ```
+
+マージベースとの違いを見るために、 `..` ではなく `...` を使っています。
 
 ## 概要
 
