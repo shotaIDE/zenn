@@ -84,6 +84,14 @@ https://zenn.dev/yoichi/articles/git-dotted-notations
 
 ## 概要
 
+### リリース計画を立てる
+
+以下のように前回のリリースからトランクブランチが進んでいるコミット一覧を確認します。
+
+```shell
+git log --pretty=format:'%H %cd %s' --date=format:'%Y-%m-%d %H:%M:%S' 'release/3.5.0(364)'..'main'
+```
+
 ### PR にリリース済みラベルがついているものはリリースブランチにマージされている
 
 ### PR に特定のラベルをつけることでリリースに含める・含めないを管理する
