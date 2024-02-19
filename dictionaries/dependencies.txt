@@ -1,11 +1,13 @@
 assetlinks
 bitrise
 creds
+dokka
 efjn
 fileutils
 firestore
 githubactions
 jasrac
+jetbrains
 materialdesign
 mergify
 mockk
@@ -19,6 +21,7 @@ recmw
 sigint
 simctl
 siri
+stdlib
 udid
 uiuxdesign
 webcredentials
