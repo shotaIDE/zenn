@@ -1,0 +1,164 @@
+<mxfile host="app.diagrams.net" modified="2024-02-18T09:22:01.443Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36" etag="JYEph2b4hNfbpRiKxZeQ" version="23.1.5" type="device">
+  <diagram name="ページ1" id="QGBW7FHV4CXrmwUfci0k">
+    <mxGraphModel dx="2020" dy="1895" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-41" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="-120" y="500" width="35" height="500" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="bEdGE2WvcX3xAI2rPaKg-2" target="bEdGE2WvcX3xAI2rPaKg-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-2" value="前回のリリースから&lt;br&gt;差分があるか？" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry y="40" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="bEdGE2WvcX3xAI2rPaKg-3" target="bEdGE2WvcX3xAI2rPaKg-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-3" value="E2Eテスト実行" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="160" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="bEdGE2WvcX3xAI2rPaKg-5" target="bEdGE2WvcX3xAI2rPaKg-17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-5" value="E2Eテストが&lt;br&gt;パスしたか？" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry y="240" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-8" value="Yes" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="70" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="bEdGE2WvcX3xAI2rPaKg-10" target="bEdGE2WvcX3xAI2rPaKg-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-10" value="前のリリースの&lt;br&gt;審査中ではないか？" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry y="-80" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-15" value="Yes" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="70" y="120" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-16" value="Yes" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="70" y="320" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="bEdGE2WvcX3xAI2rPaKg-17" target="bEdGE2WvcX3xAI2rPaKg-21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-17" value="リリースの審査中と&lt;br&gt;マーク" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="360" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-18" value="" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" vertex="1" parent="1">
+          <mxGeometry x="320" y="560" width="60" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-21" value="商用アプリを&lt;br&gt;デプロイ＆審査提出" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="15" y="440" width="130" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="bEdGE2WvcX3xAI2rPaKg-23" target="bEdGE2WvcX3xAI2rPaKg-25">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-23" value="iOSが審査通り&lt;br&gt;公開された" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-60" y="650" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="bEdGE2WvcX3xAI2rPaKg-24" target="bEdGE2WvcX3xAI2rPaKg-26">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-24" value="Androidが審査通り&lt;br&gt;公開された" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="650" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-39" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="bEdGE2WvcX3xAI2rPaKg-25" target="bEdGE2WvcX3xAI2rPaKg-33">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-25" value="iOSはリリース済みと&lt;br&gt;マーク" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-75" y="740" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-40" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="bEdGE2WvcX3xAI2rPaKg-26" target="bEdGE2WvcX3xAI2rPaKg-33">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-26" value="Androidはリリース済みと&lt;br&gt;マーク" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="85" y="740" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-56" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="bEdGE2WvcX3xAI2rPaKg-33" target="bEdGE2WvcX3xAI2rPaKg-55">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-33" value="iOS、Androidともに&lt;br&gt;リリース済みか？" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry y="830" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0;entryDx=0;entryDy=52.5;entryPerimeter=0;dashed=1;endArrow=none;endFill=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="bEdGE2WvcX3xAI2rPaKg-33" target="bEdGE2WvcX3xAI2rPaKg-18">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="180" y="917.5" as="sourcePoint" />
+            <mxPoint x="340" y="660" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="280" y="870" />
+              <mxPoint x="280" y="613" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-38" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="bEdGE2WvcX3xAI2rPaKg-37" target="bEdGE2WvcX3xAI2rPaKg-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-37" value="スケジュールで&lt;br&gt;定期的にキック" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="-160" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-42" value="この期間に&lt;br&gt;機能開発" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="-210" y="690" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-47" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="bEdGE2WvcX3xAI2rPaKg-43" target="bEdGE2WvcX3xAI2rPaKg-23">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-43" value="Apple" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-60" y="545" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-48" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="bEdGE2WvcX3xAI2rPaKg-44" target="bEdGE2WvcX3xAI2rPaKg-24">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-44" value="Google" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="545" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-45" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="bEdGE2WvcX3xAI2rPaKg-21" target="bEdGE2WvcX3xAI2rPaKg-43">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-46" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="bEdGE2WvcX3xAI2rPaKg-21" target="bEdGE2WvcX3xAI2rPaKg-44">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-49" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0;entryDx=0;entryDy=15;entryPerimeter=0;dashed=1;endArrow=none;endFill=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="bEdGE2WvcX3xAI2rPaKg-17" target="bEdGE2WvcX3xAI2rPaKg-18">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="160" y="319.9999999999998" as="sourcePoint" />
+            <mxPoint x="340" y="527.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="260" y="380" />
+              <mxPoint x="260" y="575" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-51" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;endArrow=none;endFill=0;" edge="1" parent="1" source="bEdGE2WvcX3xAI2rPaKg-26" target="bEdGE2WvcX3xAI2rPaKg-18">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="270" y="760" />
+              <mxPoint x="270" y="600" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-55" value="iOS、Androidともに&lt;br&gt;リリース済みとマーク" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="5" y="950" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-57" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=1;entryDx=0;entryDy=-15;entryPerimeter=0;endArrow=none;endFill=0;dashed=1;" edge="1" parent="1" source="bEdGE2WvcX3xAI2rPaKg-55" target="bEdGE2WvcX3xAI2rPaKg-18">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="310" y="660" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="290" y="970" />
+              <mxPoint x="290" y="625" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="bEdGE2WvcX3xAI2rPaKg-58" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0;entryDx=0;entryDy=27.5;entryPerimeter=0;endArrow=none;endFill=0;dashed=1;" edge="1" parent="1" source="bEdGE2WvcX3xAI2rPaKg-25" target="bEdGE2WvcX3xAI2rPaKg-18">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint y="720" />
+              <mxPoint x="260" y="720" />
+              <mxPoint x="260" y="587" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
