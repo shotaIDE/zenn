@@ -7,6 +7,7 @@ firestore
 githubactions
 jasrac
 materialdesign
+mergify
 mockk
 pgrep
 plgvd
