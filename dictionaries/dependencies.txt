@@ -9,6 +9,7 @@ jasrac
 materialdesign
 mergify
 mockk
+owasp
 pgrep
 plgvd
 println
