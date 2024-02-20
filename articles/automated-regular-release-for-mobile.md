@@ -151,6 +151,8 @@ source 'https://rubygems.org'
 gem 'google_drive'
 ```
 
+サービスアカウントのキー JSON ファイルを `fastlane/spreadsheet-service-account-key.json` に格納しておきます。
+
 以下のように Fastlane でスクリプトを作成します。
 
 ```ruby:Fastfile
@@ -174,6 +176,39 @@ lane :check_mobile_apps_are_currently_released do
 
   UI.success '現在のステータスはリリース済みです！'
 end
+```
+
+以下のように、Fastlane のスクリプトを GitHub Actions で実行します。
+
+```yaml
+# ...
+
+jobs:
+  check-apps-status:
+    name: Check apps status
+    runs-on: ubuntu-latest
+    outputs:
+      is-release-available: ${{ steps.check-apps-currently-released.outputs.is_released == 'true' }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Check apps currently released
+        id: check-apps-currently-released
+        run: |
+          if bundle exec fastlane check_mobile_apps_are_currently_released; then
+            echo "Apps are currently released."
+            echo "is_released=true" >> $GITHUB_OUTPUT
+          else
+            echo "Apps are not currently released."
+            echo "is_released=false" >> $GITHUB_OUTPUT
+          fi
+  next-job:
+    needs: check-apps-status
+    if: needs.check-apps-status.outputs.is-release-available
+    # ...
 ```
 
 ## 前回のリリースから差分があるかを判定する
