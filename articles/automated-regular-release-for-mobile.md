@@ -199,10 +199,10 @@ jobs:
         id: check-apps-currently-released
         run: |
           if bundle exec fastlane check_mobile_apps_are_currently_released; then
-            echo "Apps are currently released."
+            # Fastlaneのスクリプトが成功した場合
             echo "is_released=true" >> $GITHUB_OUTPUT
           else
-            echo "Apps are not currently released."
+            # Fastlaneのスクリプトが失敗した場合
             echo "is_released=false" >> $GITHUB_OUTPUT
           fi
   next-job:
@@ -210,6 +210,8 @@ jobs:
     if: needs.check-apps-status.outputs.is-release-available
     # ...
 ```
+
+リリース済みであることが確認できたら GitHub Actions の次のジョブを実行するようにしています。
 
 ## 前回のリリースから差分があるかを判定する
 
