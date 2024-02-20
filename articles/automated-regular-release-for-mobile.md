@@ -67,9 +67,11 @@ published: false
 
 トリガーの頻度は変数なので、どの程度の頻度でリリースしてもいいかを元に決定します。
 
-# 各要素の具体的な利用技術
+# 各要素の利用技術
 
 以下で、各要素の具体的な利用技術を簡単に紹介します。
+
+前提として、GitHub 上で開発しています。
 
 ## ライブラリ更新の PR が自動で作成されるようにする
 
@@ -79,15 +81,31 @@ https://docs.github.com/ja/code-security/dependabot/dependabot-version-updates/a
 
 ## 静的解析と単体テストがパスすることを PR のマージに必須の条件とする
 
-静的解析や単体テストを PR のマージ必須条件としておきます。
+PR が提出されたら GitHub Actions で静的解析や単体テストが実行されるようにしておきます。
 
-ライブラリのアップデートで、アプリ内で利用しているメソッドが利用不可になったり deprecated になった場合は、これらが失敗します。
+GitHub のブランチ保護ルールにて、これらの静的解析や単体テストをマージの必須条件としておきます。
 
-## PR の自動マージ
+https://docs.github.com/ja/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/managing-a-branch-protection-rule
 
-PR で静的解析、単体テストが通った場合、Mergify を利用して自動でマージされるようにします。
+ライブラリのアップデートで、アプリ内で利用しているメソッドが利用不可になったり deprecated になった場合は、ここで自動サイクルが止まります。
+
+## PR のマージ必須条件が満たされた場合、自動でマージされるようにする
+
+Mergify を利用して dependabot が提出した PR は、必須条件が満たされたら自動でマージされるようにします。
 
 https://mergify.com/
+
+例えば、以下のように Mergify の設定を定義します。
+
+```.github/mergify.yml
+pull_request_rules:
+  - name: Automatic merge PRs from dependabot
+    conditions:
+      - "author = dependabot[bot]"
+    actions:
+      merge:
+        method: merge
+```
 
 ## 前のリリースの審査中ではないかを判定する
 
