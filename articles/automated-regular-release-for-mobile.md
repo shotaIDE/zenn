@@ -72,7 +72,13 @@ published: false
 
 以下で、各要素の具体的な利用技術を簡単に紹介します。
 
-前提として、GitHub 上で開発しています。
+前提として、GitHub 上で開発し、CI/CD の基盤として GitHub Actions を利用しています。
+
+各種自動スクリプトは Fastlane を利用して組んでいます。
+
+https://fastlane.tools/
+
+また、データストアとしては Google スプレッドシートを利用しています。
 
 ## ライブラリ更新の PR が自動で作成されるようにする
 
@@ -127,9 +133,32 @@ jobs:
 
 https://docs.github.com/ja/actions/using-workflows/events-that-trigger-workflows#schedule
 
-## 前のリリースの審査中ではないかを判定する
+## データストアを見て前のリリースの審査中ではないかを判定する
 
-Google スプレッドシートを読み取り、前回のリリースが審査中でないかを判定します。
+Google スプレッドシートの特定のセルを読み取り、前回のリリースが審査中でないかを判定します。
+
+```ruby:Fastfile
+lane :check_mobile_apps_are_currently_released do
+  target_spreadsheet_id = 'xxxx' # スプレッドシートのURLの https://docs.google.com/spreadsheets/d/xxxx/edit における xxxx の部分
+  sheet_name = '審査ステータス'
+  target_range = 'A1'
+  released_value = 'iOS と Android 両方ともリリース済み'
+
+  service_account_key_json = File.read('spreadsheet-service-account-key.json')
+  service_account_key = StringIO.new(service_account_key_json)
+  session = GoogleDrive::Session.from_service_account_key(service_account_key)
+
+  spreadsheet = session.spreadsheet_by_key(target_spreadsheet_id)
+  sheet = spreadsheet.worksheet_by_title(sheet_name)
+  latest_status = sheet[target_range]
+
+  UI.success "現在のステータスの取得に成功しました: #{latest_status}"
+
+  raise '現在のステータスがリリース済みではありません！' unless latest_status == released_value
+
+  UI.success 'ステータスはリリース済みです！'
+end
+```
 
 ## 前回のリリースから差分があるかを判定する
 

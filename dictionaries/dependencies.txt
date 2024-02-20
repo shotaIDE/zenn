@@ -3,6 +3,7 @@ bitrise
 creds
 dokka
 efjn
+fastfile
 fileutils
 firestore
 githubactions
