@@ -58,7 +58,7 @@ published: false
 
 以下の要素を組み合わせています。
 
-- スケジュールで定期的にキック
+- スケジュールで定期的に自動リリースの処理をキック
 - データストアを見て前のリリースの審査中ではないかを判定する
 - 前回のリリースから差分があるかを判定する
 - E2E テスト実行
@@ -98,7 +98,7 @@ https://mergify.com/
 
 例えば、以下のように Mergify の設定を定義します。
 
-```.github/mergify.yml
+```yaml:.github/mergify.yml
 pull_request_rules:
   - name: Automatic merge PRs from dependabot
     conditions:
@@ -107,6 +107,25 @@ pull_request_rules:
       merge:
         method: merge
 ```
+
+## スケジュールで定期的に自動リリースの処理をキック
+
+GitHub Actions のスケジュールトリガーを利用します。
+
+例えば、以下のように設定します。
+
+```yaml:.github/workflows/regular-release.yml
+name: Regular release
+
+on:
+  schedule:
+    - cron: '0 0 * * 1' # 毎週月曜日の AM 9:00 (JST)
+
+jobs:
+  # ...
+```
+
+https://docs.github.com/ja/actions/using-workflows/events-that-trigger-workflows#schedule
 
 ## 前のリリースの審査中ではないかを判定する
 
