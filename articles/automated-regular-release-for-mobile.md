@@ -137,7 +137,25 @@ https://docs.github.com/ja/actions/using-workflows/events-that-trigger-workflows
 
 Google スプレッドシートの特定のセルを読み取り、前回のリリースが審査中でないかを判定します。
 
+事前準備として、以下のドキュメントを元に GCP のプロジェクトでサービスアカウントを作成して、必要な権限を付与した上で、キーを JSON 形式でダウンロードしておきます。
+
+https://github.com/gimite/google-drive-ruby/blob/master/doc/authorization.md#service-account
+
+Google スプレッドシートを用意し、Google スプレッドシートの編集画面にてサービスアカウントのメールアドレスに編集権限を付与します。
+
+以下のように、Fastlane で Google スプレッドシートを操作するためのライブラリを依存関係として追加します。
+
+```ruby:Gemfile
+source 'https://rubygems.org'
+
+gem 'google_drive'
+```
+
+以下のように Fastlane でスクリプトを作成します。
+
 ```ruby:Fastfile
+require 'google_drive'
+
 lane :check_mobile_apps_are_currently_released do
   target_spreadsheet_id = 'xxxx' # スプレッドシートのURLの https://docs.google.com/spreadsheets/d/xxxx/edit における xxxx の部分
   sheet_name = '審査ステータス'
@@ -152,11 +170,9 @@ lane :check_mobile_apps_are_currently_released do
   sheet = spreadsheet.worksheet_by_title(sheet_name)
   latest_status = sheet[target_range]
 
-  UI.success "現在のステータスの取得に成功しました: #{latest_status}"
-
   raise '現在のステータスがリリース済みではありません！' unless latest_status == released_value
 
-  UI.success 'ステータスはリリース済みです！'
+  UI.success '現在のステータスはリリース済みです！'
 end
 ```
 
