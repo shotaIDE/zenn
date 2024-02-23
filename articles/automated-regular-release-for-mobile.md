@@ -240,7 +240,7 @@ check-unreleased-diff:
         latest_rc_tag_name="$(git describe --tags --abbrev=0 --match 'rc/*')"
         echo "Latest RC tag name: $latest_rc_tag_name"
         echo "tag-name=$latest_rc_tag_name" >> $GITHUB_OUTPUT
-    - name: Check latest release is not based on lastest commit
+    - name: Check latest release is not based on latest commit
       id: check-latest-release-is-not-based-on-latest-commit
       run: |
         latest_release_commit_sha="$(git rev-list -n 1 HEAD)"
@@ -335,7 +335,8 @@ end
 
 さらに、以下のように Fastlane のスクリプトを GitHub Actions で実行します。
 
-GitHub Actions の Secrets における `SPREADSHEET_SERVICE_ACCOUNT_KEY_JSON_BASE64` に、サービスアカウントのキー JSON ファイルを base64 エンコードしたものを登録しておきます。
+GitHub Actions の Secrets に `SPREADSHEET_SERVICE_ACCOUNT_KEY_JSON_BASE64` を登録します。
+値にはサービスアカウントのキー JSON ファイルを base64 エンコードしたものを登録しておきます。
 
 ```yaml
 update-apps-status:
