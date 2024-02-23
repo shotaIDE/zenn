@@ -1,5 +1,6 @@
 assetlinks
 bitrise
+cocoapods
 creds
 dokka
 efjn
@@ -7,6 +8,7 @@ fastfile
 fileutils
 firestore
 githubactions
+iphonesimulator
 jasrac
 jetbrains
 materialdesign
@@ -16,6 +18,7 @@ owasp
 pgrep
 plgvd
 println
+pubspec
 pydub
 pytest
 recmw

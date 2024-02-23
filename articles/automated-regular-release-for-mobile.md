@@ -221,17 +221,148 @@ jobs:
 
 https://github.com/marketplace/actions/changed-files
 
+```yaml
+# ...
+
+check-unreleased-diff:
+  name: Check some diffs exist related to app
+  runs-on: ubuntu-latest
+  outputs:
+    has-diff-related-to-app: ${{ steps.check-related-files.outputs.any_changed == 'true' }}
+  steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.head_ref }}
+        fetch-depth: 0
+    - name: Get latest RC tag name
+      id: get-latest-rc-tag-name
+      run: |
+        latest_rc_tag_name="$(git describe --tags --abbrev=0 --match 'rc/*')"
+        echo "Latest RC tag name: $latest_rc_tag_name"
+        echo "tag-name=$latest_rc_tag_name" >> $GITHUB_OUTPUT
+    - name: Check latest release is not based on latest commit
+      id: check-latest-release-is-not-based-on-latest-commit
+      run: |
+        latest_release_commit_sha="$(git rev-list -n 1 HEAD)"
+        latest_rc_tag_commit_sha="$(git rev-list -n 1 ${{ steps.get-latest-rc-tag-name.outputs.tag-name }})"
+        if [ "$latest_release_commit_sha" = "$latest_rc_tag_commit_sha" ]; then
+          echo "Latest release is based on the latest commit."
+          echo "result=false" >> $GITHUB_OUTPUT
+        else
+          echo "Latest release is not based on latest commit."
+          echo "result=true" >> $GITHUB_OUTPUT
+        fi
+    - name: Check related files
+      id: check-related-files
+      uses: tj-actions/changed-files@v42
+      if: ${{ steps.check-latest-release-is-not-based-on-latest-commit.outputs.result == 'true' }}
+      with:
+        base_sha: ${{ steps.get-latest-rc-tag-name.outputs.tag-name }}
+        files: |
+          .maestro/**
+          android/**
+          ios/**
+          lib/**
+          test/**
+          .tool-versions
+          .xcode-version
+          pubspec.lock
+          pubspec.yaml
+        sha: "HEAD"
+```
+
 ## E2E テスト実行
 
 Maestro Cloud とその GitHub Actions を利用しています。
 
 https://cloud.mobile.dev/
 
+GitHub Actions の Secrets における `MAESTRO_CLOUD_API_KEY` に、Maestro Cloud の API キーを登録しておきます。
+
+```yaml
+# ...
+
+e2e-test-ios:
+  name: E2E test iOS app
+  runs-on: macos-14
+  steps:
+    - uses: actions/checkout@v4
+    - name: Setup Flutter
+      uses: ./.github/actions/setup-flutter
+    - name: Setup Xcode
+      uses: ./.github/actions/setup-xcode
+    - name: Setup CocoaPods
+      uses: ./.github/actions/setup-cocoapods
+    - name: Setup Ruby
+      uses: ./.github/actions/setup-ruby
+    - name: Build iOS dev app
+      run: bundle exec fastlane ios build_dev_for_simulator
+    - uses: mobile-dev-inc/action-maestro-cloud@v1.8.1
+      with:
+        api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
+        app-file: "build/ios/iphonesimulator/Runner.app"
+        ios-version: 17
+        device-locale: ja_JP
+```
+
 ## データストアにリリースの審査中とマーク
 
 Google スプレッドシートに、リリース作業開始を記録します。
 
+以下のように、Fastlane でスクリプトを作成します。
+
+```ruby:Fastfile
+lane :update_mobile_apps_status_to_in_release_process do
+  Dotenv.load '.env'
+
+  target_spreadsheet_id = 'xxxx' # スプレッドシートのURLの https://docs.google.com/spreadsheets/d/xxxx/edit における xxxx の部分
+  sheet_name = '審査ステータス'
+  target_range = 'A1'
+  in_release_process_value = 'iOS と Android 両方ともリリース進行中'
+
+  service_account_key_json = File.read('spreadsheet-service-account-key.json')
+  service_account_key = StringIO.new(service_account_key_json)
+  session = GoogleDrive::Session.from_service_account_key(service_account_key)
+
+  spreadsheet = session.spreadsheet_by_key(target_spreadsheet_id)
+  sheet = spreadsheet.worksheet_by_title(sheet_name)
+  sheet[target_range] = in_release_process_value
+  sheet.save
+end
+```
+
+`spreadsheet-service-account-key.json` は前述の通り、サービスアカウントのキー JSON ファイルです。
+
+さらに、以下のように Fastlane のスクリプトを GitHub Actions で実行します。
+
+GitHub Actions の Secrets に `SPREADSHEET_SERVICE_ACCOUNT_KEY_JSON_BASE64` を登録します。
+値にはサービスアカウントのキー JSON ファイルを base64 エンコードしたものを登録しておきます。
+
+```yaml
+update-apps-status:
+  name: Update apps status
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v4
+    - name: Setup Ruby
+      uses: ./.github/actions/setup-ruby
+    - name: Generate service account key file
+      run: echo ${{ secrets.SPREADSHEET_SERVICE_ACCOUNT_KEY_JSON_BASE64 }} | base64 -d > fastlane/spreadsheet-service-account-key.json
+    - name: Update apps status
+      run: bundle exec fastlane update_mobile_apps_status_to_in_release_process
+```
+
 ## 商用アプリをデプロイ＆審査提出
+
+以下のように、Fastlane でスクリプトを作成します。
+
+```ruby:Fastfile
+lane :deploy_and_submit_for_review do
+  # ...
+  # ここでビルドとアプリ審査提出を行う
+  # ...
+end
+```
 
 ## 審査が通り公開された際に、データストアにリリース済みとマーク
 
@@ -242,3 +373,78 @@ Zapier を利用しています。
 Google スプレッドシートの変更時に発動する、Apps Script を利用しています。
 
 iOS と Android 両方ともリリース通知が揃った場合に、スプレッドシートを更新します。
+
+```javascript:script.as
+const summarySheetName = 'Summary';
+const statusRange = 'A2';
+const statusValueBothInReleaseProcess = 'iOS と Android の両方ともリリース進行中';
+const statusValueOnlyOneSideInReleaseProcess = 'iOS と Android のいずれかがリリース進行中';
+const statusValueBothReleased = 'iOS と Android の両方ともリリース済み';
+
+function checkLatestReleaseHasCompleted() {
+  const status = getValueInRangeForSheetByName(summarySheetName, statusRange);
+
+  const iosLastRow = getLastRowForSheetByName('iOS');
+
+  const androidLastRow = getLastRowForSheetByName('Android');
+
+  if (iosLastRow !== androidLastRow) {
+    console.log(`Last row number is different: iOS = ${iosLastRow}, Android = ${androidLastRow}.`);
+    console.log(`Release status is "${status}".`);
+
+    if (status == statusValueBothInReleaseProcess) {
+      console.log('The above means only one of either iOS or Android is in release process.');
+
+      setValueInRangeForSheetByName(summarySheetName, statusRange, statusValueOnlyOneSideInReleaseProcess);
+    }
+
+    return;
+  }
+
+  console.log(`Last row number is same: iOS = ${iosLastRow}, Android = ${androidLastRow}.`);
+  console.log(`Release status is "${status}".`);
+
+  if (status == statusValueBothInReleaseProcess) {
+    console.log('The above means that both of iOS and Android are in release process.');
+    return;
+  }
+
+  console.log('The above means that both iOS and Android releases have been completed.');
+
+  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  const iosSheet = spreadsheet.getSheetByName('iOS');
+  const iosLastRange = iosSheet.getRange(iosLastRow, 1);
+  const iosLastReleaseMetaData = iosLastRange.getValue();
+  const iosVersionNameRegex = /App Version Number: ([0-9]+\.[0-9]+\.[0-9]+)/;
+  const matched = iosLastReleaseMetaData.match(iosVersionNameRegex);
+
+  if (!matched && matched.length <= 1) {
+    console.log(`Failed to extract version name from meta data: "${iosLastReleaseMetaData}".`);
+  }
+
+  const versionName = matched[1];
+  console.log(`Found "${versionName}" release.`);
+
+  setValueInRangeForSheetByName(summarySheetName, statusRange, statusValueBothReleased);
+}
+
+function getLastRowForSheetByName(sheetName) {
+  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = spreadsheet.getSheetByName(sheetName);
+  return sheet.getLastRow();
+}
+
+function getValueInRangeForSheetByName(sheetName, range) {
+  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = spreadsheet.getSheetByName(sheetName);
+  const targetRange = sheet.getRange(range);
+  return targetRange.getValue();
+}
+
+function setValueInRangeForSheetByName(sheetName, range, value) {
+  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = spreadsheet.getSheetByName(sheetName);
+  const targetRange = sheet.getRange(range);
+  targetRange.setValue(value);
+}
+```
