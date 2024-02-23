@@ -373,6 +373,6 @@ Google スプレッドシートの変更時に発動する、Apps Script を利�
 
 iOS と Android 両方ともリリース通知が揃った場合に、スプレッドシートを更新します。
 
-```
+```javascript:script.as
 
 ```
