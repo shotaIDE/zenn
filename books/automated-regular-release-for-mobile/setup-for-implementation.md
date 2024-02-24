@@ -19,6 +19,18 @@ https://flutter.dev/
 
 https://docs.github.com/ja/actions
 
+# GitHub Apps
+
+GitHub Actions のワークフロー上で別のワークフローをトリガーするために、GitHub Apps を利用しています。
+
+https://docs.github.com/ja/apps/creating-github-apps/about-creating-github-apps/about-creating-github-apps
+
+より簡便な方法として GitHub の Personal Access Token を利用する方法もあります。
+これを利用すると自動で実行されたのに個人アカウントが手動でトリガーしたのと同様の扱いになってしまいます。
+また、もしチームで開発する際には、個人アカウントのトークンを利用することになるため、管理上のデメリットがあります。
+
+そのため、GitHub Apps を利用して、ワークフロー間でのトリガーを行っています。
+
 # スクリプト
 
 各種自動スクリプトは Fastlane を利用して組んでいます。
