@@ -1,0 +1,19 @@
+title: "完全に自動でメンテナンスリリースされていくモバイルアプリを作ってみる実験"
+summary: "本の紹介文"
+topics: ["ios", "android", "flutter"]
+published: false
+price: 0
+chapters:
+  - abstract
+  - flows
+  - prepare
+  - automated-pr-updating-libraries
+  - require-checks-to-merge-pr
+  - automated-merge-pr
+  - trigger-regular-release
+  - check-apps-status
+  - check-unreleased-diff
+  - e2e-testing
+  - update-apps-status
+  - deploy-prod
+  - update-apps-status-to-released
