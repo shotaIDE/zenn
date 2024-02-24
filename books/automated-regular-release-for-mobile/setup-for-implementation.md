@@ -31,6 +31,8 @@ https://docs.github.com/ja/apps/creating-github-apps/about-creating-github-apps/
 
 そのため、GitHub Apps を利用して、ワークフロー間でのトリガーを行っています。
 
+これを利用するのは意外と簡単です。
+
 # スクリプト
 
 各種自動スクリプトは Fastlane を利用して組んでいます。
