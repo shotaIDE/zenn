@@ -1,5 +1,6 @@
 ---
 title: "ライブラリ更新の PR が自動で作成されるようにする"
+free: true
 ---
 
 dependabot を使います。

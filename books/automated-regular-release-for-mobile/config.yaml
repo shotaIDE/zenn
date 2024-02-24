@@ -5,9 +5,12 @@ summary: |
   内容のレベル感としては、モバイルアプリの開発経験がある方を想定しています。
 
   実際にこの方法で私が1ヶ月間実験した結果、週に平均5回リリースできるようになりました。
+
+  価格設定していますが、全てのチャプター無料で閲覧できます。
+  もし役に立ったら、購入していただけると嬉しいです🙇🏻‍♂️
 topics: ["ios", "android", "flutter"]
 published: false
-price: 0
+price: 200
 chapters:
   - abstract
   - system-summary
@@ -22,3 +25,4 @@ chapters:
   - update-apps-status
   - deploy-prod
   - update-apps-status-to-released
+  - full-sample-code

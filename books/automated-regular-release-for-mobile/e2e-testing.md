@@ -1,5 +1,6 @@
 ---
 title: "E2E テスト実行"
+free: true
 ---
 
 Maestro Cloud とその GitHub Actions を利用しています。
