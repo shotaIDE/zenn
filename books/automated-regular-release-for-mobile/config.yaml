@@ -5,7 +5,7 @@ published: false
 price: 0
 chapters:
   - abstract
-  - flows
+  - system-summary
   - prepare
   - automated-pr-updating-libraries
   - require-checks-to-merge-pr
