@@ -4,6 +4,8 @@ title: "審査が通り公開された際に、データストアにリリース
 
 リリース完了のメール通知が来た際に、Google スプレッドシートを更新します。
 
+Google スプレッドシートが更新された際に、Apps Script を実行し、iOS/Android 両方のリリース状況をチェックします。
+
 # iOS のリリース通知を受信した際に、スプレッドシートに記述
 
 App Store のユーザー設定画面で、「アプリステータスレポート」の通知を受信するように設定しておきます。
@@ -30,6 +32,13 @@ from:(no_reply@email.apple.com) subject:(The status of your (iOS) app, アプリ
 
 ![](/images/automated-regular-release-for-mobile/zapier-android-01.png)
 ![](/images/automated-regular-release-for-mobile/zapier-android-02.png)
+
+Search String を以下のように設定します。「アプリ名」は App Store Connect でのアプリ名に置き換えてください。
+
+```plaintext:Search String
+from:(noreply-play-developer-console@google.com) subject:(Your update is live) アプリ名
+```
+
 ![](/images/automated-regular-release-for-mobile/zapier-android-03.png)
 ![](/images/automated-regular-release-for-mobile/zapier-android-04.png)
 
