@@ -4,21 +4,7 @@ title: "データストアを見て前のリリースの審査中ではないか
 
 Google スプレッドシートの特定のセルを読み取り、前回のリリースが審査中でないかを判定します。
 
-事前準備として、以下のドキュメントを元に GCP のプロジェクトでサービスアカウントを作成して、必要な権限を付与した上で、キーを JSON 形式でダウンロードしておきます。
-
-https://github.com/gimite/google-drive-ruby/blob/master/doc/authorization.md#service-account
-
-Google スプレッドシートを用意し、Google スプレッドシートの編集画面にてサービスアカウントのメールアドレスに編集権限を付与します。
-
-以下のように、Fastlane で Google スプレッドシートを操作するためのライブラリを依存関係として追加します。
-
-```ruby:Gemfile
-source 'https://rubygems.org'
-
-gem 'google_drive'
-```
-
-サービスアカウントのキー JSON ファイルを `fastlane/spreadsheet-service-account-key.json` に格納しておきます。
+事前準備としてサービスアカウントのキー JSON ファイルを `fastlane/spreadsheet-service-account-key.json` に格納しておきます。
 
 以下のように Fastlane でスクリプトを作成します。
 

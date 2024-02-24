@@ -6,7 +6,7 @@ price: 0
 chapters:
   - abstract
   - system-summary
-  - prepare
+  - setup-for-implementation
   - automated-pr-updating-libraries
   - require-checks-to-merge-pr
   - automated-merge-pr
