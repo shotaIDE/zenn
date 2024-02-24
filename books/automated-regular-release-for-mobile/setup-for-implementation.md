@@ -1,5 +1,6 @@
 ---
 title: "実装時の前提とセットアップ"
+free: true
 ---
 
 以降のチャプターでは、実際に実装した際のコードを紹介していきます。
@@ -17,6 +18,20 @@ https://flutter.dev/
 前提として、GitHub 上で開発し、CI/CD の基盤として GitHub Actions を利用しています。
 
 https://docs.github.com/ja/actions
+
+# GitHub Apps
+
+GitHub Actions のワークフロー上で別のワークフローをトリガーするために、GitHub Apps を利用しています。
+
+https://docs.github.com/ja/apps/creating-github-apps/about-creating-github-apps/about-creating-github-apps
+
+より簡便な方法として GitHub の Personal Access Token を利用する方法もあります。
+これを利用すると自動で実行されたのに個人アカウントが手動でトリガーしたのと同様の扱いになってしまいます。
+また、もしチームで開発する際には、個人アカウントのトークンを利用することになるため、管理上のデメリットがあります。
+
+そのため、GitHub Apps を利用して、ワークフロー間でのトリガーを行っています。
+
+これを利用するのは意外と簡単です。
 
 # スクリプト
 

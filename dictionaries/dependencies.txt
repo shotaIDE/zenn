@@ -1,6 +1,8 @@
 assetlinks
 bitrise
+chdir
 cocoapods
+codesign
 creds
 dokka
 efjn
@@ -13,6 +15,7 @@ jasrac
 jetbrains
 materialdesign
 mergify
+mobileprovision
 mockk
 owasp
 pgrep
@@ -26,6 +29,7 @@ sigint
 simctl
 siri
 stdlib
+tibdex
 udid
 uiuxdesign
 webcredentials
