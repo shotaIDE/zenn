@@ -10,9 +10,13 @@ title: "実装時の前提とセットアップ"
 Flutter を利用して iOS と Android のアプリを実装する前提です。
 そのため、iOS と Android の共通リポジトリが 1 つあります。
 
+https://flutter.dev/
+
 # CI/CD
 
 前提として、GitHub 上で開発し、CI/CD の基盤として GitHub Actions を利用しています。
+
+https://docs.github.com/ja/actions
 
 # スクリプト
 
@@ -39,3 +43,9 @@ gem 'google_drive'
 ```
 
 サービスアカウントのキー JSON ファイルをダウンロードしておきます。
+
+# 自動化ツール
+
+メール通知を受信したことをトリガーに Apps Script を実行するために、Zapier を利用します。
+
+https://zapier.com/
