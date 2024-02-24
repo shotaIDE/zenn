@@ -4,13 +4,44 @@ title: "審査が通り公開された際に、データストアにリリース
 
 リリース完了のメール通知が来た際に、Google スプレッドシートを更新します。
 
+# iOS のリリース通知を受信した際に、スプレッドシートに記述
+
+App Store のユーザー設定画面で、「アプリステータスレポート」の通知を受信するように設定しておきます。
+
+https://appstoreconnect.apple.com/access/users
+
+![](/images/automated-regular-release-for-mobile/app-store-notification-settings.png)
+
 Zapier を利用しています。
 
-Google スプレッドシートの変更時に発動する、Apps Script を利用しています。
+![](/images/automated-regular-release-for-mobile/zapier-ios-01.png)
+![](/images/automated-regular-release-for-mobile/zapier-ios-02.png)
 
-iOS と Android 両方ともリリース通知が揃った場合に、スプレッドシートを更新します。
+Search String を以下のように設定します。「アプリ名」は App Store Connect でのアプリ名に置き換えてください。
 
-```javascript:script.as
+```plaintext:Search String
+from:(no_reply@email.apple.com) subject:(The status of your (iOS) app, アプリ名, is now "Ready for Distribution")
+```
+
+![](/images/automated-regular-release-for-mobile/zapier-ios-03.png)
+![](/images/automated-regular-release-for-mobile/zapier-ios-04.png)
+
+# Android のリリース通知を受信した際に、スプレッドシートに記述
+
+![](/images/automated-regular-release-for-mobile/zapier-android-01.png)
+![](/images/automated-regular-release-for-mobile/zapier-android-02.png)
+![](/images/automated-regular-release-for-mobile/zapier-android-03.png)
+![](/images/automated-regular-release-for-mobile/zapier-android-04.png)
+
+# スプレッドシートの Apps Script
+
+Google スプレッドシートの「変更時」に発動する、Apps Script を利用します。
+
+![](/images/automated-regular-release-for-mobile/spreadsheet-trigger.png)
+
+以下のように、iOS と Android 両方ともリリース通知が揃った場合に、スプレッドシートを更新します。
+
+```javascript:script.gs
 const summarySheetName = 'Summary';
 const statusRange = 'A2';
 const statusValueBothInReleaseProcess = 'iOS と Android の両方ともリリース進行中';
