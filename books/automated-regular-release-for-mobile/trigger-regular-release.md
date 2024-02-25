@@ -18,4 +18,9 @@ jobs:
   # ...
 ```
 
+スケジュールの頻度は、定期リリースは最大どの頻度で行われていいかという要件に合わせて設定します。
+
+最大週 1 回に抑えたい場合は、上記のように週 1 回に設定します。
+毎日リリースしても問題ない場合は、1 日 1 回に設定します。
+
 https://docs.github.com/ja/actions/using-workflows/events-that-trigger-workflows#schedule
