@@ -15,7 +15,7 @@ Google スプレッドシートの特定のセルを読み取り、前回のリ�
 default_platform(:ios)
 
 platform :ios do
-  # 他のレーンの記載など
+  # ...
 
 +  lane :check_mobile_apps_are_currently_released do
 +    target_spreadsheet_id = 'xxxx' # スプレッドシートのURLの https://docs.google.com/spreadsheets/d/xxxx/edit における xxxx の部分
