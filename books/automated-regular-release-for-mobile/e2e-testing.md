@@ -28,6 +28,7 @@ jobs:
     # ...
   check-unreleased-diff:
     # ...
+-  next-job:
 +  e2e-test-ios:
 +    name: E2E test iOS app
     needs: check-unreleased-diff

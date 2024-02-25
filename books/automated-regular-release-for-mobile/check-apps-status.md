@@ -64,7 +64,7 @@ jobs:
 +      - name: Check apps currently released
 +        id: check-apps-currently-released
 +        run: |
-+          if bundle exec fastlane check_mobile_apps_are_currently_released; then
++          if bundle exec fastlane ios check_mobile_apps_are_currently_released; then
 +            # Fastlaneのスクリプトが成功した場合
 +            echo "is_released=true" >> $GITHUB_OUTPUT
 +          else

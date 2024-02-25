@@ -17,6 +17,7 @@ name: Regular release
 jobs:
   check-apps-status:
     # ...
+-  next-job:
 +  check-unreleased-diff:
 +    name: Check some diffs exist related to app
     needs: check-apps-status
