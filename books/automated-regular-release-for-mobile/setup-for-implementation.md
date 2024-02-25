@@ -47,6 +47,15 @@ https://docs.github.com/ja/apps/creating-github-apps/about-creating-github-apps/
 
 https://fastlane.tools/
 
+Flutter のアプリに対して利用するため、以下を参考にしてセットアップしておきます。
+
+https://docs.flutter.dev/deployment/cd#fastlane
+
+上記を完了させた際にできる以下のファイルに対して変更を適用していきます。
+
+- `ios/fastlane/Fastfile`
+- `android/fastlane/Fastfile`
+
 # データストア
 
 データストアとしては Google スプレッドシートを利用しています。
