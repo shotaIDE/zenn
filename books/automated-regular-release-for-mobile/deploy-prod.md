@@ -5,50 +5,55 @@ free: true
 
 以下のように、Fastlane でスクリプトを作成します。
 
-```ruby:fastlane/Fastfile
-lane :bump_patch_version do
-  Dir.chdir('../') do
-    sh('dart run cider bump patch --bump-build')
-  end
+```diff ruby:ios/fastlane/Fastfile
+default_platform(:ios)
+
+platform :ios do
+  # ...
+
++  lane :bump_patch_version do
++    Dir.chdir('../') do
++      sh('dart run cider bump patch --bump-build')
++    end
++  end
++
++  lane :add_release_candidate_tag do
++    full_version_name = get_full_version_name
++
++    add_git_tag(
++      grouping: 'rc',
++      includes_lane: false,
++      build_number: full_version_name
++    )
++  end
++
++  lane :set_full_version_name_from_latest_tag do
++    latest_tag_name = Dir.chdir('../') do
++      sh("git describe --tags --abbrev=0 --match='rc/*'")
++    end
++
++    matched = %r{^.*/(\d+\.\d+\.\d+\+\d+)$}.match(latest_tag_name)
++
++    full_version_name = matched[1]
++
++    Dir.chdir('../') do
++      sh("dart run cider version #{full_version_name}")
++    end
++  end
++
++  lane :build_prod do
++    export_options_plist_path = 'ios/Runner/ExportOptions.plist'
++
++    Dir.chdir('../') do
++      sh(
++        'flutter build ipa '\
++        "--export-options-plist=#{export_options_plist_path}"
++      )
++    end
++
++    lane_context[SharedValues::IPA_OUTPUT_PATH] = 'build/ios/ipa/アプリ名.ipa'
++  end
 end
-
-lane :add_release_candidate_tag do
-  full_version_name = get_full_version_name
-
-  add_git_tag(
-    grouping: 'rc',
-    includes_lane: false,
-    build_number: full_version_name
-  )
-end
-
-lane :set_full_version_name_from_latest_tag do
-  latest_tag_name = Dir.chdir('../') do
-    sh("git describe --tags --abbrev=0 --match='rc/*'")
-  end
-
-  matched = %r{^.*/(\d+\.\d+\.\d+\+\d+)$}.match(latest_tag_name)
-
-  full_version_name = matched[1]
-
-  Dir.chdir('../') do
-    sh("dart run cider version #{full_version_name}")
-  end
-end
-```
-
-```ruby:ios/fastlane/Fastfile
-  desc 'Build production app'
-  lane :build_prod do
-    install_dependencies
-
-    generate
-
-    build(
-      dart_defines_path: 'dart-defines_prod.json',
-      export_options_plist_path: './ios/ExportOptions_AppStore.plist'
-    )
-  end
 ```
 
 ```yaml:.github/workflows/automated-release.yml
