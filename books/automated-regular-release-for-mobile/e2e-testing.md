@@ -72,6 +72,7 @@ jobs:
 +          app-file: 'build/app/outputs/flutter-apk/app-release.apk'
 +          android-api-level: 34
 +          device-locale: ja_JP
++  next-job:
 +    needs:
 +      - e2e-test-ios
 +      - e2e-test-android

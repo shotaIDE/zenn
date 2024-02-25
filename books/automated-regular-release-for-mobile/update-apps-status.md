@@ -34,16 +34,33 @@ end
 GitHub Actions の Secrets に `SPREADSHEET_SERVICE_ACCOUNT_KEY_JSON_BASE64` を登録します。
 値にはサービスアカウントのキー JSON ファイルを base64 エンコードしたものを登録しておきます。
 
-```yaml
-update-apps-status:
-  name: Update apps status
-  runs-on: ubuntu-latest
-  steps:
-    - uses: actions/checkout@v4
-    - name: Setup Ruby
-      uses: ./.github/actions/setup-ruby
-    - name: Generate service account key file
-      run: echo ${{ secrets.SPREADSHEET_SERVICE_ACCOUNT_KEY_JSON_BASE64 }} | base64 -d > fastlane/spreadsheet-service-account-key.json
-    - name: Update apps status
-      run: bundle exec fastlane update_mobile_apps_status_to_in_release_process
+```diff yaml:.github/workflows/regular-release.yml
+name: Regular release
+
+# ...
+
+jobs:
+  check-apps-status:
+    # ...
+  check-unreleased-diff:
+    # ...
+  e2e-test-ios:
+    # ...
+  e2e-test-android:
+    # ...
+-  next-job:
++  update-apps-status:
++    name: Update apps status
++    runs-on: ubuntu-latest
+    needs:
+      - e2e-test-ios
+      - e2e-test-android
++    steps:
++      - uses: actions/checkout@v4
++      - name: Setup Ruby
++        uses: ./.github/actions/setup-ruby
++      - name: Generate service account key file
++        run: echo ${{ secrets.SPREADSHEET_SERVICE_ACCOUNT_KEY_JSON_BASE64 }} | base64 -d > fastlane/spreadsheet-service-account-key.json
++      - name: Update apps status
++        run: bundle exec fastlane update_mobile_apps_status_to_in_release_process
 ```
