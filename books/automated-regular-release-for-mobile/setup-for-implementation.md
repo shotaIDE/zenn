@@ -19,6 +19,14 @@ https://flutter.dev/
 
 https://docs.github.com/ja/actions
 
+# 自動マージ
+
+Mergify を利用しています。
+
+以下のドキュメントを参考に、リポジトリに Mergify をインストールしておきます。
+
+https://docs.mergify.com/getting-started/
+
 # GitHub Apps
 
 GitHub Actions のワークフロー上で別のワークフローをトリガーするために、GitHub Apps を利用しています。

@@ -18,3 +18,5 @@ pull_request_rules:
       merge:
         method: merge
 ```
+
+`author = dependabot[bot]"` と指定しておくことで dependabot による PR のみが自動マージの対象になります。
