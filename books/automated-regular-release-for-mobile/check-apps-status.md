@@ -38,37 +38,48 @@ platform :ios do
 end
 ```
 
-以下のように、Fastlane のスクリプトを GitHub Actions で実行します。
+アプリがリリース済みでない場合、**終了ステータスが 0 ではない値で完了するレーン**となっています。
 
-```yaml
-# ...
+次に、以下のように、Fastlane のスクリプトを GitHub Actions で実行します。
+
+```diff yaml:.github/workflows/regular-release.yml
+name: Regular release
+
+on:
+  schedule:
+    - cron: '0 0 * * 1' # 毎週月曜日の AM 9:00 (JST)
 
 jobs:
-  check-apps-status:
-    name: Check apps status
-    runs-on: ubuntu-latest
-    outputs:
-      is-release-available: ${{ steps.check-apps-currently-released.outputs.is_released == 'true' }}
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
-      - name: Check apps currently released
-        id: check-apps-currently-released
-        run: |
-          if bundle exec fastlane check_mobile_apps_are_currently_released; then
-            # Fastlaneのスクリプトが成功した場合
-            echo "is_released=true" >> $GITHUB_OUTPUT
-          else
-            # Fastlaneのスクリプトが失敗した場合
-            echo "is_released=false" >> $GITHUB_OUTPUT
-          fi
-  next-job:
-    needs: check-apps-status
-    if: needs.check-apps-status.outputs.is-release-available
-    # ...
++  check-apps-status:
++    name: Check apps status
++    runs-on: ubuntu-latest
++    outputs:
++      is-release-available: ${{ steps.check-apps-currently-released.outputs.is_released == 'true' }}
++    steps:
++      - uses: actions/checkout@v4
++      - name: Setup Ruby
++        uses: ruby/setup-ruby@v1
++        with:
++          bundler-cache: true
++      - name: Check apps currently released
++        id: check-apps-currently-released
++        run: |
++          if bundle exec fastlane check_mobile_apps_are_currently_released; then
++            # Fastlaneのスクリプトが成功した場合
++            echo "is_released=true" >> $GITHUB_OUTPUT
++          else
++            # Fastlaneのスクリプトが失敗した場合
++            echo "is_released=false" >> $GITHUB_OUTPUT
++          fi
++  next-job:
++    needs: check-apps-status
++    if: needs.check-apps-status.outputs.is-release-available
++    # ...
 ```
+
+先ほど定義したレーン `check_mobile_apps_are_currently_released` は、アプリが審査中のステータスの場合、終了ステータス 0 以外になります。
+その際、**GitHub Actions のジョブが終了してしまわないように `if` で囲っています**。
+
+Fastlane のレーンから結果を GitHub Actions のジョブに渡すスマートな方法を思いつかなかったので上記のようにしています。
 
 リリース済みであることが確認できたら GitHub Actions の次のジョブを実行するようにしています。

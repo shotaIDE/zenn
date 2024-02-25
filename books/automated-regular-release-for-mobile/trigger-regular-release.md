@@ -5,7 +5,7 @@ free: true
 
 GitHub Actions のスケジュールトリガーを利用します。
 
-例えば、以下のように設定します。
+以下のように設定します。
 
 ```yaml:.github/workflows/regular-release.yml
 name: Regular release
