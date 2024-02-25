@@ -78,6 +78,10 @@ jobs:
 先ほど定義したレーン `check_mobile_apps_are_currently_released` は、アプリが審査中のステータスの場合、終了ステータス 0 以外になります。
 その際、**GitHub Actions のジョブが終了してしまわないように `if` で囲っています**。
 
+以下を参考にしました。
+
+https://qiita.com/mkiken/items/3d2999217832704fcf01
+
 Fastlane のレーンから結果を GitHub Actions のジョブに渡すスマートな方法を思いつかなかったので上記のようにしています。
 
 リリース済みであることが確認できたら GitHub Actions の次のジョブを実行するようにしています。
