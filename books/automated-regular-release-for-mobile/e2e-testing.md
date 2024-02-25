@@ -30,8 +30,8 @@ jobs:
     # ...
 +  e2e-test-ios:
 +    name: E2E test iOS app
-+    needs: check-unreleased-diff
-+    if: ${{ needs.check-unreleased-diff.outputs.has-diff-related-to-app == 'true' }}
+    needs: check-unreleased-diff
+    if: ${{ needs.check-unreleased-diff.outputs.has-diff-related-to-app == 'true' }}
 +    runs-on: macos-14
 +    steps:
 +      - uses: actions/checkout@v4
@@ -72,6 +72,11 @@ jobs:
 +          app-file: 'build/app/outputs/flutter-apk/app-release.apk'
 +          android-api-level: 34
 +          device-locale: ja_JP
++    needs:
++      - e2e-test-ios
++      - e2e-test-android
 ```
 
 これにより、iOS と Android の E2E テストが実行されます。
+
+iOS と Android の E2E テストが両方ともパスしたら GitHub Actions の次のジョブを実行するようにしています。

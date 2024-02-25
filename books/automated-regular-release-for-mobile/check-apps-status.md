@@ -73,7 +73,7 @@ jobs:
 +          fi
 +  next-job:
 +    needs: check-apps-status
-+    if: needs.check-apps-status.outputs.is-release-available
++    if: ${{ needs.check-apps-status.outputs.is-release-available == 'true' }}
 +    # ...
 ```
 

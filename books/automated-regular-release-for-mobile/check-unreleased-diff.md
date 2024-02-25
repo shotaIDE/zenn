@@ -20,7 +20,7 @@ jobs:
 +  check-unreleased-diff:
 +    name: Check some diffs exist related to app
     needs: check-apps-status
-    if: needs.check-apps-status.outputs.is-release-available
+    if: ${{ needs.check-apps-status.outputs.is-release-available == 'true' }}
 +    runs-on: ubuntu-latest
 +    outputs:
 +      has-diff-related-to-app: ${{ steps.check-related-files.outputs.any_changed == 'true' }}
@@ -62,6 +62,10 @@ jobs:
 +            pubspec.lock
 +            pubspec.yaml
 +          sha: "HEAD"
++  next-job:
++    needs: check-unreleased-diff
++    if: ${{ needs.check-unreleased-diff.outputs.has-diff-related-to-app == 'true' }}
++    # ...
 ```
 
 リリース時には `rc/*` という名前でタグが付けられている前提となっています。
@@ -72,3 +76,5 @@ jobs:
 進んでいる場合、`Check related files` のステップでさらに、**アプリの本質的な差分が発生しているか**を確認します。
 
 ビルドツールなどの差分であれば、原理的にはビルドされたアプリに差分を生じないため、リリース作業をスキップします。
+
+リリース済みであることが確認できたら GitHub Actions の次のジョブを実行するようにしています。
