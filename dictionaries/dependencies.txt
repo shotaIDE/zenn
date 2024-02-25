@@ -1,3 +1,4 @@
+appbundle
 assetlinks
 bitrise
 chdir
@@ -10,6 +11,7 @@ fastfile
 fileutils
 firestore
 githubactions
+idfa
 iphonesimulator
 jasrac
 jetbrains
@@ -20,6 +22,7 @@ mockk
 owasp
 pgrep
 plgvd
+precheck
 println
 pubspec
 pydub

@@ -31,3 +31,10 @@ updates:
     # See https://github.com/dependabot/dependabot-core/issues/4979
     versioning-strategy: "increase"
 ```
+
+アプリでは、依存ライブラリのバージョン制約は、最新版のみに追従していく方針になることが多いです。
+
+一方で、Flutter に対する dependabot は現在、そうしたバージョン制約が取りづらくなっているため、独自でパッチを当てています。
+
+また、dependabot による PR の作成時刻をある程度ずらしています。
+これにより、片方がマージされた際に他の PR がマージ対象のブランチの最新コミットから遅れているためにマージできない状況を防ぎます。

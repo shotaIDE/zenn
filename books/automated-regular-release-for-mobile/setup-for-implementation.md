@@ -19,6 +19,14 @@ https://flutter.dev/
 
 https://docs.github.com/ja/actions
 
+# 自動マージ
+
+Mergify を利用しています。
+
+以下のドキュメントを参考に、リポジトリに Mergify をインストールしておきます。
+
+https://docs.mergify.com/getting-started/
+
 # GitHub Apps
 
 GitHub Actions のワークフロー上で別のワークフローをトリガーするために、GitHub Apps を利用しています。
@@ -38,6 +46,15 @@ https://docs.github.com/ja/apps/creating-github-apps/about-creating-github-apps/
 各種自動スクリプトは Fastlane を利用して組んでいます。
 
 https://fastlane.tools/
+
+Flutter のアプリに対して利用するため、以下を参考にしてセットアップしておきます。
+
+https://docs.flutter.dev/deployment/cd#fastlane
+
+上記を完了させた際にできる以下のファイルに対して変更を適用していきます。
+
+- `ios/fastlane/Fastfile`
+- `android/fastlane/Fastfile`
 
 # データストア
 
