@@ -40,7 +40,14 @@ platform :ios do
 +      sh("dart run cider version #{full_version_name}")
 +    end
 +  end
-+
+end
+```
+
+```diff ruby:ios/fastlane/Fastfile
+default_platform(:ios)
+
+platform :ios do
+  # ...
 +  lane :build_prod do
 +    export_options_plist_path = 'ios/Runner/ExportOptions.plist'
 +
@@ -53,6 +60,44 @@ platform :ios do
 +
 +    lane_context[SharedValues::IPA_OUTPUT_PATH] = 'build/ios/ipa/アプリ名.ipa'
 +  end
++
++  lane :deploy_prod_without_build do
++    apple_api_key_id = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
++    apple_api_issuer_id = 'xxxxxxxxxx'
++
++    app_store_connect_api_key_path = 'fastlane/app-store-connect-api-key.p8'
++
++    lane_context[SharedValues::IPA_OUTPUT_PATH] = 'build/ios/ipa/アプリ名.ipa'
++
++    api_key = app_store_connect_api_key(
++      key_id: apple_api_key_id,
++      issuer_id: apple_api_issuer_id,
++      key_filepath: app_store_connect_api_key_path
++    )
++
++    upload_to_app_store(
++      api_key: api_key,
++      metadata_path: 'fastlane/metadata/ios',
++      skip_metadata: false,
++      skip_screenshots: true,
++      force: true,
++      submit_for_review: true,
++      reject_if_possible: true,
++      automatic_release: true,
++      submission_information: { add_id_info_uses_idfa: false },
++      precheck_include_in_app_purchases: false
++    )
++  end
+end
+```
+
+```diff ruby:android/fastlane/Fastfile
+default_platform(:android)
+
+platform :android do
+  # ...
+
+
 end
 ```
 
