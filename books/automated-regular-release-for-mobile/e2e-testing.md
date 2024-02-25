@@ -43,7 +43,7 @@ jobs:
 +      - name: Setup CocoaPods
 +        uses: ./.github/actions/setup-cocoapods
 +      - name: Setup Ruby
-+        uses: ./.github/actions/setup-ruby
++        uses: ruby/setup-ruby@v1
 +      - name: Build iOS dev app
 +        run: flutter build ios --debug --simulator
 +      - uses: mobile-dev-inc/action-maestro-cloud@v1.8.1
@@ -64,7 +64,7 @@ jobs:
 +      - name: Setup Gradle
 +        uses: ./.github/actions/setup-gradle
 +      - name: Setup Ruby
-+        uses: ./.github/actions/setup-ruby
++        uses: ruby/setup-ruby@v1
 +      - name: Build Android dev app
 +        run: flutter build apk --dart-define-from-file 'dart-defines_dev.json'
 +      - uses: mobile-dev-inc/action-maestro-cloud@v1.8.1

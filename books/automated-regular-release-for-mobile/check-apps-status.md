@@ -59,8 +59,6 @@ jobs:
 +      - uses: actions/checkout@v4
 +      - name: Setup Ruby
 +        uses: ruby/setup-ruby@v1
-+        with:
-+          bundler-cache: true
 +      - name: Check apps currently released
 +        id: check-apps-currently-released
 +        run: |

@@ -64,6 +64,7 @@ jobs:
 +    steps:
 +      - uses: actions/checkout@v4
 +      - name: Setup Ruby
++        uses: ruby/setup-ruby@v1
 +        uses: ./.github/actions/setup-ruby
 +      - name: Generate service account key file
 +        run: echo ${{ secrets.SPREADSHEET_SERVICE_ACCOUNT_KEY_JSON_BASE64 }} | base64 -d > fastlane/spreadsheet-service-account-key.json
