@@ -58,6 +58,15 @@ Firebase Remote Config のライブラリを依存関係に追加します。
 
 モバイルアプリ側では、リモート設定の値に応じてプログラム中に分岐を書き、フィーチャートグル ON の時の挙動と OFF の時の挙動を両方定義します。
 
+```swift
+let isFeatureAEnabled = RemoteConfig.remoteConfig.configValue(forKey: "featureA").boolValue
+if isFeatureAEnabled {
+    // 機能A のフィーチャートグル ON の時の挙動
+} else {
+    // 機能A のフィーチャートグル OFF の時の挙動
+}
+```
+
 リモート設定がサーバーから 1 回も同期できていない場合は、モバイルアプリ側で定義してあるデフォルトの設定値を使用します。
 
 また、リモート設定のサーバーからの同期は、アプリがフォアグラウンド状態の場合に数秒以内のタイムラグを含みつつリアルタイムで行われます。
