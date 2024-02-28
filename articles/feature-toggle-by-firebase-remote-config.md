@@ -1,14 +1,28 @@
 ---
-title: "Firebase Remote Configを利用してフィーチャーフラグを実現する際に必要な知識"
+title: "Firebase Remote Configによるフィーチャートグルを実現する際の運用に関する概要"
 emoji: "📡"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["firebase", "ios", "android"]
 published: false
 ---
 
+# はじめに
+
+プロジェクトに Firebase Remote Config を導入するにあたり、プロジェクトメンバーに対して運用の概要を説明するために作成したドキュメントです。
+
+エンジニアやプロジェクトマネージャー、QA などを想定の読者としています。
+
 # Firebase Remote Config とは
 
 アプリのアップデートをストアから公開しなくても、アプリの動作を変更できるようにする仕組みです。
+
+https://firebase.google.com/docs/remote-config?hl=ja
+
+# フィーチャートグルとは
+
+1 つのアプリで、特定の機能を ON/OFF できるようにする仕組みです。
+
+https://ja.wikipedia.org/wiki/%E3%83%95%E3%82%A3%E3%83%BC%E3%83%81%E3%83%A3%E3%83%BC%E3%83%88%E3%82%B0%E3%83%AB
 
 # 実現できること
 
