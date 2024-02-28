@@ -46,9 +46,13 @@ Firebase Remote Config によるフィーチャートグルを導入すると、
 
 Web ページから Firebase のプロジェクトを作成し、Remote Config の画面でリモート設定のキー・バリューを記述します。
 
+![](/images/feature-toggle-by-firebase-remote-config/create-first-key-value.png)
+
 ## モバイルアプリ
 
 Firebase Remote Config のライブラリを依存関係に追加します。
+
+https://firebase.google.com/docs/remote-config/get-started?hl=ja
 
 # 実装・運用の概要
 
