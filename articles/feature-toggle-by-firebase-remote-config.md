@@ -3,7 +3,7 @@ title: "Firebase Remote Configによるフィーチャートグルを実現す�
 emoji: "📡"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["firebase", "ios", "android"]
-published: false
+published: true
 ---
 
 # はじめに
