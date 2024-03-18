@@ -6,6 +6,28 @@ topics: ["ios", "android"]
 published: false
 ---
 
+# 目指したいこと
+
+大規模な修正を特定のメンバーが自分の手元だけで行わないことを目指します。
+
+![](/images/mobile-trunk-based-release-strategy/long-live-changes.png)
+
+これは以下のリスクがあるためです。
+
+- 大規模な修正はセルフテストが十分に行えないことが多い
+- 大規模な修正はコードレビューが十分に行えないことが多い
+- 大規模な修正はコンフリクトが発生し、解消ミスを起こしやすい
+- 大規模な修正は、バグ発生時の原因特定が難しい
+- 大規模な修正は、特定のメンバーだけに確認が集中しやすく、他のメンバーの知見が活かされにくい
+
+そのため、小さな修正を頻繁に行い、全員が見えるところに公開していくことを目指します。
+
+![](/images/mobile-trunk-based-release-strategy/short-live-changes.png)
+
+これがトランクベース開発です。
+
+# はじめに
+
 プロジェクトでトランクベース開発を実施しています。
 
 https://cloud.google.com/architecture/devops/devops-tech-trunk-based-development?hl=ja
