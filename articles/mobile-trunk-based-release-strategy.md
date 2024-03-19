@@ -42,6 +42,8 @@ Git でトランクブランチという 1 つのブランチを据えます。
 
 ## リリース時
 
+![](/images/mobile-trunk-based-release-strategy/trunk-based-release-flow-for-project.png)
+
 リリース作業時に、基本的にはトランクブランチの最新コミットからリリースブランチを分岐させます。
 例外としては、以下のような修正が最新の方に来ている場合に、それを含まない形でリリースブランチを切ることがあります。
 
