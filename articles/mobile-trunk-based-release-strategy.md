@@ -8,9 +8,11 @@ published: false
 
 # 目指したいこと
 
+## こまめにデプロイ
+
 大規模な修正を特定のメンバーが自分の手元だけで行わないことを目指します。
 
-![](/images/mobile-trunk-based-release-strategy/long-live-changes.png)
+![](/images/mobile-trunk-based-release-strategy/merge-changes-to-trunk-branch_bad-pattern.png)
 
 これは以下のリスクがあるためです。
 
@@ -22,7 +24,11 @@ published: false
 
 そのため、小さな修正を頻繁に行い、全員が見えるところに公開していくことを目指します。
 
-![](/images/mobile-trunk-based-release-strategy/short-live-changes.png)
+![](/images/mobile-trunk-based-release-strategy/merge-changes-to-trunk-branch_good-pattern.png)
+
+## マージをブロックする要素を減らす
+
+また、マージをブロックする要素を減らすことを目指します。
 
 これがトランクベース開発です。
 
