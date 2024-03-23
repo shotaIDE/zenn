@@ -26,12 +26,6 @@ published: false
 
 ![](/images/mobile-trunk-based-release-strategy/merge-changes-to-trunk-branch_good-pattern.png)
 
-## マージをブロックする要素を減らす
-
-また、マージをブロックする要素を減らすことを目指します。
-
-リリースをしたいから、リリースに関係のある PR だけをマージするようにする、という期間を設けるとします。
-
 これがトランクベース開発です。
 
 # 採用しているトランクベース開発の概要
