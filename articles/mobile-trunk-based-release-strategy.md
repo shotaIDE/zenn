@@ -48,7 +48,7 @@ Git でトランクブランチという 1 つのブランチを据えます。
 
 ### 初回ビルド
 
-![](/images/mobile-trunk-based-release-strategy/trunk-based-release-flow-for-project.png)
+![](/images/mobile-trunk-based-release-strategy/trunk-based-regular-release_01.png)
 
 リリース作業時に、基本的にはトランクブランチの最新コミットからリリースブランチを分岐させます。
 
@@ -58,6 +58,8 @@ Git でトランクブランチという 1 つのブランチを据えます。
 
 - 次のリリースに含みたくない修正
 
+![](/images/mobile-trunk-based-release-strategy/trunk-based-regular-release_02.png)
+
 リリースブランチ上でアプリをビルド・デプロイし、リリース前のテストを行います。
 
 ### 2 回目以降のビルド
@@ -65,6 +67,8 @@ Git でトランクブランチという 1 つのブランチを据えます。
 バグが見つかった場合には、**トランクブランチに修正を適用**します。
 
 その後、トランクブランチ上の修正を**リリースブランチにチェリーピック**します。
+
+![](/images/mobile-trunk-based-release-strategy/trunk-based-regular-release_03.png)
 
 初回ビルドから取り込まれていないコミットを全て精査し、現在ターゲットとしているリリースに必ず含めたいもののみをチェリーピックしていきます。
 必要なもの以外は取り込まないので、排他的なかき集めということができます。
@@ -106,6 +110,8 @@ QA メンバーもトランクブランチ上でビルドされたアプリを�
 
 前回のリリースブランチからリリースブランチを新たに作ります。
 その後、hotfix として取り込むべき内容をトランクブランチから排他的に取り込みます。
+
+![](/images/mobile-trunk-based-release-strategy/trunk-based-hotfix-release.png)
 
 # はじめに
 
