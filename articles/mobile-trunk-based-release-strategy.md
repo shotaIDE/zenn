@@ -24,7 +24,7 @@ https://cloud.google.com/architecture/devops/devops-tech-trunk-based-development
 
 **大規模または、長期にわたる修正を、特定のメンバーだけが見える場所で行わない**ことを目指します。
 
-![長期、大規模な修正を特定のメンバーだけで行うのは悪い](/images/mobile-trunk-based-release-strategy/merge-changes-to-trunk-branch_bad-pattern.png)
+![長期、大規模な修正を特定のメンバーだけで行うのは悪い](/images/mobile-trunk-based-release-strategy/merge-large-changes.png)
 
 これは以下の辛さがあるためです。
 
@@ -41,11 +41,11 @@ https://cloud.google.com/architecture/devops/devops-tech-trunk-based-development
 
 Git-flow や一般的なブランチ管理戦略では、よくみられるものではあります。
 
-![リリースブランチを作り、最後にマージする]()
+![リリースブランチを作り、最後にマージする](/images/mobile-trunk-based-release-strategy/merge-release-branch.png)
 
 そのため、小さな修正を頻繁に行い、全員が見えるところに公開していくことを目指します。
 
-![小さな修正をこまめにマージする](/images/mobile-trunk-based-release-strategy/merge-changes-to-trunk-branch_good-pattern.png)
+![小さな修正をこまめにマージする](/images/mobile-trunk-based-release-strategy/commit-on-only-trunk.png)
 
 これがトランクベース開発です。
 
@@ -53,7 +53,7 @@ Git-flow や一般的なブランチ管理戦略では、よくみられるも�
 
 ## 普段の開発
 
-![普段の開発](/images/mobile-trunk-based-release-strategy/trunk-based-flow-for-project.png)
+![普段の開発](/images/mobile-trunk-based-release-strategy/development-flow.png)
 
 Git で**トランクブランチ**という 1 つのブランチを据えます。
 
@@ -65,9 +65,19 @@ Git で**トランクブランチ**という 1 つのブランチを据えます
 
 PR マージ時に Squash マージを採用しているため、最終的には **PR1 つにつきトランクブランチに 1 コミットが生成**されます。
 
-![PR1つにつき1コミットが生成される]()
-
 ## 定期リリース
+
+定期リリースの際には以下のようなフローをたどります。
+
+```mermaid
+flowchart TD
+    A[トランクブランチの最新コミット*からリリースブランチ作成] --> B[リリースブランチ上でアプリ作成し、テスト]
+    B --> C{修正必須のバグが見つかったか？}
+    C -->|Yes| D[トランクブランチに修正を適用]
+    D --> E[リリースブランチに修正をコピー]
+    E --> B
+    C -->|No| F[リリース]
+```
 
 定期的なリリース時には、基本的にはトランクブランチの最新コミットからリリースブランチを分岐させます。
 
@@ -80,8 +90,6 @@ PR マージ時に Squash マージを採用しているため、最終的には
 その後、追加加ビルドを行います。
 
 これをリリース可能な基準に達するまで繰り返し、最後のビルドをストアに審査をかけてリリースします。
-
-![定期リリースのリリースまでのサイクル]()
 
 ### 初回ビルド
 
@@ -132,7 +140,7 @@ PR マージ時に Squash マージを採用しているため、最終的には
 
 1 項目目にある通り、トランクブランチとリリースブランチの乖離が大きければこの戦略は適用できないため、大きくならないよう開発フローを最適化していく必要があります。
 
-![乖離が大きくなってはいけない]()
+![乖離が大きくなってはいけない](/images/mobile-trunk-based-release-strategy/diff-trunk-and-release.png)
 
 また、バグ修正を適用した時点のトランクブランチのコミットで 2 回目以降のビルドを行うという選択肢もあります。
 しかし、この方法は以下のデメリットがあるため採用していません。
