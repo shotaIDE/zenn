@@ -8,15 +8,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/shotaIDE/Zenn.git"
+    "url": "git+https://github.com/shotaIDE/zenn.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/shotaIDE/Zenn/issues"
+    "url": "https://github.com/shotaIDE/zenn/issues"
   },
-  "homepage": "https://github.com/shotaIDE/Zenn#readme",
+  "homepage": "https://github.com/shotaIDE/zenn#readme",
   "dependencies": {
     "@textlint-rule/textlint-rule-no-unmatched-pair": "^2.0.0",
     "textlint": "^14.0.1",
