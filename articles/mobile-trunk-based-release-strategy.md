@@ -24,7 +24,7 @@ https://cloud.google.com/architecture/devops/devops-tech-trunk-based-development
 
 **大規模または、長期にわたる修正を、特定のメンバーだけが見える場所で行わない**ことを目指します。
 
-![](/images/mobile-trunk-based-release-strategy/merge-changes-to-trunk-branch_bad-pattern.png)
+![長期、大規模な修正を特定のメンバーだけで行うのは悪い](/images/mobile-trunk-based-release-strategy/merge-changes-to-trunk-branch_bad-pattern.png)
 
 これは以下の辛さがあるためです。
 
@@ -41,11 +41,11 @@ https://cloud.google.com/architecture/devops/devops-tech-trunk-based-development
 
 Git-flow や一般的なブランチ管理戦略では、よくみられるものではあります。
 
-![長いブランチを作り、最後にマージするという図]()
+![リリースブランチを作り、最後にマージする]()
 
 そのため、小さな修正を頻繁に行い、全員が見えるところに公開していくことを目指します。
 
-![](/images/mobile-trunk-based-release-strategy/merge-changes-to-trunk-branch_good-pattern.png)
+![小さな修正をこまめにマージする](/images/mobile-trunk-based-release-strategy/merge-changes-to-trunk-branch_good-pattern.png)
 
 これがトランクベース開発です。
 
@@ -53,7 +53,7 @@ Git-flow や一般的なブランチ管理戦略では、よくみられるも�
 
 ## 普段の開発
 
-![トランクベース開発の概念図](/images/mobile-trunk-based-release-strategy/trunk-based-flow-for-project.png)
+![普段の開発](/images/mobile-trunk-based-release-strategy/trunk-based-flow-for-project.png)
 
 Git で**トランクブランチ**という 1 つのブランチを据えます。
 
@@ -65,7 +65,7 @@ Git で**トランクブランチ**という 1 つのブランチを据えます
 
 PR マージ時に Squash マージを採用しているため、最終的には **PR1 つにつきトランクブランチに 1 コミットが生成**されます。
 
-![PR1つにつき1コミットが生成される図]()
+![PR1つにつき1コミットが生成される]()
 
 ## 定期リリース
 
@@ -81,11 +81,11 @@ PR マージ時に Squash マージを採用しているため、最終的には
 
 これをリリース可能な基準に達するまで繰り返し、最後のビルドをストアに審査をかけてリリースします。
 
-![サイクルの図]()
+![定期リリースのリリースまでのサイクル]()
 
 ### 初回ビルド
 
-![](/images/mobile-trunk-based-release-strategy/trunk-based-regular-release_01.png)
+![1回目のブランチ戦略・弾くコミットがない場合](/images/mobile-trunk-based-release-strategy/trunk-based-regular-release_01.png)
 
 基本的には**トランクブランチの最新コミットからリリースブランチを分岐**させます。
 
@@ -97,7 +97,7 @@ PR マージ時に Squash マージを採用しているため、最終的には
 - デグレを引き起こすことが明確に分かっている
 - 後のリリースで提供したい機能である
 
-![](/images/mobile-trunk-based-release-strategy/trunk-based-regular-release_02.png)
+![1回目のブランチ戦略・弾くコミットがある場合](/images/mobile-trunk-based-release-strategy/trunk-based-regular-release_02.png)
 
 :::message
 基本的には上記のように特定のコミットだけリリースに含めないということは避けるべきです。
@@ -116,7 +116,7 @@ PR マージ時に Squash マージを採用しているため、最終的には
 
 その後、トランクブランチ上の修正を**リリースブランチにチェリーピック**します。
 
-![](/images/mobile-trunk-based-release-strategy/trunk-based-regular-release_03.png)
+![2回目以降のビルドのブランチ戦略](/images/mobile-trunk-based-release-strategy/trunk-based-regular-release_03.png)
 
 :::message
 チェリーピックとは、あるコミットを別のブランチに持っていく作業です。
@@ -132,7 +132,7 @@ PR マージ時に Squash マージを採用しているため、最終的には
 
 1 項目目にある通り、トランクブランチとリリースブランチの乖離が大きければこの戦略は適用できないため、大きくならないよう開発フローを最適化していく必要があります。
 
-![乖離が大きくなってはいけないという図]()
+![乖離が大きくなってはいけない]()
 
 また、バグ修正を適用した時点のトランクブランチのコミットで 2 回目以降のビルドを行うという選択肢もあります。
 しかし、この方法は以下のデメリットがあるため採用していません。
@@ -175,4 +175,4 @@ QA メンバーもトランクブランチ上でビルドされたアプリを�
 前回のリリースブランチからリリースブランチを新たに作ります。
 その後、hotfix として取り込むべき内容をトランクブランチから排他的に取り込みます。
 
-![](/images/mobile-trunk-based-release-strategy/trunk-based-hotfix-release.png)
+![hotfixのブランチ戦略](/images/mobile-trunk-based-release-strategy/trunk-based-hotfix-release.png)
