@@ -85,7 +85,7 @@ PR マージ時に Squash マージを採用しているため、最終的には
 
 ### 初回ビルド
 
-![](/images/mobile-trunk-based-release-strategy/trunk-based-regular-release_01.png)
+![1回目のブランチ戦略・弾くコミットがない場合](/images/mobile-trunk-based-release-strategy/trunk-based-regular-release_01.png)
 
 基本的には**トランクブランチの最新コミットからリリースブランチを分岐**させます。
 
@@ -97,7 +97,7 @@ PR マージ時に Squash マージを採用しているため、最終的には
 - デグレを引き起こすことが明確に分かっている
 - 後のリリースで提供したい機能である
 
-![](/images/mobile-trunk-based-release-strategy/trunk-based-regular-release_02.png)
+![1回目のブランチ戦略・弾くコミットがある場合](/images/mobile-trunk-based-release-strategy/trunk-based-regular-release_02.png)
 
 :::message
 基本的には上記のように特定のコミットだけリリースに含めないということは避けるべきです。
@@ -116,7 +116,7 @@ PR マージ時に Squash マージを採用しているため、最終的には
 
 その後、トランクブランチ上の修正を**リリースブランチにチェリーピック**します。
 
-![](/images/mobile-trunk-based-release-strategy/trunk-based-regular-release_03.png)
+![2回目以降のビルドのブランチ戦略](/images/mobile-trunk-based-release-strategy/trunk-based-regular-release_03.png)
 
 :::message
 チェリーピックとは、あるコミットを別のブランチに持っていく作業です。
@@ -132,7 +132,7 @@ PR マージ時に Squash マージを採用しているため、最終的には
 
 1 項目目にある通り、トランクブランチとリリースブランチの乖離が大きければこの戦略は適用できないため、大きくならないよう開発フローを最適化していく必要があります。
 
-![乖離が大きくなってはいけないという図]()
+![乖離が大きくなってはいけない]()
 
 また、バグ修正を適用した時点のトランクブランチのコミットで 2 回目以降のビルドを行うという選択肢もあります。
 しかし、この方法は以下のデメリットがあるため採用していません。
@@ -175,4 +175,4 @@ QA メンバーもトランクブランチ上でビルドされたアプリを�
 前回のリリースブランチからリリースブランチを新たに作ります。
 その後、hotfix として取り込むべき内容をトランクブランチから排他的に取り込みます。
 
-![](/images/mobile-trunk-based-release-strategy/trunk-based-hotfix-release.png)
+![hotfixのブランチ戦略](/images/mobile-trunk-based-release-strategy/trunk-based-hotfix-release.png)
