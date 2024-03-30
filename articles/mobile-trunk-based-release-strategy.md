@@ -24,7 +24,7 @@ https://cloud.google.com/architecture/devops/devops-tech-trunk-based-development
 
 **大規模または、長期にわたる修正を、特定のメンバーだけが見える場所で行わない**ことを目指します。
 
-![長期、大規模な修正を特定のメンバーだけで行うのは悪い](/images/mobile-trunk-based-release-strategy/merge-changes-to-trunk-branch_bad-pattern.png)
+![長期、大規模な修正を特定のメンバーだけで行うのは悪い](/images/mobile-trunk-based-release-strategy/merge-large-changes.png)
 
 これは以下の辛さがあるためです。
 
@@ -41,11 +41,11 @@ https://cloud.google.com/architecture/devops/devops-tech-trunk-based-development
 
 Git-flow や一般的なブランチ管理戦略では、よくみられるものではあります。
 
-![リリースブランチを作り、最後にマージする](/images/mobile-trunk-based-release-strategy/merge-long-live-release-branch.png)
+![リリースブランチを作り、最後にマージする](/images/mobile-trunk-based-release-strategy/merge-release-branch.png)
 
 そのため、小さな修正を頻繁に行い、全員が見えるところに公開していくことを目指します。
 
-![小さな修正をこまめにマージする](/images/mobile-trunk-based-release-strategy/merge-changes-to-trunk-branch_good-pattern.png)
+![小さな修正をこまめにマージする](/images/mobile-trunk-based-release-strategy/commit-on-only-trunk.png)
 
 これがトランクベース開発です。
 
