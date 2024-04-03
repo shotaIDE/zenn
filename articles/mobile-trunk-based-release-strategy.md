@@ -49,10 +49,10 @@ published: false
 
 以下のような**リリースブランチを作り最後にトランクブランチへマージするという営み**も同様のリスクがあります。
 
-![リリースブランチを作り、最後にマージする](/images/mobile-trunk-based-release-strategy/merge-release-branch.png)
-
 - 開発ブランチからリリースブランチを分岐させ、受け入れ試験で発生したバグ修正をそこに適用し、最後に開発ブランチへマージする
   - このような戦略は、開発ブランチを触っているエンジニアとリリースブランチを触っているエンジニアが異なるため、コンフリクトが発生しやすい
+
+![リリースブランチを作り、最後にマージする](/images/mobile-trunk-based-release-strategy/merge-release-branch.png)
 
 Git-flow などの一般的なブランチ戦略では、よくみられるものです。
 
