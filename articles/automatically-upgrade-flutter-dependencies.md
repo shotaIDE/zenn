@@ -6,6 +6,8 @@ topics: ["flutter", "ios", "android"]
 published: false
 ---
 
+<!-- cspell:ignore automerge -->
+
 # はじめに
 
 アプリ開発で、運用やメンテナンスにかかるコストはできるだけ削減することが重要です。
