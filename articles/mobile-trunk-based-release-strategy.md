@@ -211,6 +211,14 @@ flowchart TD
 
 定期リリースの 2 回目以降のビルドと同様に、**排他的なかき集め**フェーズと捉えることができます。
 
+## 次の定期リリースのビルドを開始する
+
+リリースが完了し、次の定期リリースのビルドを開始したい場合は、再度**トランクブランチの最新コミットからリリースブランチを作成**します。
+
+![](/images/mobile-trunk-based-release-strategy/next-release.png)
+
+前回のリリースブランチ(v1.0 リリースブランチ)は、利用しません。
+
 # 参考
 
 https://cloud.google.com/architecture/devops/devops-tech-trunk-based-development?hl=ja
