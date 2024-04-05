@@ -6,7 +6,7 @@ topics: ["flutter", "ios", "android"]
 published: false
 ---
 
-<!-- cspell:ignore automerge -->
+<!-- cspell:ignore automerge, noreply, podfile, precache, subosito, temurin -->
 
 # はじめに
 
@@ -98,4 +98,62 @@ PR が同時に大量に発生してノイズにならないように、適切�
 
 ## iOS ネイティブのライブラリのロックファイルを更新し、プッシュバックする
 
-パーソナルアクセストークンを用意します。
+プッシュバックした後に CI がトリガーされるように、パーソナルアクセストークンを用意します。
+
+リンクです。
+
+```yaml:.github/workflows/ios.yml
+name: CI / iOS
+
+on:
+  pull_request:
+    branches:
+      - "main"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  push-back-diffs-if-needed:
+    name: Push back diffs after resolving dependencies if needed
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+      - name: Setup Git
+        # Git のユーザーとして "github-actions[bot]" を設定する
+        # https://github.com/actions/checkout/issues/13#issuecomment-724415212
+        run: |
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+      - uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
+      - uses: subosito/flutter-action@v2
+      - name: Install iOS dependencies
+        run: |
+          flutter pub get --no-example
+          flutter precache --ios
+          cd ios
+          pod install
+      - name: Commit
+        run: |
+          git add ios/Podfile.lock
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m 'build: fix Podfile.lock'
+          fi
+      - name: Push back if needed
+        run: |
+          BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
+          git push origin "$BRANCH_NAME"
+```
