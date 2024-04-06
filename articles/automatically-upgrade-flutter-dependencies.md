@@ -6,7 +6,7 @@ topics: ["flutter", "ios", "android"]
 published: false
 ---
 
-<!-- cspell:ignore automerge -->
+<!-- cspell:ignore automerge, noreply, podfile, precache, subosito, temurin -->
 
 # はじめに
 
@@ -27,7 +27,21 @@ Renovate の自動マージにより、マージされます。
 
 # 詳細
 
+## 前提
+
 GitHub で開発し、GitHub Actions で CI を組んでいる前提で説明します。
+
+ライブラリの更新 PR は、**1 ライブラリにつき 1PR** としています。
+ただし、Renovate の設定により、複数ライブラリを 1PR にまとめることも可能です。
+
+また、本記事で前提としているのはアプリ開発です。
+そのため、ライブラリの**新しいバージョンがリリースされたら、できるだけ早く最新のバージョンのみを利用するようバージョン指定の制約を更新**するようにします。
+
+:::message
+一方ライブラリ自体の開発では、そのライブラリが利用するライブラリのバージョン制約は広く取り、制約の更新自体も緩やかに行うことが一般的です。
+これは、他の人やチームから様々な状況において利用されることを考慮しているためです。
+本記事では、ライブラリ自体の開発においては適していない方法になっています。
+:::
 
 ## Flutter のライブラリ依存関係の定義方法を変更
 
@@ -98,4 +112,72 @@ PR が同時に大量に発生してノイズにならないように、適切�
 
 ## iOS ネイティブのライブラリのロックファイルを更新し、プッシュバックする
 
-パーソナルアクセストークンを用意します。
+プッシュバックした後に CI がトリガーされるように、パーソナルアクセストークンを用意します。
+
+プロジェクト運用上 GitHub Apps で作成したアクセストークンを使う方が良いですが、今回は一番簡単な個人のアクセストークンを使う方法をご紹介します。
+
+リンクです。
+
+`GH_PERSONAL_ACCESS_TOKEN` としてアクセストークンを登録しておきます。
+
+次に、ワークフローを作成します。
+
+```yaml:.github/workflows/ios.yml
+name: CI / iOS
+
+on:
+  pull_request:
+    branches:
+      - "main"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  push-back-diffs-if-needed:
+    name: Push back diffs after resolving dependencies if needed
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+      - name: Setup Git
+        # Git のユーザーとして "github-actions[bot]" を設定する
+        # https://github.com/actions/checkout/issues/13#issuecomment-724415212
+        run: |
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+      - uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
+      - uses: subosito/flutter-action@v2
+      - name: Install iOS dependencies
+        run: |
+          flutter pub get --no-example
+          flutter precache --ios
+          cd ios
+          pod install
+      - name: Commit
+        run: |
+          git add ios/Podfile.lock
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m 'build: fix Podfile.lock'
+          fi
+      - name: Push back if needed
+        run: |
+          BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
+          git push origin "$BRANCH_NAME"
+```
+
+# 実際に動作している様子
+
+# まとめ
