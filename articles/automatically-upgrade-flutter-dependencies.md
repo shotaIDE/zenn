@@ -180,4 +180,20 @@ jobs:
 
 # 実際に動作している様子
 
+Renovate が PR を作成します。
+
+![](/images/automatically-upgrade-flutter-dependencies/pr-by-renovate.png)
+
+最初は以下のようなコミットが作成されます。
+
+![](/images/automatically-upgrade-flutter-dependencies/first-commit-by-renoate.png)
+
+以下のようなコミットがプッシュバックされ、CI がトリガーされます。
+
+![](/images/automatically-upgrade-flutter-dependencies/push-back-commit.png)
+
+CI がパスすると、以下のように PR がマージされます。
+
+![](/images/automatically-upgrade-flutter-dependencies/auto-merge-by-renovate.png)
+
 # まとめ
