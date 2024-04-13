@@ -237,6 +237,10 @@ pod install
 
 `ios/Podfile.lock` に更新がある場合、コミットします。
 
+`Push back if needed` は、更新されたロックファイルをプッシュバックするためのステップです。
+
+チェックアウトの際に `GH_PERSONAL_ACCESS_TOKEN` を使っているため、GitHub Actions の CI がトリガーされます。
+
 # 実際に動作している様子
 
 Renovate が PR を作成します。
