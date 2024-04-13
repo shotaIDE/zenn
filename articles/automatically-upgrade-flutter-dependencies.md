@@ -2,7 +2,7 @@
 title: "Flutterのライブラリ更新地獄から脱出！自動化でスマートなFlutter開発を！"
 emoji: "🎃"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["flutter", "ios", "android"]
+topics: ["flutter", "renovate", "ios", "android"]
 published: false
 ---
 
