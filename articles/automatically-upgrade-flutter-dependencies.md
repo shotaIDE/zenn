@@ -124,14 +124,42 @@ https://docs.github.com/ja/actions/using-workflows/triggering-a-workflow#trigger
 `GITHUB_TOKEN` は、プルリクエストのトリガーには使えますが、プッシュバックには使えません。
 :::
 
-これを解消するためには、以下の 2 種類の方法があります。
+これを解消するためには、以下の 3 種類の方法があります。
 
-- GitHub Apps を使う
-- 個人のアクセストークンを使う
+1. GitHub Apps によるトークンを使う
+2. 個人トークン(Fine-grained)を使う
+3. 個人トークン(クラシック)を使う
 
-プロジェクト運用上 GitHub Apps で作成したアクセストークンを使う方が良いですが、今回は一番簡単な個人のアクセストークンを使う方法をご紹介します。
+プロジェクト運用上 GitHub Apps で作成したアクセストークンを使う方が良いですが、今回は一番簡単な個人トークン(クラシック)を使う方法をご紹介します。
+
+個人トークンのページを開きます。
+
+https://github.com/settings/tokens
+
+"Generate new token (classic)" をクリックします。
+
+![](/images/automatically-upgrade-flutter-dependencies/create-personal-access-token.png)
+
+"Note" に任意の名前を入力し、"Expiration" を好きな値に設定します。
+また、"Select scopes" における "repo" のスコープにチェックを入れます。
+
+![](/images/automatically-upgrade-flutter-dependencies/personal-access-token-settings.png)
+
+作成したトークンをコピーします。
+
+![](/images/automatically-upgrade-flutter-dependencies/created-personal-access-token.png)
+
+リポジトリの "Settings" に移動し、"Secrets and variables" > "Actions" を開き、"New repository secret" をクリックします。
+
+![](/images/automatically-upgrade-flutter-dependencies/repository-secrets.png)
 
 `GH_PERSONAL_ACCESS_TOKEN` としてアクセストークンを登録しておきます。
+
+![](/images/automatically-upgrade-flutter-dependencies/add-repository-secrets.png)
+
+:::message
+`GITHUB_` という名前は GitHub により禁止されているため、`GH_` としています。
+:::
 
 次に、ワークフローを作成します。
 
