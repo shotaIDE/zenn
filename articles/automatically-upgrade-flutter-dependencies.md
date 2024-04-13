@@ -1,8 +1,8 @@
 ---
-title: "ライブラリ更新に時間かかりすぎて、更新作業だけで人生終わっちゃうという危機感を持つ人に送る！"
+title: "Flutterのライブラリ更新地獄から脱出！自動化でスマートなFlutter開発を！"
 emoji: "🎃"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["flutter", "ios", "android"]
+topics: ["flutter", "renovate", "ios", "android"]
 published: false
 ---
 
@@ -16,20 +16,30 @@ published: false
 
 本記事では、Flutter プロジェクトでライブラリの更新を自動化する方法について紹介します。
 
-# 概要
+# 自動化方法の概要
 
 Renovate を導入し、PR 作成を自動化します。
 これにより、Flutter のライブラリの依存関係定義ファイルとロックファイルが更新された PR が作成されます。
 
-CI により、Flutter のライブラリが間接的に利用する iOS ネイティブのライブラリのロックファイルを更新し、PR にプッシュバックします。
+PR 作成後に発火するワークフローにより、Flutter のライブラリが**間接的に利用する iOS ネイティブのライブラリのロックファイルを更新**し、PR にプッシュバックします。
 
-Renovate の自動マージにより、マージされます。
+Renovate の自動マージ設定により、各種 CI のチェックが通った後にマージされます。
 
-# 詳細
+:::message
+ライブラリの自動更新は Renovate や dependabot などのソリューションがあります。
+一方で、Flutter のライブラリは iOS ネイティブのライブラリを利用するものもあり、それらの間接的な依存関係の更新を自動化する必要が生じます。
+それらの更新は Renovate や dependabot では現時点では対応できないため、本記事ではその対応方法を紹介します。
+:::
 
-## 前提
+# 前提
 
 GitHub で開発し、GitHub Actions で CI を組んでいる前提で説明します。
+
+ライブラリの更新による影響は CI で検証され、CI が通れば安全に PR がマージできるという前提に立ちます。
+
+:::message
+プロジェクトの品質基準によっては、ライブラリの更新による影響を検証するためのテストを CI に追加することも検討してください。
+:::
 
 ライブラリの更新 PR は、**1 ライブラリにつき 1PR** としています。
 ただし、Renovate の設定により、複数ライブラリを 1PR にまとめることも可能です。
@@ -42,6 +52,8 @@ GitHub で開発し、GitHub Actions で CI を組んでいる前提で説明し
 これは、他の人やチームから様々な状況において利用されることを考慮しているためです。
 本記事では、ライブラリ自体の開発においては適していない方法になっています。
 :::
+
+# 自動化方法の詳細
 
 ## Flutter のライブラリ依存関係の定義方法を変更
 
@@ -89,7 +101,7 @@ Renovate をリポジトリにインストールしたら、ライブラリ自�
 
 そのままマージはせず、適した設定に修正します。
 
-以下のように設定しています。
+以下が修正後の設定の全容です。
 
 ```json:renovate.json
 {
@@ -105,20 +117,65 @@ Renovate をリポジトリにインストールしたら、ライブラリ自�
 }
 ```
 
+Flutter のライブラリは pub というパッケージマネージャーを通じて管理されているため、`enabledManagers` に `pub` を指定します。
+
 `prConcurrentLimit` は、同時に提出される PR の数を制限するための設定です。
 PR が同時に大量に発生してノイズにならないように、適切な数に設定すると良いです。
 
 このように修正後、PR をマージします。
 
-## iOS ネイティブのライブラリのロックファイルを更新し、プッシュバックする
+## GitHub Actions でプッシュバックする際のアクセストークンを用意する
 
-プッシュバックした後に CI がトリガーされるように、パーソナルアクセストークンを用意します。
+iOS ネイティブのライブラリのロックファイルを更新し、プッシュバックします。
+更新した後のプッシュバックにより CI が実行されるようにします。
 
-プロジェクト運用上 GitHub Apps で作成したアクセストークンを使う方が良いですが、今回は一番簡単な個人のアクセストークンを使う方法をご紹介します。
+この際、GitHub Actions でデフォルトで利用できる `GITHUB_TOKEN` によりプッシュバックすると、CI がトリガーされません。
+これは、意図せず CI が大量に動作して経済的な損失が発生しないようにするための、GitHub の仕様です。
 
-リンクです。
+https://docs.github.com/ja/actions/using-workflows/triggering-a-workflow#triggering-a-workflow-from-a-workflow
+
+:::message
+`GITHUB_TOKEN` は、プルリクエストのトリガーには使えますが、プッシュバックには使えません。
+:::
+
+これを解消するためには、以下の 3 種類の方法があります。
+
+1. GitHub Apps によるトークンを使う
+2. 個人トークン(Fine-grained)を使う
+3. 個人トークン(クラシック)を使う
+
+プロジェクト運用上 GitHub Apps で作成したアクセストークンを使う方が良いですが、今回は一番簡単な個人トークン(クラシック)を使う方法をご紹介します。
+
+個人トークンのページを開きます。
+
+https://github.com/settings/tokens
+
+"Generate new token (classic)" をクリックします。
+
+![](/images/automatically-upgrade-flutter-dependencies/create-personal-access-token.png)
+
+"Note" に任意の名前を入力し、"Expiration" を好きな値に設定します。
+また、"Select scopes" における "repo" のスコープにチェックを入れます。
+
+![](/images/automatically-upgrade-flutter-dependencies/personal-access-token-settings.png)
+
+作成したトークンをコピーします。
+
+![](/images/automatically-upgrade-flutter-dependencies/created-personal-access-token.png)
+
+リポジトリの "Settings" に移動し、"Secrets and variables" > "Actions" を開き、"New repository secret" をクリックします。
+
+![](/images/automatically-upgrade-flutter-dependencies/repository-secrets.png)
 
 `GH_PERSONAL_ACCESS_TOKEN` としてアクセストークンを登録しておきます。
+
+![](/images/automatically-upgrade-flutter-dependencies/add-repository-secrets.png)
+
+:::message
+`GITHUB_` という名前は GitHub により禁止されているため、`GH_` としています。
+:::
+
+## iOS ネイティブのライブラリのロックファイルを更新し、プッシュバックする
 
 次に、ワークフローを作成します。
 
@@ -178,9 +235,29 @@ jobs:
           git push origin "$BRANCH_NAME"
 ```
 
+ワークフローの説明は以下のとおりです。
+
+`Install iOS dependencies` は、iOS ネイティブのライブラリのロックファイルを更新するためのステップです。
+以下のように実行することで、iOS ネイティブのライブラリのロックファイルを更新される場合があります。
+
+```shell:Install iOS dependencies
+flutter pub get --no-example
+flutter precache --ios
+cd ios
+pod install
+```
+
+`Commit` は、更新されたロックファイルをコミットするためのステップです。
+
+`ios/Podfile.lock` に更新がある場合、コミットします。
+
+`Push back if needed` は、更新されたロックファイルをプッシュバックするためのステップです。
+
+チェックアウトの際に `GH_PERSONAL_ACCESS_TOKEN` を使っているため、GitHub Actions の CI がトリガーされます。
+
 # 実際に動作している様子
 
-Renovate が PR を作成します。
+Renovate が定期的に PR を作成します。
 
 ![](/images/automatically-upgrade-flutter-dependencies/pr-by-renovate.png)
 
@@ -188,7 +265,7 @@ Renovate が PR を作成します。
 
 ![](/images/automatically-upgrade-flutter-dependencies/first-commit-by-renoate.png)
 
-以下のようなコミットがプッシュバックされ、CI がトリガーされます。
+PR 作成後しばらくすると以下のようなコミットがプッシュバックされ、CI が再度トリガーされます。
 
 ![](/images/automatically-upgrade-flutter-dependencies/push-back-commit.png)
 
@@ -196,4 +273,11 @@ CI がパスすると、以下のように PR がマージされます。
 
 ![](/images/automatically-upgrade-flutter-dependencies/auto-merge-by-renovate.png)
 
-# まとめ
+# 最後に
+
+本記事で紹介した方法により、ライブラリ更新が大幅に自動化できるため、開発者の負担を軽減できます。
+
+一方で、まだライブラリ更新時に依存関係の解決が失敗して手動で修正する必要がある場合もあります。
+そのため、まだ完全な自動化とはなっていません。
+
+今後も、完全な自動化を目指していきたいです。
