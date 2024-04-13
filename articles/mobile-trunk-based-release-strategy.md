@@ -12,10 +12,12 @@ published: false
 
 今まで Git-flow を含むいくつかのブランチ管理を試してきました。
 
-しかし、ブランチ戦略が複雑になればなるほど、開発者自身が気をつけて操作する必要が増え、事故るリスクが高まります。
+しかし、ブランチを多く活用すればするほど、開発者自身が気をつけて行うべき活動が増え、事故るリスクが高まります。
 また、仕組みにより事故がなくなるようにする際にも、仕組みを作ること自体のコストがかかります。
 
 できるだけシンプルで効果的なブランチ戦略を模索していく中で、**トランクベース開発**にたどり着きました。
+
+https://cloud.google.com/architecture/devops/devops-tech-trunk-based-development?hl=ja
 
 トランクベース開発は、複雑なブランチ戦略を全く取らず、トランクブランチというメインのブランチ 1 つに対してのみエンジニア全員が修正していく開発手法です。
 
@@ -222,6 +224,4 @@ flowchart TD
 
 # 最後に
 
-# 参考
-
-https://cloud.google.com/architecture/devops/devops-tech-trunk-based-development?hl=ja
+k
