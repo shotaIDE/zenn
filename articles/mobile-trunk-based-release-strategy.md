@@ -1,8 +1,8 @@
 ---
-title: "「ブランチ複雑化」を解消！トランクベース開発でシンプル＆効率的に"
+title: "「ブランチ戦略疲れ」を解消！トランクベース開発でシンプル＆効率的に"
 emoji: "⛴️"
 type: "idea" # tech: 技術記事 / idea: アイデア
-topics: ["ios", "android"]
+topics: ["トランクベース開発"]
 published: false
 ---
 
