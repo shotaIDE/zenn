@@ -257,7 +257,7 @@ pod install
 
 # 実際に動作している様子
 
-Renovate が PR を作成します。
+Renovate が定期的に PR を作成します。
 
 ![](/images/automatically-upgrade-flutter-dependencies/pr-by-renovate.png)
 
@@ -265,7 +265,7 @@ Renovate が PR を作成します。
 
 ![](/images/automatically-upgrade-flutter-dependencies/first-commit-by-renoate.png)
 
-以下のようなコミットがプッシュバックされ、CI がトリガーされます。
+PR 作成後しばらくすると以下のようなコミットがプッシュバックされ、CI が再度トリガーされます。
 
 ![](/images/automatically-upgrade-flutter-dependencies/push-back-commit.png)
 
