@@ -221,6 +221,22 @@ jobs:
           git push origin "$BRANCH_NAME"
 ```
 
+ワークフローの説明は以下のとおりです。
+
+`Install iOS dependencies` は、iOS ネイティブのライブラリのロックファイルを更新するためのステップです。
+以下のように実行することで、iOS ネイティブのライブラリのロックファイルを更新される場合があります。
+
+```shell:Install iOS dependencies
+flutter pub get --no-example
+flutter precache --ios
+cd ios
+pod install
+```
+
+`Commit` は、更新されたロックファイルをコミットするためのステップです。
+
+`ios/Podfile.lock` に更新がある場合、コミットします。
+
 # 実際に動作している様子
 
 Renovate が PR を作成します。
