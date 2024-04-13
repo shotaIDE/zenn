@@ -1,5 +1,5 @@
 ---
-title: "ライブラリ更新に時間かかりすぎて、更新作業だけで人生終わっちゃうという危機感を持つ人に送る！"
+title: "Flutterのライブラリ更新地獄から脱出！自動化でスマートなFlutter開発を！"
 emoji: "🎃"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["flutter", "ios", "android"]
