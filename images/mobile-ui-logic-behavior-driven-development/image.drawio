@@ -1,0 +1,64 @@
+<mxfile host="app.diagrams.net" modified="2024-04-16T02:02:59.679Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36" etag="7lIo0_Pl_l27VgJjPZ2Q" version="24.2.1" type="device">
+  <diagram name="ページ1" id="KTmhikJlyO--2MtsTX8y">
+    <mxGraphModel dx="857" dy="541" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="tbAWzuxnCb8HUWdNtCA--7" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="210" y="100" width="310" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="tbAWzuxnCb8HUWdNtCA--1" value="ViewModel" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="200" y="120" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tbAWzuxnCb8HUWdNtCA--2" value="UseCase" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="310" y="120" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tbAWzuxnCb8HUWdNtCA--4" value="Repository" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="420" y="120" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tbAWzuxnCb8HUWdNtCA--5" value="SharedPreference" style="rounded=0;whiteSpace=wrap;html=1;textOpacity=30;opacity=30;" vertex="1" parent="1">
+          <mxGeometry x="560" y="100" width="110" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tbAWzuxnCb8HUWdNtCA--8" value="API" style="rounded=0;whiteSpace=wrap;html=1;textOpacity=30;opacity=30;" vertex="1" parent="1">
+          <mxGeometry x="560" y="170" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tbAWzuxnCb8HUWdNtCA--9" value="Fragment" style="rounded=0;whiteSpace=wrap;html=1;textOpacity=30;opacity=30;" vertex="1" parent="1">
+          <mxGeometry x="40" y="120" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tbAWzuxnCb8HUWdNtCA--10" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="150" y="110" as="sourcePoint" />
+            <mxPoint x="190" y="110" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tbAWzuxnCb8HUWdNtCA--11" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="190" y="160" as="sourcePoint" />
+            <mxPoint x="150" y="160" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tbAWzuxnCb8HUWdNtCA--12" value="When" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="110" y="80" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tbAWzuxnCb8HUWdNtCA--14" value="Then" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="110" y="160" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tbAWzuxnCb8HUWdNtCA--15" value="SharedPreference Mock" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="540" y="80" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tbAWzuxnCb8HUWdNtCA--16" value="API Mock" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="540" y="150" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tbAWzuxnCb8HUWdNtCA--17" value="Real object" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=3" vertex="1" parent="1">
+          <mxGeometry x="200" y="200" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tbAWzuxnCb8HUWdNtCA--18" value="Fake object" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=3" vertex="1" parent="1">
+          <mxGeometry x="540" y="200" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tbAWzuxnCb8HUWdNtCA--20" value="Given" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="540" y="50" width="60" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
