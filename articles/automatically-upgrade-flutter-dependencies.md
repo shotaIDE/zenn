@@ -126,17 +126,12 @@ PR が同時に大量に発生してノイズにならないように、適切�
 
 ## GitHub Actions でプッシュバックする際のアクセストークンを用意する
 
-iOS ネイティブのライブラリのロックファイルを更新し、プッシュバックします。
-更新した後のプッシュバックにより CI が実行されるようにします。
+後述のステップで、iOS ネイティブのライブラリのロックファイルを更新し、プッシュバックし、プッシュバックをトリガーとして CI が実行されるようにします。
 
-この際、GitHub Actions でデフォルトで利用できる `GITHUB_TOKEN` によりプッシュバックすると、CI がトリガーされません。
+この際、GitHub Actions で**デフォルトで利用できるアクセストークンの `GITHUB_TOKEN` によりプッシュバックすると、CI がトリガーされません**。
 これは、意図せず CI が大量に動作して経済的な損失が発生しないようにするための、GitHub の仕様です。
 
 https://docs.github.com/ja/actions/using-workflows/triggering-a-workflow#triggering-a-workflow-from-a-workflow
-
-:::message
-`GITHUB_TOKEN` は、プルリクエストのトリガーには使えますが、プッシュバックには使えません。
-:::
 
 これを解消するためには、以下の 3 種類の方法があります。
 
@@ -144,7 +139,7 @@ https://docs.github.com/ja/actions/using-workflows/triggering-a-workflow#trigger
 2. 個人トークン(Fine-grained)を使う
 3. 個人トークン(クラシック)を使う
 
-プロジェクト運用上 GitHub Apps で作成したアクセストークンを使う方が良いですが、今回は一番簡単な個人トークン(クラシック)を使う方法をご紹介します。
+チーム開発の運用やセキュリティ的な観点では 1 の GitHub Apps によるトークンを使う方法が良いですが、今回は一番簡単な 3 の個人トークン(クラシック)を使う方法をご紹介します。
 
 個人トークンのページを開きます。
 
@@ -167,7 +162,7 @@ https://github.com/settings/tokens
 
 ![](/images/automatically-upgrade-flutter-dependencies/repository-secrets.png)
 
-`GH_PERSONAL_ACCESS_TOKEN` としてアクセストークンを登録しておきます。
+`GH_PERSONAL_ACCESS_TOKEN` としてコピーしたアクセストークンを登録しておきます。
 
 ![](/images/automatically-upgrade-flutter-dependencies/add-repository-secrets.png)
 
