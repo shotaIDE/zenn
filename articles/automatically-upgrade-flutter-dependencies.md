@@ -180,7 +180,7 @@ https://github.com/settings/tokens
 次に、ワークフローを作成します。
 
 ```yaml:.github/workflows/ios.yml
-name: CI / iOS
+name: iOS
 
 on:
   pull_request:
@@ -237,8 +237,26 @@ jobs:
 
 ワークフローの説明は以下のとおりです。
 
+ワークフローでコードをチェックアウトする際、Git のチェックアウト先の Ref として `github.head_ref` を指定しています。
+
+```yaml
+- uses: actions/checkout@v4
+  with:
+    ref: ${{ github.head_ref }}
+```
+
+これは、未指定だと、プルリクエストのトリガーによるワークフローでは、プルリクエストのベースブランチがチェックアウトされるためです。
+
+また、チェックアウトの際には、GitHub のアクセストークンとして `GH_PERSONAL_ACCESS_TOKEN` を使っています。
+
+```yaml
+- uses: actions/checkout@v4
+  with:
+    # ...
+    token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+```
+
 `Install iOS dependencies` は、iOS ネイティブのライブラリのロックファイルを更新するためのステップです。
-以下のように実行することで、iOS ネイティブのライブラリのロックファイルを更新される場合があります。
 
 ```shell:Install iOS dependencies
 flutter pub get --no-example
@@ -247,13 +265,30 @@ cd ios
 pod install
 ```
 
-`Commit` は、更新されたロックファイルをコミットするためのステップです。
+Flutter のライブラリが更新された後に上記のように実行することで、iOS ネイティブのライブラリのロックファイルを更新される場合があります。
 
-`ios/Podfile.lock` に更新がある場合、コミットします。
+その後、`Commit` ステップにより、更新されたロックファイルをコミットします。
+
+```shell:Commit
+git add ios/Podfile.lock
+if git diff --cached --quiet; then
+  echo "No changes to commit"
+else
+  git commit -m 'build: fix Podfile.lock'
+fi
+```
+
+`ios/Podfile.lock` に更新がある場合、`build: fix Podfile.lock` というコミットメッセージでコミットします。
 
 `Push back if needed` は、更新されたロックファイルをプッシュバックするためのステップです。
 
-チェックアウトの際に `GH_PERSONAL_ACCESS_TOKEN` を使っているため、GitHub Actions の CI がトリガーされます。
+```shell:Push back if needed
+BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
+git push origin "$BRANCH_NAME"
+```
+
+チェックアウトの際に `GH_PERSONAL_ACCESS_TOKEN` を使っているため、プッシュの際もそのトークンが使われます。
+これにより、GitHub Actions の CI が再度トリガーされます。
 
 # 実際に動作している様子
 
