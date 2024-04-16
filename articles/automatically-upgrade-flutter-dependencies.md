@@ -97,13 +97,13 @@ https://docs.renovatebot.com/getting-started/installing-onboarding/#hosted-githu
 
 ## 3. Renovate の設定
 
-Renovate をリポジトリにインストールしたら、ライブラリ自動更新の推奨設定が適用された PR が提出されます。
+Renovate をリポジトリにインストールしたら、ライブラリ自動更新の推奨設定が適用された PR が自動で作成されます。
 
 ![](/images/automatically-upgrade-flutter-dependencies/renovate-configure-pr.png)
 
-そのままマージはせず、適した設定に修正します。
+この PR は**そのままマージせず、目的に適した設定へと修正**します。
 
-以下が修正後の設定の全容です。
+以下が修正後の設定ファイルの内容です。
 
 ```json:renovate.json
 {
@@ -125,6 +125,10 @@ Flutter のライブラリは pub というパッケージマネージャーを�
 PR が同時に大量に発生してノイズにならないように、適切な数に設定すると良いです。
 
 このように修正後、PR をマージします。
+
+Renovate の設定ファイルに関する詳細は以下のドキュメントを参照してください。
+
+https://docs.renovatebot.com/configuration-options/
 
 ## 4. GitHub Actions でプッシュバックする際のアクセストークンを用意する
 
