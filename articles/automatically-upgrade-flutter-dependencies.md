@@ -37,6 +37,8 @@ GitHub で開発し、GitHub Actions で CI を組んでいる前提で説明し
 
 ライブラリの更新による影響は CI で検証され、CI が通れば安全に PR がマージできるという前提に立ちます。
 
+CI の組み方は本記事では記載しません。
+
 :::message
 プロジェクトの品質基準によっては、ライブラリの更新による影響を検証するためのテストを CI に追加することも検討してください。
 :::
@@ -55,7 +57,7 @@ GitHub で開発し、GitHub Actions で CI を組んでいる前提で説明し
 
 # 自動化方法の詳細
 
-## Flutter のライブラリ依存関係の定義方法を変更
+## 1. Flutter のライブラリ依存関係の定義方法を変更
 
 `pubspec.yaml` におけるライブラリのバージョン指定は、キャレット演算子 `^` を使うことが一般的です。
 
@@ -83,7 +85,7 @@ dependencies:
 # ...
 ```
 
-## Renovate の導入
+## 2. Renovate の導入
 
 Renovate は、GitHub のリポジトリにプルリクエストを作成し、ライブラリの更新を自動化するツールです。
 
@@ -93,15 +95,15 @@ https://docs.renovatebot.com/
 
 https://docs.renovatebot.com/getting-started/installing-onboarding/#hosted-githubcom-app
 
-## Renovate の設定
+## 3. Renovate の設定
 
-Renovate をリポジトリにインストールしたら、ライブラリ自動更新の推奨設定が適用された PR が提出されます。
+Renovate をリポジトリにインストールしたら、ライブラリ自動更新の推奨設定が適用された PR が自動で作成されます。
 
 ![](/images/automatically-upgrade-flutter-dependencies/renovate-configure-pr.png)
 
-そのままマージはせず、適した設定に修正します。
+この PR は**そのままマージせず、目的に適した設定へと修正**します。
 
-以下が修正後の設定の全容です。
+以下が修正後の設定ファイルの内容です。
 
 ```json:renovate.json
 {
@@ -124,19 +126,18 @@ PR が同時に大量に発生してノイズにならないように、適切�
 
 このように修正後、PR をマージします。
 
-## GitHub Actions でプッシュバックする際のアクセストークンを用意する
+Renovate の設定ファイルに関する詳細は以下のドキュメントを参照してください。
 
-iOS ネイティブのライブラリのロックファイルを更新し、プッシュバックします。
-更新した後のプッシュバックにより CI が実行されるようにします。
+https://docs.renovatebot.com/configuration-options/
 
-この際、GitHub Actions でデフォルトで利用できる `GITHUB_TOKEN` によりプッシュバックすると、CI がトリガーされません。
+## 4. GitHub Actions でプッシュバックする際のアクセストークンを用意する
+
+後述のステップで、iOS ネイティブのライブラリのロックファイルを更新し、プッシュバックし、プッシュバックをトリガーとして CI が実行されるようにします。
+
+この際、GitHub Actions で**デフォルトで利用できるアクセストークンの `GITHUB_TOKEN` によりプッシュバックすると、CI がトリガーされません**。
 これは、意図せず CI が大量に動作して経済的な損失が発生しないようにするための、GitHub の仕様です。
 
 https://docs.github.com/ja/actions/using-workflows/triggering-a-workflow#triggering-a-workflow-from-a-workflow
-
-:::message
-`GITHUB_TOKEN` は、プルリクエストのトリガーには使えますが、プッシュバックには使えません。
-:::
 
 これを解消するためには、以下の 3 種類の方法があります。
 
@@ -144,7 +145,7 @@ https://docs.github.com/ja/actions/using-workflows/triggering-a-workflow#trigger
 2. 個人トークン(Fine-grained)を使う
 3. 個人トークン(クラシック)を使う
 
-プロジェクト運用上 GitHub Apps で作成したアクセストークンを使う方が良いですが、今回は一番簡単な個人トークン(クラシック)を使う方法をご紹介します。
+チーム開発の運用やセキュリティ的な観点では 1 の GitHub Apps によるトークンを使う方法が良いですが、今回は一番簡単な 3 の個人トークン(クラシック)を使う方法をご紹介します。
 
 個人トークンのページを開きます。
 
@@ -167,7 +168,7 @@ https://github.com/settings/tokens
 
 ![](/images/automatically-upgrade-flutter-dependencies/repository-secrets.png)
 
-`GH_PERSONAL_ACCESS_TOKEN` としてアクセストークンを登録しておきます。
+`GH_PERSONAL_ACCESS_TOKEN` としてコピーしたアクセストークンを登録しておきます。
 
 ![](/images/automatically-upgrade-flutter-dependencies/add-repository-secrets.png)
 
@@ -175,12 +176,12 @@ https://github.com/settings/tokens
 `GITHUB_` という名前は GitHub により禁止されているため、`GH_` としています。
 :::
 
-## iOS ネイティブのライブラリのロックファイルを更新し、プッシュバックする
+## 5. iOS ネイティブのライブラリのロックファイルを更新し、プッシュバックする
 
 次に、ワークフローを作成します。
 
 ```yaml:.github/workflows/ios.yml
-name: CI / iOS
+name: iOS
 
 on:
   pull_request:
@@ -237,8 +238,26 @@ jobs:
 
 ワークフローの説明は以下のとおりです。
 
+ワークフローでコードをチェックアウトする際、Git のチェックアウト先の Ref として `github.head_ref` を指定しています。
+
+```yaml
+- uses: actions/checkout@v4
+  with:
+    ref: ${{ github.head_ref }}
+```
+
+これは、未指定だと、プルリクエストのトリガーによるワークフローでは、プルリクエストのベースブランチがチェックアウトされるためです。
+
+また、チェックアウトの際には、GitHub のアクセストークンとして `GH_PERSONAL_ACCESS_TOKEN` を使っています。
+
+```yaml
+- uses: actions/checkout@v4
+  with:
+    # ...
+    token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+```
+
 `Install iOS dependencies` は、iOS ネイティブのライブラリのロックファイルを更新するためのステップです。
-以下のように実行することで、iOS ネイティブのライブラリのロックファイルを更新される場合があります。
 
 ```shell:Install iOS dependencies
 flutter pub get --no-example
@@ -247,13 +266,30 @@ cd ios
 pod install
 ```
 
-`Commit` は、更新されたロックファイルをコミットするためのステップです。
+Flutter のライブラリが更新された後に上記のように実行することで、iOS ネイティブのライブラリのロックファイルを更新される場合があります。
 
-`ios/Podfile.lock` に更新がある場合、コミットします。
+その後、`Commit` ステップにより、更新されたロックファイルをコミットします。
+
+```shell:Commit
+git add ios/Podfile.lock
+if git diff --cached --quiet; then
+  echo "No changes to commit"
+else
+  git commit -m 'build: fix Podfile.lock'
+fi
+```
+
+`ios/Podfile.lock` に更新がある場合、`build: fix Podfile.lock` というコミットメッセージでコミットします。
 
 `Push back if needed` は、更新されたロックファイルをプッシュバックするためのステップです。
 
-チェックアウトの際に `GH_PERSONAL_ACCESS_TOKEN` を使っているため、GitHub Actions の CI がトリガーされます。
+```shell:Push back if needed
+BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
+git push origin "$BRANCH_NAME"
+```
+
+チェックアウトの際に `GH_PERSONAL_ACCESS_TOKEN` を使っているため、プッシュの際もそのトークンが使われます。
+これにより、GitHub Actions の CI が再度トリガーされます。
 
 # 実際に動作している様子
 
