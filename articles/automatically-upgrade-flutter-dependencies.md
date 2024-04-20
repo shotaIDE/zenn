@@ -88,6 +88,12 @@ dependencies:
 # ...
 ```
 
+:::message
+バージョン制約の絶対指定への変更は、Renovate の設定における `rangeStrategy` を `pin` に指定することによっても対応可能です。
+指定すると、絶対指定へ修正する PR を自動で立ててくれます。
+https://docs.renovatebot.com/configuration-options/#rangestrategy
+:::
+
 これにより、Renovate が新しいバージョンのライブラリがリリースされた際に、バージョン制約を以下のように変更した PR を作成してくれるようになります。
 
 ```diff yaml:pubspec.yaml
@@ -109,8 +115,6 @@ dependencies:
 ## 2. Renovate の導入
 
 Renovate は、GitHub のリポジトリにプルリクエストを作成し、ライブラリの更新を自動化するツールです。
-
-https://docs.renovatebot.com/
 
 以下の "Hosted GitHub.com App" を参考にして、GitHub App として該当のリポジトリに対してインストールします。
 
