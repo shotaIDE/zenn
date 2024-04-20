@@ -1,5 +1,5 @@
 ---
-title: "Web、API、iOS、Androidでストーリーポイント基準ってどう揃える？？"
+title: "Web、API、iOS、Androidでストーリーポイント基準って統一できる？ → あ、まぁ揃えられそう"
 emoji: "3️⃣"
 type: "idea" # tech: 技術記事 / idea: アイデア
 topics: ["アジャイル"]
