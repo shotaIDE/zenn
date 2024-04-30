@@ -64,9 +64,14 @@ https://www.tutorialspoint.com/behavior_driven_development/behavior_test_driven_
 
 ## テストコード実装時の方針
 
-### UI はテストせず、かつスモールテストの範囲とする
+### 1. UI はテストせず、かつスモールテストの範囲とする
 
 ![](/images/mobile-ui-logic-behavior-driven-development/testing-layers.png)
+
+スモールテストとは、**1 つのマシン内の 1 プロセス内で実行が完結するような高速なテスト**のことです。
+Google Testing Blog で詳細が紹介されています。
+
+https://testing.googleblog.com/2010/12/test-sizes.html
 
 安定性や速度を高めるための方針です。
 
@@ -81,7 +86,7 @@ https://www.tutorialspoint.com/behavior_driven_development/behavior_test_driven_
 UI ロジックに近い場所をモックしすぎると、UI ロジックに紐づくアプリの動作のテストにならないため、それ以外の部分は全て本物を使います。
 また、モックしすぎるとホワイトボックステストに近くなり、仕様変更やリファクタリング時にテストコードが壊れやすくなります。
 
-### 画面仕様書の分岐を全て網羅する。また、それ以上のテストはしない
+### 2. 画面仕様書の分岐を全て網羅する。また、それ以上のテストはしない
 
 必要十分にテストケースを網羅するための方針です。
 
