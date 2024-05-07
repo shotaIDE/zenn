@@ -66,14 +66,16 @@ https://www.tutorialspoint.com/behavior_driven_development/behavior_test_driven_
 
 ### 1. UI はテストせず、かつスモールテストの範囲とする
 
-![](/images/mobile-ui-logic-behavior-driven-development/testing-layers.png)
+安定性や速度を高めるための方針です。
 
 スモールテストとは、**1 つのマシン内の 1 プロセス内で実行が完結するような高速なテスト**のことです。
 Google Testing Blog で詳細が紹介されています。
 
 https://testing.googleblog.com/2010/12/test-sizes.html
 
-安定性や速度を高めるための方針です。
+クラスアーキテクチャーの各レイヤーにおける、本物(Real Object)やダミー(Fake Object)などは以下の図のように想定しています。
+
+![](/images/mobile-ui-logic-behavior-driven-development/testing-layers.png)
 
 この内容が UI ロジックレイヤーから出力されれば、UI は正常に表示されるだろう、という前提に立ち、UI ロジックの入出力を確認します。
 
