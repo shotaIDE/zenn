@@ -36,3 +36,34 @@ https://firebase.google.com/docs/projects/terraform/get-started?hl=ja
 3. 各リソースを import するための ID を取得する。
 4. Terraform の定義ファイルを自動生成する。
 5. Terraform plan で差分なく定義されているか確認する。
+
+# Terraform で管理できるリソースを洗い出す
+
+Firebase プロジェクトをセットアップし各種機能を有効にした際、リソースがどのようにプロビジョニングされているかの知識が必要と思われます。
+
+そのため、Firebase のリソースを一旦 Terraform で定義してみることがおすすめです。
+
+import する必要があります。
+リソースを見つけ、その import に必要な ID フォーマットを確認し、Firebase や GCP のコンソール、CLI ツールから ID を取得します。
+
+そして、以下のような形式で Terraform で定義します。
+
+```hcl:import.tf
+import {
+  id = "{{project_id}}"
+  to = google_project.default
+}
+
+# 他のリソースの定義が続く
+```
+
+私のプロジェクトの場合、以下のようになりました。
+
+## プロジェクト
+
+| リソース名                                                                                                                         | 説明                                    |
+| ---------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| [google_project](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_project)                    | GCP プロジェクト                        |
+| [google_firebase_project](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firebase_project)         | Firebase プロジェクト                   |
+| [google_firebase_apple_app](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firebase_apple_app)     | Firebase に登録された Apple(iOS) アプリ |
+| [google_firebase_android_app](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firebase_android_app) | Firebase に登録された Android アプリ    |
