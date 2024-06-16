@@ -6,6 +6,8 @@ topics: ["firebase", "terraform", "ios", "android"]
 published: false
 ---
 
+<!-- cspell:ignore tfstate -->
+
 # 前提の方針
 
 以下は、現時点では Terraform による管理に対応していないため、諦める必要があります。
