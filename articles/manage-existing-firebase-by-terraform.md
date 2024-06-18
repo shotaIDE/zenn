@@ -23,6 +23,8 @@ published: false
 また、Terraform で管理されているリソースに関しては、Firebase Console での変更は避けるようにします。
 tfstate による管理が面倒になるためです。
 
+tfstate に関しては、ローカルに管理します。
+
 # 本記事で書くこと
 
 本記事では、新たに Firebase プロジェクトを作成する際に Terraform によりセットアップする方法は書きません。
@@ -38,6 +40,18 @@ https://firebase.google.com/docs/projects/terraform/get-started?hl=ja
 3. 各リソースを import するための ID を取得する。
 4. Terraform の定義ファイルを自動生成する。
 5. Terraform plan で差分なく定義されているか確認する。
+
+# 事前準備
+
+# Terraform をセットアップする
+
+以下コマンドを実行します。
+
+```shell
+terraform init
+```
+
+生成されたファイルをコミットしておきます。
 
 # Terraform で管理できるリソースを洗い出す
 
@@ -132,3 +146,15 @@ GCP の Cloud Tasks を利用していたので、以下のリソースを定義
 - google_iam_workload_identity_pool
 - google_iam_workload_identity_pool_provider
 - google_service_account_iam_member
+
+# Terraform の定義ファイルを自動生成する
+
+以下のコマンドを実行します。
+
+```shell
+terraform plan -generate=import
+```
+
+# Terraform plan で差分なく定義されているか確認する
+
+# まとめ
