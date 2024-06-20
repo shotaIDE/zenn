@@ -33,6 +33,9 @@ tfstate に関しては、ローカルに管理します。
 
 https://firebase.google.com/docs/projects/terraform/get-started?hl=ja
 
+また、実際に CI/CD を組んでデプロイを自動化するところまでは書きません。
+一旦ローカルのマシンで Terraform で管理、デプロイするまでを本記事では書きます。
+
 # 手順の概要
 
 1. 既存の Firebase プロジェクトで作成されているリソースのうち、Terraform で管理できるリソースを洗い出す。
@@ -43,7 +46,29 @@ https://firebase.google.com/docs/projects/terraform/get-started?hl=ja
 
 # 事前準備
 
-# Terraform をセットアップする
+## 必要なツールをインストールする
+
+以下のページを参考に Terraform をセットアップします。
+
+https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli
+
+また、以下のページを参考に Firebase CLI をセットアップします。
+CLI をインストールしたら、CLI 上での Firebase へのログインも実施しておきます。
+
+https://firebase.google.com/docs/cli?hl=ja
+
+さらに、Google Cloud CLI もセットアップします。
+こちらも CLI 上でのログインを実施しておきます。
+
+https://cloud.google.com/sdk/docs/install?hl=ja
+
+:::message
+Firebase CLI と Google Cloud CLI でログインするアカウントは、管理者権限を持つアカウントを用意できると便利です。
+これは、Terraform コマンド実行時の権限エラーなどを避け、スムーズに進めるためです。
+一方で、自動デプロイを組む場合は、必要最小限の権限を持つアカウントを用意して利用することをおすすめします。
+:::
+
+## Terraform をディレクトリで初期化する
 
 以下コマンドを実行します。
 
@@ -53,14 +78,32 @@ terraform init
 
 生成されたファイルをコミットしておきます。
 
-# Terraform で管理できるリソースを洗い出す
+## Terraform 上で Firebase を管理する方法について知る
+
+:::message
+本項目はオプションです。不要な方はスキップしてください。
+:::
 
 Firebase プロジェクトをセットアップし各種機能を有効にした際、リソースがどのようにプロビジョニングされているかの知識が必要と思われます。
-
 そのため、Firebase のリソースを一旦 Terraform で定義してみることがおすすめです。
 
-import する必要があります。
-リソースを見つけ、その import に必要な ID フォーマットを確認し、Firebase や GCP のコンソール、CLI ツールから ID を取得します。
+https://firebase.google.com/docs/projects/terraform/get-started?hl=ja
+
+# 1. Terraform で管理できるリソースを洗い出す
+
+Terraform で既存のインフラリソースを管理するためには、各リソースを Terraform にインポートする操作が必要です。
+インポートにより、Terraform はリソースの状態を把握し、tfstate ファイルに記録します。
+Terraform は tfstate ファイルを参照して現状のリソースを把握し、さらにファイルに定義されたリソースの状態を比較し、必要な更新手順を計算します。
+
+インポートには、コマンドにより 1 つずつリソースをインポートする方法と、tf ファイルに定義されたリソースを一気にインポートする方法があります。
+
+今回は、tf ファイルに定義されたリソースを一気にインポートする方法を採用します。
+
+一気にインポートする方法では、tf ファイル自体を自動生成するという機能もあるため、そちらを利用して tf ファイル生成も省力化して実施します。
+
+インポート定義を作成するには、以下の手順が必要です。
+
+- リソースを見つけ、その import に必要な ID フォーマットを確認し、Firebase や GCP のコンソール、CLI ツールから ID を取得します。
 
 そして、以下のような形式で Terraform で定義します。
 
