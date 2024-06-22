@@ -6,7 +6,7 @@ topics: ["firebase", "terraform", "ios", "android"]
 published: false
 ---
 
-<!-- cspell:ignore appspot, cloudfunctions, cloudtasks, firebaserules, gserviceaccount, ruleset, rulesets, tfstate, tfvars -->
+<!-- cspell:ignore appspot, cloudfunctions, cloudtasks, firebaserules, googleapi, gserviceaccount, identitytoolkit, ruleset, rulesets, tfstate, tfvars -->
 
 # 前提の方針
 
@@ -95,7 +95,34 @@ terraform {
     }
   }
 }
+
+provider "google-beta" {
+  user_project_override = true
+}
 ```
+
+:::message
+`user_project_override = true` は以下のエラーを回避するために設定しています。
+
+```log
+╷
+│ Error: Error when reading or editing IdentityPlatformConfig "projects/********": googleapi: Error 403: Your application is authenticating by using local Application Default Credentials. The identitytoolkit.googleapis.com API requires a quota project, which is not set by default. To learn how to set your quota project, see https://cloud.google.com/docs/authentication/adc-troubleshooting/user-creds .
+│ Details:
+│ [
+│   {
+│     "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+│     "domain": "googleapis.com",
+│     "metadata": {
+│       "consumer": "projects//********",
+│       "service": "identitytoolkit.googleapis.com"
+│     },
+│     "reason": "SERVICE_DISABLED"
+│   }
+│ ]
+╵
+```
+
+:::
 
 ```hcl:import.tf
 # 後から記載するため、一旦空ファイルとしておく
@@ -627,6 +654,10 @@ terraform {
     }
   }
 }
+
+provider "google-beta" {
+  user_project_override = true
+}
 +
 +resource "google_firebase_project" "default" {
 +  provider = google-beta
@@ -649,9 +680,17 @@ terraform {
 +  package_name = var.import_ios_android_application_id
 +}
 +
++resource "google_identity_platform_config" "auth" {
++  provider = google-beta
++
++  project = google_firebase_project.default.project
++}
++
 +resource "google_firebase_storage_bucket" "default" {
 +  provider = google-beta
-+  project  = google_firebase_project.default.project
++
++  project   = google_firebase_project.default.project
++  bucket_id = "${var.import_google_project_id}.appspot.com"
 +}
 ```
 
@@ -671,6 +710,51 @@ import_firestore_ruleset_name           = "{{Firestoreのルールセット名�
 terraform plan -generate-config-out=generated.tf
 ```
 
+これにより、Terraform の定義ファイルが `generated.tf` に生成されます。
+
+次に自動生成なしでコマンドを生成します。
+
+```shell
+terraform plan
+```
+
+すると以下のようなログが出力されます。
+
+```log
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  ~ update in-place
+-/+ destroy and then create replacement
+
+Terraform planned the following actions, but then encountered a problem:
+
+  # google_app_engine_application.default will be imported
+    resource "google_app_engine_application" "default" {
+        app_id            = "********"
+        auth_domain       = "gmail.com"
+        code_bucket       = "staging.********.appspot.com"
+        database_type     = "CLOUD_FIRESTORE"
+        default_bucket    = "********.appspot.com"
+        default_hostname  = "********.de.r.appspot.com"
+        gcr_domain        = "asia.gcr.io"
+        id                = "********"
+        location_id       = "********"
+        name              = "apps/********"
+        project           = "********"
+        serving_status    = "SERVING"
+        url_dispatch_rule = []
+
+        feature_settings {
+            split_health_checks = true
+        }
+    }
+
+...
+```
+
 # Terraform plan で差分なく定義されているか確認する
 
 # まとめ
+
+# 参考
+
+https://zenn.dev/maretol/articles/d68bf92c76d0ba
