@@ -6,7 +6,7 @@ topics: ["firebase", "terraform", "ios", "android"]
 published: false
 ---
 
-<!-- cspell:ignore appspot, cloudfunctions, firebaserules, ruleset, rulesets, tfstate, tfvars -->
+<!-- cspell:ignore appspot, cloudfunctions, cloudtasks, firebaserules, gserviceaccount, ruleset, rulesets, tfstate, tfvars -->
 
 # 前提の方針
 
@@ -518,10 +518,56 @@ import_firebase_storage_ruleset_name = "{{Firebase Storageのルールセット�
 
 ## サービスアカウント
 
+Cloud Tasks を Functions から呼び出すためのサービスアカウントを作成していたので、以下のインポート定義を追加します。
+
 | リソース名                                                                                                                      | 説明                     |
 | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | [google_service_account](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_service_account) | サービスアカウント       |
 | [google_project_iam_member](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_project_iam)  | サービスアカウントの IAM |
+
+```diff hcl:import.tf
+# ...
+
+variable "import_cloud_tasks_queue_id" {
+  type        = string
+  description = "Cloud Tasks queue ID."
+}
+
++variable "import_cloud_tasks_service_account_name" {
++  type        = string
++  description = "Service account name for Cloud Tasks."
++}
++
+import {
+  id = var.import_google_project_id
+  to = google_project.default
+}
+
+# ...
+
+import {
+  id = "projects/${vars.import_google_project_id}/locations/${var.import_google_project_location}/queues/${vars.import_cloud_tasks_queue_id}"
+  to = google_cloud_tasks_queue.default
+}
++
++import {
++  id = "projects/${vars.import_google_project_id}/serviceAccounts/${vars.import_cloud_tasks_service_account_name}@${vars.import_google_project_id}.iam.gserviceaccount.com"
++  to = google_service_account.cloud_tasks
++}
++
++import {
++  id = "${vars.import_google_project_id} roles/cloudtasks.enqueuer serviceAccount:${vars.import_cloud_tasks_service_account_name}@${vars.import_google_project_id}.iam.gserviceaccount.com"
++  to = google_project_iam_member.cloud_tasks_enqueuer
++}
+```
+
+```diff hcl:terraform.tfvars
+# ...
+import_cloud_tasks_queue_id             = "{{Cloud TasksのキューIDを記載}}"
++import_cloud_tasks_service_account_name = "{{Cloud Tasksのサービスアカウント名を記載}}"
+```
+
+Cloud Tasks のサービスアカウント名は、サービスアカウントのメールアドレスの `@` より前の部分を指定します。
 
 # その他 Terraform で管理するようになってから生成したもの
 
