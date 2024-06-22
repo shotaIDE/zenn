@@ -1,16 +1,18 @@
 ---
-title: "Fastlaneで自作のアクションに対してテストコードを書く"
+title: "Fastlaneに記述しているロジックに対してテストコードを書く"
 emoji: "🌟"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["fastlane", "ruby", "ios", "android"]
+topics: ["fastlane", "rspec", "ruby", "ios", "android"]
 published: false
 ---
 
-Fastlane とは、iOS や Android のビルド、テスト、デプロイなどのタスクを自動化するためのツールです。
+<!-- cspell:ignore gsub, testflight -->
+
+Fastlane とは、iOS や Android アプリのビルド、テスト、デプロイなどのタスクを自動化するためのツールです。
 
 https://fastlane.tools/
 
-Fastlane には、iOS や Android をテストしてリリースするまでの様々な自動化の要望に応えてくれる標準機能が豊富に用意されています。
+Fastlane には、iOS や Android アプリ をテストしてリリースするまでに必要な様々な自動化の要望に応えてくれる標準機能が豊富に用意されています。
 
 しかし、自分のプロジェクトに合わせた複雑なロジックを含む処理を行いたい場合もあります。
 
@@ -22,19 +24,27 @@ Fastlane には、iOS や Android をテストしてリリースするまでの�
 
 - Fastlane の基本的な使い方を理解していること
 - Fastlane をセットアップ済みのプロジェクトがあること
+- Bundler を利用して Fastlane を組み込んでいること(Fastlane の推奨)
 - Ruby の基本的な文法を理解していること
 
 ## 複雑なロジックは Fastlane の「アクション」として定義する
 
-Fastlane では、以下のような記述方式でレーンを定義します。
+Fastlane では、1 つのタスクを「レーン」と呼ばれる単位で定義します。
 
 ```ruby:fastlane/Fastfile
-lane :my_lane do
-  # ここにタスクを記述
+lane :send_results_to_slack do
+  slack(
+    message: "Build Succeeded!",
+    success: true
+  )
 end
 ```
 
-レーンの定義には、Ruby における DSL（Domain Specific Language）を使用しています。
+レーンの定義は、`Fastfile`というファイル名に記載し、この中では Ruby における DSL（Domain Specific Language）を使用して記述していきます。
+
+DSL とは、特定のドメイン（分野）に特化した言語のことです。
+
+Fastlane では、Ruby の言語上で動作する DSL を使用して、iOS や Android アプリのビルドやデプロイなどのタスクを記述します。
 
 これは、ビルドやデプロイなど、単純な手続的なタスクを記述することに適していると言えます。
 
@@ -42,57 +52,157 @@ end
 
 自作のアクションを作成するには、`fastlane new_action` コマンドを使用します。
 
-```sh
-fastlane new_action
+https://docs.fastlane.tools/create-action/
+
+```shell
+bundle exec fastlane new_action
 ```
 
-そうすると、以下のようなファイルが作成されます。
+以下のようにアクションの名前を入力するように求められます。
+例として、`escape_for_slack_message` という名前を入力します。
 
-```sh
-./fastlane/actions/my_custom_action.rb
+```log
+Must be lowercase, and use a '_' between words. Do not use '.'
+examples: 'testflight', 'upload_to_s3'
+[11:15:55]: Name of your action:
+```
+
+そうすると、以下のような出力とともに `./fastlane/actions/escape_for_slack_message.rb` というファイルが作成されます。
+
+```log
+[11:17:04]: Created new action file './fastlane/actions/escape_for_slack_message.rb'. Edit it to implement your custom action.
 ```
 
 このファイルに、自作のアクションを記述します。
 例えば、以下のようなアクションを作成できます。
 
-```ruby
+```ruby:fastlane/actions/escape_for_slack_message.rb
+module Fastlane
+  module Actions
+    module SharedValues
+      ESCAPE_FOR_SLACK_MESSAGE_ESCAPED_VALUE = :ESCAPE_FOR_SLACK_MESSAGE_ESCAPED_VALUE
+    end
 
-```
+    class EscapeForSlackMessageAction < Action
+      def self.run(params)
+        text = params[:text]
 
-## 「アクション」に対してテストコードを書く
+        # See https://api.slack.com/reference/surfaces/formatting#escaping
+        text
+          .gsub(/&/, '&amp;')
+          .gsub(/</, '&lt;')
+          .gsub(/>/, '&gt;')
+      end
 
-自作のアクションに対してテストコードを書くには、Rspec を使用します。
+      #####################################################
+      # @!group Documentation
+      #####################################################
 
-まず、`Gemfile` に `rspec` を追加します。
+      def self.description
+        'Escape string for sending Slack message by incoming webhooks'
+      end
 
-```ruby:Gemfile
-group :test do
-  gem 'rspec'
+      def self.details
+        'You can use this action to escape "&", "<" and ">" into HTML entities.'\
+        'They are used control characters in Slack message.'
+      end
+
+      def self.available_options
+        [
+          FastlaneCore::ConfigItem.new(
+            key: :text,
+            env_name: 'ESCAPE_FOR_SLACK_MESSAGE_TEXT',
+            description: 'Text to be escaped',
+            type: String,
+            optional: false
+          )
+        ]
+      end
+
+      def self.output
+        [
+          ['ESCAPE_FOR_SLACK_MESSAGE_ESCAPED_VALUE', 'Escaped text']
+        ]
+      end
+
+      def self.return_value; end
+
+      def self.authors
+        ['colomney']
+      end
+
+      def self.is_supported?(platform)
+        %i[ios mac].include?(platform)
+      end
+    end
+  end
 end
 ```
 
-以下のコマンドで、`rspec` をインストールします。
+ほとんどはドキュメントのための記述です。
+実際のロジックとしては、`self.run` のみが重要です。
 
-```sh
+ここでは例として、Slack に Incoming Webhook でメッセージを送信する際に、`&`, `<`, `>` といった文字をエスケープするアクションを作成しています。
+
+## 「アクション」に対して RSpec でテストコードを書く
+
+作成したアクションに対してテストコードを書くには、RSpec を使用します。
+
+https://rspec.info/
+
+`Gemfile` に RSpec を追加します。
+
+```diff ruby:Gemfile
+source 'https://rubygems.org'
+
+gem 'fastlane'
++gem 'rspec'
+# Other dependencies...
+```
+
+以下コマンドでインストールします。
+
+```shell
 bundle install
 ```
 
-`spec/` ディレクトリを作成し、その中にテストコードを記述します。
+`spec/escape_for_slack_message_spec.rb` という名前でファイルを作成し、その中にテストコードを記述します。
 
-```ruby:spec/test.rb
+```ruby:spec/escape_for_slack_message_spec.rb
+require 'fastlane/action'
+require './fastlane/actions/escape_for_slack_message'
 
+describe Fastlane::Actions::EscapeForSlackMessageAction do
+  let(:action) { Fastlane::Actions::EscapeForSlackMessageAction }
+
+  describe '#run' do
+    it '"&"はエスケープされる' do
+      expect(action.run(text: 'A & B')).to eq('A &amp; B')
+    end
+
+    it '通常の文字はエスケープされない' do
+      expect(action.run(text: 'A B')).to eq('A B')
+    end
+  end
+end
 ```
 
 ## テストを実行する
 
 以下のコマンドでテストが実行できます。
 
-```sh
-bundle exec rspec -format d
+```shell
+bundle exec rspec
 ```
 
 以下のようにテスト結果が得られます。
 
-```sh
+```log
+Fastlane::Actions::EscapeForSlackMessageAction
+  #run
+    "&"はエスケープされる
+    通常の文字はエスケープされない
 
+Finished in 0.00243 seconds (files took 0.22909 seconds to load)
+2 examples, 0 failures
 ```
