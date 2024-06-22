@@ -2,7 +2,7 @@
 title: "Fastlaneに記述しているロジックに対してテストコードを書く"
 emoji: "🌟"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["fastlane", "ruby", "ios", "android"]
+topics: ["fastlane", "rspec", "ruby", "ios", "android"]
 published: false
 ---
 
