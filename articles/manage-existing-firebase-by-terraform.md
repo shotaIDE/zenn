@@ -350,12 +350,49 @@ xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 
 ## Firebase Storage
 
+Firebase Storage に関するリソースのインポート定義を追加します。
+
 | リソース名                                                                                                                               | 説明                                              |
 | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
 | [google_firebase_storage_bucket](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firebase_storage_bucket) | Firebase Storage 本体                             |
 | [google_firebaserules_ruleset](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firebaserules_ruleset)     | Firestore のセキュリティルール                    |
 | [google_firebaserules_release](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firebaserules_release)     | Firestore のセキュリティルールの適用状態          |
 | [google_app_engine_application](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/app_engine_application)   | Firestore によりプロビジョニングされる App Engine |
+
+```diff hcl:import.tf
+# ...
+
+import {
+  id = "projects/${vars.import_google_project_id}/releases/cloud.firestore"
+  to = google_firebaserules_release.firestore
+}
++
++import {
++  id = "projects/${vars.import_google_project_id}/buckets/${vars.import_google_project_id}.appspot.com"
++  to = google_firebase_storage_bucket.default
++}
++
++import {
++  id = "projects/${vars.import_google_project_id}/rulesets/${var.import_firebase_storage_ruleset_name}"
++  to = google_firebaserules_ruleset.storage
++}
++
++import {
++  id = "projects/${vars.import_google_project_id}/releases/firebase.storage/${vars.import_google_project_id}.appspot.com"
++  to = google_firebaserules_release.storage
++}
++
++import {
++  id = vars.import_google_project_id
++  to = google_app_engine_application.default
++}
+```
+
+```diff hcl:terraform.tfvars
+# ...
+import_firestore_ruleset_name        = "{{Firestoreのルールセット名を記載}}"
++import_firebase_storage_ruleset_name = "{{Firebase Storageのルールセット名を記載}}"
+```
 
 `google_firebaserules_ruleset` と `google_firebaserules_release` は Firestore で取り込んだリソースの種類と同じです。
 
