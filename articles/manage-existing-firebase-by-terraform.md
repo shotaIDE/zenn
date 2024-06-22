@@ -333,7 +333,11 @@ import_firebase_android_app_id = "{{Firebaseに登録されているAndroidア�
 +import_firestore_ruleset_name  = "{{Firestoreのルールセット名を記載}}"
 ```
 
-Firestore のルールセット名は、Firebase Console から確認できます？
+Firestore のルールセット名は、最初の方の手順でメモした以下のフォーマットのものを記載します。
+
+```text
+xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+```
 
 ## Firebase Storage
 
