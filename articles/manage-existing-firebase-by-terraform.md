@@ -156,6 +156,46 @@ import {
 
 私のプロジェクトの場合、以下のようになりました。
 
+## Firebase のセキュリティールールの名前を調べる
+
+Firebase CLI や GCP CLI から、Firebase のセキュリティールールの名前を調べる方法が分かっていません。
+そのため、一旦 Terraform で関連するリソースをインポートすることで、間接的にセキュリティールールの名前を調べることにします。
+
+まず、以下の一時ファイルを作成します。
+
+```hcl:temporary.tf
+resource "google_firebaserules_release" "firestore" {
+  provider     = google-beta
+  name         = "cloud.firestore"
+  ruleset_name = ""
+}
+```
+
+GCP のプロジェクト ID を調べておきます。
+
+以下のコマンドを実行します。
+
+```shell
+PROJECT_ID="{{GCPのプロジェクトIDを記載}}"
+terraform import google_firebaserules_release.firestore "projects/$PROJECT_ID/releases/cloud.firestore"
+```
+
+すると、`terraform.tfstate` という名前の JSON ファイルが生成されるため、その中から、`ruleset_name` というキー名に対するバリューを探してメモしておきます。
+
+以下のようなフォーマットです。
+
+```text
+projects/{{GCPのプロジェクトID}}/rulesets/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+```
+
+`xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` の部分を後から利用します。
+
+:::message
+`x` は数字またはアルファベットを示しています。
+:::
+
+メモが完了したら、`temporary.tf` と `terraform.tfstate` を削除しておきます。
+
 ## プロジェクトとアプリ
 
 まず、プロジェクト本体と、Firebase に登録されているアプリのインポート定義を追加します。
