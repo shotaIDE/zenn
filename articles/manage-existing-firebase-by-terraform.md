@@ -6,7 +6,7 @@ topics: ["firebase", "terraform", "ios", "android"]
 published: false
 ---
 
-<!-- cspell:ignore cloudfunctions, firebaserules, ruleset, tfstate, tfvars -->
+<!-- cspell:ignore cloudfunctions, firebaserules, ruleset, rulesets, tfstate, tfvars -->
 
 # 前提の方針
 
@@ -245,6 +245,53 @@ Firestore に関するリソースのインポート定義を追加します。
 | [google_firestore_database](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firestore_database)       | Firestore 本体                           |
 | [google_firebaserules_ruleset](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firebaserules_ruleset) | Firestore のセキュリティルール           |
 | [google_firebaserules_release](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firebaserules_release) | Firestore のセキュリティルールの適用状態 |
+
+```diff hcl:import.tf
+# ...
+
+variable "import_firebase_android_app_id" {
+  type        = string
+  description = "App ID for Firebase Android app, such as 1:000000000000:android:xxxxxxxxxxxxxxxxxxxxxx."
+}
+
++variable "import_firestore_ruleset_name" {
++  type        = string
++  description = "Firestore rule set name."
++}
++
+import {
+  id = var.import_google_project_id
+  to = google_project.default
+}
+
+# ...
+
+import {
+  id = vars.import_google_project_id
+  to = google_identity_platform_config.auth
+}
++
++import {
++  id = "projects/${vars.import_google_project_id}/databases/(default)"
++  to = google_firestore_database.default
++}
++
++import {
++  id = "projects/${vars.import_google_project_id}/rulesets/${var.import_firestore_ruleset_name}"
++  to = google_firebaserules_ruleset.firestore
++}
++
++import {
++  id = "projects/${vars.import_google_project_id}/releases/cloud.firestore"
++  to = google_firebaserules_release.firestore
++}
+```
+
+```diff hcl:terraform.tfvars
+# ...
+import_firebase_android_app_id = "{{Firebaseに登録されているAndroidアプリのアプリIDを記載}}"
++import_firestore_ruleset_name  = "{{Firestoreのルールセット名を記載}}"
+```
 
 ## Firebase Storage
 
