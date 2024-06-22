@@ -158,6 +158,8 @@ import {
 
 ## プロジェクトとアプリ
 
+まず、プロジェクト本体と、Firebase に登録されているアプリのインポート定義を追加します。
+
 | リソース名                                                                                                                         | 説明                                    |
 | ---------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
 | [google_project](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_project)                    | GCP プロジェクト本体                    |
@@ -214,11 +216,29 @@ Firebase に登録されているアプリ ID は、Firebase Console から確�
 
 ## Authentication
 
+次に、Firebase Authentication に関するリソースのインポート定義を追加します。
+
 | リソース名                                                                                                                                 | 説明                  |
 | ------------------------------------------------------------------------------------------------------------------------------------------ | --------------------- |
 | [google_identity_platform_config](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/identity_platform_config) | Authentication の設定 |
 
+```diff hcl:import.tf
+# ...
+
+import {
+  id = "projects/${var.import_google_project_id}/androidApps/${var.import_firebase_android_app_id}"
+  to = google_firebase_android_app.default
+}
++
++import {
++  id = vars.import_google_project_id
++  to = google_identity_platform_config.auth
++}
+```
+
 ## Firestore
+
+Firestore に関するリソースのインポート定義を追加します。
 
 | リソース名                                                                                                                           | 説明                                     |
 | ------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------- |
