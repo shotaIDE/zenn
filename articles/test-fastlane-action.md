@@ -6,6 +6,8 @@ topics: ["fastlane", "ruby", "ios", "android"]
 published: false
 ---
 
+<!-- cspell:ignore gsub, testflight -->
+
 Fastlane とは、iOS や Android アプリのビルド、テスト、デプロイなどのタスクを自動化するためのツールです。
 
 https://fastlane.tools/
