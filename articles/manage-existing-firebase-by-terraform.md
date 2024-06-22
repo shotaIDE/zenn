@@ -418,12 +418,55 @@ Firestore を有効にすると、裏側で AppEngine が有効にされます�
 
 ## Cloud Functions
 
-Firebase でラップされている Cloud Functions ではなく、GCP の Cloud Functions を直接利用していたので、以下のリソースを定義しました。
+Firebase でラップされている Cloud Functions ではなく、GCP の Cloud Functions を直接利用していたので、以下のインポート定義を追加します。
 
 | リソース名                                                                                                                                              | 説明                           |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
 | [google_cloudfunctions_function](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloudfunctions_function)                | Cloud Functions の各関数       |
 | [google_cloudfunctions_function_iam_member](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloudfunctions_function_iam) | Cloud Functions の公開ポリシー |
+
+```diff hcl:import.tf
+variable "import_google_project_id" {
+  type        = string
+  description = "ID for GCP project."
+}
+
++variable "import_google_project_location" {
++  type        = string
++  description = "Location for GCP project."
++}
++
+variable "import_firebase_apple_app_id" {
+  type        = string
+  description = "App ID for Firebase Apple app, such as 1:000000000000:ios:xxxxxxxxxxxxxxxxxxxxxx."
+}
+
+# ...
+
+import {
+  id = vars.import_google_project_id
+  to = google_app_engine_application.default
+}
++
++import {
++  id = "${vars.import_google_project_id}/${var.import_google_project_location}/function1"
++  to = google_cloudfunctions_function.function1
++}
++
++import {
++  id = "${vars.import_google_project_id}/${var.import_google_project_location}/detect roles/cloudfunctions.invoker allUsers"
++  to = google_cloudfunctions_function_iam_member.function1_invoker
++}
+```
+
+```diff hcl:terraform.tfvars
+import_google_project_id             = "{{GCPのプロジェクトIDを記載}}"
++import_google_project_location       = "{{GCPプロジェクトのロケーションを記載}}"
+import_firebase_apple_app_id         = "{{Firebaseに登録されているAppleアプリのアプリIDを記載}}"
+# ...
+```
+
+Function を複数定義している場合は、それぞれに対してインポート定義が必要です。
 
 関数は認証不要で全ユーザーがアクセスできるようにしていました。そのため、以下のような IAM ポリシーが設定されています。
 Terraform ではこのような IAM ポリシーもリソースとして定義されています。
