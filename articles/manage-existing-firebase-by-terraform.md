@@ -10,20 +10,23 @@ published: false
 
 # 前提の方針
 
-以下は、現時点では Terraform による管理に対応していないため、諦める必要があります。
+以下は、現時点では Terraform による管理に対応していないため、手動でセットアップ＆管理する必要があります。
 
 - Firebase Cloud Messaging
 - Firebase Remote Config
 - Firebase Crashlytics
 - Firebase Analytics
 
-これらは手動でセットアップ＆管理する必要があります。
+上記以外に関しては、Terraform で管理します。
 
-これ以外に関しては、Terraform で管理します。
 また、Terraform で管理されているリソースに関しては、Firebase Console での変更は避けるようにします。
-tfstate による管理が面倒になるためです。
+手動で変更すると、Terraform 側にその変更を伝えるために、tfstate ファイルにも変更を反映する必要があります。
 
-tfstate に関しては、ローカルに管理します。
+tfstate とは、Terraform が管理するリソースの状態を記録するファイルです。
+これを利用することで、Terraform はリソースの状態を把握し、変更があった場合にはその変更を計算し、必要な更新手順を提案します。
+
+また、tfstate ファイルは、GCP の Cloud Storage や AWS の S3 などのリモートストレージに保存し、チームで共有できます。
+本記事では、簡単のために、tfstate に関しては、ローカルに管理することとします。
 
 # 本記事で書くこと
 
@@ -34,41 +37,45 @@ tfstate に関しては、ローカルに管理します。
 https://firebase.google.com/docs/projects/terraform/get-started?hl=ja
 
 また、実際に CI/CD を組んでデプロイを自動化するところまでは書きません。
-一旦ローカルのマシンで Terraform で管理、デプロイするまでを本記事では書きます。
+
+ローカルのマシンで Terraform で管理、デプロイするまでを本記事では書きます。
 
 # 手順の概要
 
-1. 既存の Firebase プロジェクトで作成されているリソースのうち、Terraform で管理できるリソースを洗い出す。
-2. Terraform で管理できるリソースを定義する。
-3. 各リソースを import するための ID を取得する。
-4. Terraform の定義ファイルを自動生成する。
-5. Terraform plan で差分なく定義されているか確認する。
+手順としては以下のように進めます。
 
-# 事前準備
+1. 必要なツールをインストールする
+2. 作業ディレクトリを作成する
+3. (オプション)Terraform 上で Firebase を管理する方法について知る
+4. Terraform で管理できるリソースを洗い出す
+5. Terraform で管理できるリソースを定義する。
+6. 各リソースを import するための ID を取得する。
+7. Terraform の定義ファイルを自動生成する。
+8. Terraform plan で差分なく定義されているか確認する。
 
-## 必要なツールをインストールする
+# 必要なツールをインストールする
 
 以下のページを参考に Terraform をセットアップします。
 
 https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli
 
 また、以下のページを参考に Firebase CLI をセットアップします。
-CLI をインストールしたら、CLI 上での Firebase へのログインも実施しておきます。
+CLI をインストールしたら、**CLI 上での Firebase へのログイン**も実施しておきます。
 
 https://firebase.google.com/docs/cli?hl=ja
 
 さらに、Google Cloud CLI もセットアップします。
-こちらも CLI 上でのログインを実施しておきます。
+こちらも **CLI 上でのログイン**を実施しておきます。
 
 https://cloud.google.com/sdk/docs/install?hl=ja
 
 :::message
-Firebase CLI と Google Cloud CLI でログインするアカウントは、管理者権限を持つアカウントを用意できると便利です。
-これは、Terraform コマンド実行時の権限エラーなどを避け、スムーズに進めるためです。
-一方で、自動デプロイを組む場合は、必要最小限の権限を持つアカウントを用意して利用することをおすすめします。
+Firebase CLI と Google Cloud CLI でログインするアカウントは、プロジェクトオーナーの権限を持つアカウントで行うと便利です。
+これにより、Terraform コマンド実行時の権限エラーに悩まされることなく、手順をスムーズに進められます。
+一方で、本格的にチームで運用する際や自動デプロイを組む場合は、必要最小限の権限を持つアカウントを用意することをおすすめします。
 :::
 
-## Terraform をディレクトリで初期化する
+# 作業ディレクトリを作成する
 
 以下コマンドを実行します。
 
@@ -78,7 +85,7 @@ terraform init
 
 生成されたファイルをコミットしておきます。
 
-## Terraform 上で Firebase を管理する方法について知る
+# Terraform 上で Firebase を管理する方法について知る
 
 :::message
 本項目はオプションです。不要な方はスキップしてください。
