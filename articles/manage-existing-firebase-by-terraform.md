@@ -282,7 +282,7 @@ import {
 }
 +
 +import {
-+  id = vars.import_google_project_id
++  id = var.import_google_project_id
 +  to = google_identity_platform_config.auth
 +}
 ```
@@ -318,22 +318,22 @@ import {
 # ...
 
 import {
-  id = vars.import_google_project_id
+  id = var.import_google_project_id
   to = google_identity_platform_config.auth
 }
 +
 +import {
-+  id = "projects/${vars.import_google_project_id}/databases/(default)"
++  id = "projects/${var.import_google_project_id}/databases/(default)"
 +  to = google_firestore_database.default
 +}
 +
 +import {
-+  id = "projects/${vars.import_google_project_id}/rulesets/${var.import_firestore_ruleset_name}"
++  id = "projects/${var.import_google_project_id}/rulesets/${var.import_firestore_ruleset_name}"
 +  to = google_firebaserules_ruleset.firestore
 +}
 +
 +import {
-+  id = "projects/${vars.import_google_project_id}/releases/cloud.firestore"
++  id = "projects/${var.import_google_project_id}/releases/cloud.firestore"
 +  to = google_firebaserules_release.firestore
 +}
 ```
@@ -374,27 +374,27 @@ Firebase Storage に関するリソースのインポート定義を追加しま
 # ...
 
 import {
-  id = "projects/${vars.import_google_project_id}/releases/cloud.firestore"
+  id = "projects/${var.import_google_project_id}/releases/cloud.firestore"
   to = google_firebaserules_release.firestore
 }
 +
 +import {
-+  id = "projects/${vars.import_google_project_id}/buckets/${vars.import_google_project_id}.appspot.com"
++  id = "projects/${var.import_google_project_id}/buckets/${var.import_google_project_id}.appspot.com"
 +  to = google_firebase_storage_bucket.default
 +}
 +
 +import {
-+  id = "projects/${vars.import_google_project_id}/rulesets/${var.import_firebase_storage_ruleset_name}"
++  id = "projects/${var.import_google_project_id}/rulesets/${var.import_firebase_storage_ruleset_name}"
 +  to = google_firebaserules_ruleset.storage
 +}
 +
 +import {
-+  id = "projects/${vars.import_google_project_id}/releases/firebase.storage/${vars.import_google_project_id}.appspot.com"
++  id = "projects/${var.import_google_project_id}/releases/firebase.storage/${var.import_google_project_id}.appspot.com"
 +  to = google_firebaserules_release.storage
 +}
 +
 +import {
-+  id = vars.import_google_project_id
++  id = var.import_google_project_id
 +  to = google_app_engine_application.default
 +}
 ```
@@ -444,17 +444,17 @@ variable "import_firebase_apple_app_id" {
 # ...
 
 import {
-  id = vars.import_google_project_id
+  id = var.import_google_project_id
   to = google_app_engine_application.default
 }
 +
 +import {
-+  id = "${vars.import_google_project_id}/${var.import_google_project_location}/function1"
++  id = "${var.import_google_project_id}/${var.import_google_project_location}/function1"
 +  to = google_cloudfunctions_function.function1
 +}
 +
 +import {
-+  id = "${vars.import_google_project_id}/${var.import_google_project_location}/detect roles/cloudfunctions.invoker allUsers"
++  id = "${var.import_google_project_id}/${var.import_google_project_location}/detect roles/cloudfunctions.invoker allUsers"
 +  to = google_cloudfunctions_function_iam_member.function1_invoker
 +}
 ```
@@ -500,12 +500,12 @@ import {
 # ...
 
 import {
-  id = "${vars.import_google_project_id}/${var.import_google_project_location}/detect roles/cloudfunctions.invoker allUsers"
+  id = "${var.import_google_project_id}/${var.import_google_project_location}/detect roles/cloudfunctions.invoker allUsers"
   to = google_cloudfunctions_function_iam_member.function1_invoker
 }
 +
 +import {
-+  id = "projects/${vars.import_google_project_id}/locations/${var.import_google_project_location}/queues/${vars.import_cloud_tasks_queue_id}"
++  id = "projects/${var.import_google_project_id}/locations/${var.import_google_project_location}/queues/${var.import_cloud_tasks_queue_id}"
 +  to = google_cloud_tasks_queue.default
 +}
 ```
@@ -546,17 +546,17 @@ import {
 # ...
 
 import {
-  id = "projects/${vars.import_google_project_id}/locations/${var.import_google_project_location}/queues/${vars.import_cloud_tasks_queue_id}"
+  id = "projects/${var.import_google_project_id}/locations/${var.import_google_project_location}/queues/${var.import_cloud_tasks_queue_id}"
   to = google_cloud_tasks_queue.default
 }
 +
 +import {
-+  id = "projects/${vars.import_google_project_id}/serviceAccounts/${vars.import_cloud_tasks_service_account_name}@${vars.import_google_project_id}.iam.gserviceaccount.com"
++  id = "projects/${var.import_google_project_id}/serviceAccounts/${var.import_cloud_tasks_service_account_name}@${var.import_google_project_id}.iam.gserviceaccount.com"
 +  to = google_service_account.cloud_tasks
 +}
 +
 +import {
-+  id = "${vars.import_google_project_id} roles/cloudtasks.enqueuer serviceAccount:${vars.import_cloud_tasks_service_account_name}@${vars.import_google_project_id}.iam.gserviceaccount.com"
++  id = "${var.import_google_project_id} roles/cloudtasks.enqueuer serviceAccount:${var.import_cloud_tasks_service_account_name}@${var.import_google_project_id}.iam.gserviceaccount.com"
 +  to = google_project_iam_member.cloud_tasks_enqueuer
 +}
 ```
