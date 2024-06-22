@@ -473,12 +473,48 @@ Terraform ではこのような IAM ポリシーもリソースとして定義�
 
 ## Cloud Tasks
 
-GCP の Cloud Tasks を利用していたので、以下のリソースを定義しました。
+GCP の Cloud Tasks を利用していたので、以下のインポート定義を追加します。
 
-| リソース名                                                                                                                                              | 説明                           |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
-| [google_cloud_tasks_queue](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloud_tasks_queue)                            | Cloud Tasks のキュー           |
-| [google_cloudfunctions_function_iam_member](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloudfunctions_function_iam) | Cloud Functions の公開ポリシー |
+| リソース名                                                                                                                   | 説明                 |
+| ---------------------------------------------------------------------------------------------------------------------------- | -------------------- |
+| [google_cloud_tasks_queue](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloud_tasks_queue) | Cloud Tasks のキュー |
+
+```diff hcl:import.tf
+# ...
+
+variable "import_firebase_storage_ruleset_name" {
+  type        = string
+  description = "Firebase Storage rule set name."
+}
+
++variable "import_cloud_tasks_queue_id" {
++  type        = string
++  description = "Cloud Tasks queue ID."
++}
++
+import {
+  id = var.import_google_project_id
+  to = google_project.default
+}
+
+# ...
+
+import {
+  id = "${vars.import_google_project_id}/${var.import_google_project_location}/detect roles/cloudfunctions.invoker allUsers"
+  to = google_cloudfunctions_function_iam_member.function1_invoker
+}
++
++import {
++  id = "projects/${vars.import_google_project_id}/locations/${var.import_google_project_location}/queues/${vars.import_cloud_tasks_queue_id}"
++  to = google_cloud_tasks_queue.default
++}
+```
+
+```diff hcl:terraform.tfvars
+# ...
+import_firebase_storage_ruleset_name = "{{Firebase Storageのルールセット名を記載}}"
++import_cloud_tasks_queue_id          = "{{Cloud TasksのキューIDを記載}}"
+```
 
 ## サービスアカウント
 
