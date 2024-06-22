@@ -720,38 +720,13 @@ terraform plan
 
 すると以下のようなログが出力されます。
 
-```log
-Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
-  ~ update in-place
--/+ destroy and then create replacement
+![](/images/manage-existing-firebase-by-terraform/terraform-plan-no-changes.png)
 
-Terraform planned the following actions, but then encountered a problem:
+差分がある場合には、以下のようにハイライトされます。
 
-  # google_app_engine_application.default will be imported
-    resource "google_app_engine_application" "default" {
-        app_id            = "********"
-        auth_domain       = "gmail.com"
-        code_bucket       = "staging.********.appspot.com"
-        database_type     = "CLOUD_FIRESTORE"
-        default_bucket    = "********.appspot.com"
-        default_hostname  = "********.de.r.appspot.com"
-        gcr_domain        = "asia.gcr.io"
-        id                = "********"
-        location_id       = "********"
-        name              = "apps/********"
-        project           = "********"
-        serving_status    = "SERVING"
-        url_dispatch_rule = []
+![](/images/manage-existing-firebase-by-terraform/terraform-plan-some-changes.png)
 
-        feature_settings {
-            split_health_checks = true
-        }
-    }
-
-...
-```
-
-# Terraform plan で差分なく定義されているか確認する
+必要に応じて、Terraform の定義内に手動で変更を加えます。
 
 # まとめ
 
