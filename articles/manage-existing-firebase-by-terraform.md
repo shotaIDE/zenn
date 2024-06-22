@@ -333,6 +333,15 @@ import_firebase_android_app_id = "{{Firebaseに登録されているAndroidア�
 +import_firestore_ruleset_name  = "{{Firestoreのルールセット名を記載}}"
 ```
 
+Firebase で Firestore を有効にすると、データベース名が `(default)` になります。
+そのため、`google_firestore_database.default` の ID の末尾は `(default)` 固定にしています。
+
+もし、お使いの Firestore のデータベース名が `(default)` 以外の場合は、その名前を指定してください。
+
+Firestore のデータベース名は、Firebase Console から確認できます。
+
+![](/images/manage-existing-firebase-by-terraform/firestore-database-id.png)
+
 Firestore のルールセット名は、最初の方の手順でメモした以下のフォーマットのものを記載します。
 
 ```text
