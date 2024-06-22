@@ -6,7 +6,7 @@ topics: ["firebase", "terraform", "ios", "android"]
 published: false
 ---
 
-<!-- cspell:ignore cloudfunctions, firebaserules, ruleset, tfstate -->
+<!-- cspell:ignore cloudfunctions, firebaserules, ruleset, tfstate, tfvars -->
 
 # 前提の方針
 
@@ -77,6 +77,38 @@ Firebase CLI と Google Cloud CLI でログインするアカウントは、プ�
 
 # 作業ディレクトリを作成する
 
+作業用のディレクトリを作成し、その中に 3 つの Terraform の設定ファイルを配置します。
+
+```
+.
+├── main.tf
+├── import.tf
+└── terraform.tfvars
+```
+
+```hcl:main.tf
+terraform {
+  required_providers {
+    google-beta = {
+      source  = "hashicorp/google-beta"
+      version = "5.34.0"
+    }
+  }
+}
+```
+
+```hcl:import.tf
+# 後から記載するため、一旦空ファイルとしておく
+```
+
+```hcl:terraform.tfvars
+# 後から記載するため、一旦空ファイルとしておく
+```
+
+最新バージョン名は以下を確認してください。
+
+https://registry.terraform.io/providers/hashicorp/google-beta/latest
+
 以下コマンドを実行します。
 
 ```shell
@@ -111,16 +143,15 @@ Terraform は tfstate ファイルを参照して現状のリソースを把握�
 インポート定義を作成するには、以下の手順が必要です。
 
 - リソースを見つけ、その import に必要な ID フォーマットを確認し、Firebase や GCP のコンソール、CLI ツールから ID を取得します。
+- リソースに対し、Terraform 上で管理するための名前をつけます
 
-そして、以下のような形式で Terraform で定義します。
+そして、以下のような形式で Terraform ファイルに定義します。
 
 ```hcl:import.tf
 import {
-  id = "{{project_id}}"
-  to = google_project.default
+  id = "{{リソースの ID}}"
+  to = {{リソースの種別}}.{{リソースの管理名}}
 }
-
-# 他のリソースの定義が続く
 ```
 
 私のプロジェクトの場合、以下のようになりました。
@@ -133,6 +164,49 @@ import {
 | [google_firebase_project](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firebase_project)         | Firebase プロジェクト本体               |
 | [google_firebase_apple_app](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firebase_apple_app)     | Firebase に登録された Apple(iOS) アプリ |
 | [google_firebase_android_app](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firebase_android_app) | Firebase に登録された Android アプリ    |
+
+```diff hcl:import.tf
++variable "import_google_project_id" {
++  type        = string
++  description = "ID for GCP project."
++}
++
++variable "import_firebase_apple_app_id" {
++  type        = string
++  description = "App ID for Firebase Apple app, such as 1:000000000000:ios:xxxxxxxxxxxxxxxxxxxxxx."
++}
++
++variable "import_firebase_android_app_id" {
++  type        = string
++  description = "App ID for Firebase Android app, such as 1:000000000000:android:xxxxxxxxxxxxxxxxxxxxxx."
++}
++
++import {
++  id = var.import_google_project_id
++  to = google_project.default
++}
++
++import {
++  id = "projects/${var.import_google_project_id}"
++  to = google_firebase_project.default
++}
++
++import {
++  id = "projects/${var.import_google_project_id}/iosApps/${var.import_firebase_apple_app_id}"
++  to = google_firebase_apple_app.default
++}
++
++import {
++  id = "projects/${var.import_google_project_id}/androidApps/${var.import_firebase_android_app_id}"
++  to = google_firebase_android_app.default
++}
+```
+
+```diff hcl:terraform.tfvars
++import_google_project_id       = "{{ここにプロジェクトIDを記載}}"
++import_firebase_apple_app_id   = "{{ここにAppleアプリIDを記載}}"
++import_firebase_android_app_id = "{{ここにAndroidアプリIDを記載}}"
+```
 
 ## Authentication
 
