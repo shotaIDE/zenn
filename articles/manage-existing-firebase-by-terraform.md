@@ -162,11 +162,18 @@ Firebase CLI や GCP CLI から、Firebase のセキュリティールールの�
 そのため、一旦 Terraform で関連するリソースをインポートすることで、間接的にセキュリティールールの名前を調べることにします。
 
 まず、以下の一時ファイルを作成します。
+これは、Firestore と Storage のセキュリティールールのリソースをインポートするためのファイルです。
 
 ```hcl:temporary.tf
 resource "google_firebaserules_release" "firestore" {
   provider     = google-beta
   name         = "cloud.firestore"
+  ruleset_name = ""
+}
+
+resource "google_firebaserules_release" "storage" {
+  provider     = google-beta
+  name         = "cloud.storage"
   ruleset_name = ""
 }
 ```
@@ -178,9 +185,13 @@ GCP のプロジェクト ID を調べておきます。
 ```shell
 PROJECT_ID="{{GCPのプロジェクトIDを記載}}"
 terraform import google_firebaserules_release.firestore "projects/$PROJECT_ID/releases/cloud.firestore"
+terraform import google_firebaserules_release.storage "projects/$PROJECT_ID/releases/firebase.storage/$PROJECT_ID.appspot.com"
 ```
 
-すると、`terraform.tfstate` という名前の JSON ファイルが生成されるため、その中から、`ruleset_name` というキー名に対するバリューを探してメモしておきます。
+すると、`terraform.tfstate` という名前の JSON ファイルが生成されます。
+その中から、`ruleset_name` というキー名に対するバリューを探してメモしておきます。
+
+![](/images/manage-existing-firebase-by-terraform/firebase-ruleset-name-in-tfstate.png)
 
 以下のようなフォーマットです。
 
@@ -394,10 +405,16 @@ import_firestore_ruleset_name        = "{{Firestoreのルールセット名を�
 +import_firebase_storage_ruleset_name = "{{Firebase Storageのルールセット名を記載}}"
 ```
 
-`google_firebaserules_ruleset` と `google_firebaserules_release` は Firestore で取り込んだリソースの種類と同じです。
+Firebase Storage のルールセット名は、最初の方の手順でメモした以下のフォーマットのものを記載します。
+
+```text
+xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+```
 
 Firestore を有効にすると、裏側で AppEngine が有効にされます。
 これを Terraform で管理する必要があります。
+
+`google_firebaserules_ruleset` と `google_firebaserules_release` は Firestore で取り込んだリソースの種類と同じです。
 
 ## Cloud Functions
 
