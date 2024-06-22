@@ -24,6 +24,7 @@ Fastlane には、iOS や Android アプリ をテストしてリリースする
 
 - Fastlane の基本的な使い方を理解していること
 - Fastlane をセットアップ済みのプロジェクトがあること
+- Bundler を利用して Fastlane を組み込んでいること(Fastlane の推奨)
 - Ruby の基本的な文法を理解していること
 
 ## 複雑なロジックは Fastlane の「アクション」として定義する
@@ -54,12 +55,8 @@ Fastlane では、Ruby の言語上で動作する DSL を使用して、iOS や
 https://docs.fastlane.tools/create-action/
 
 ```shell
-fastlane new_action
+bundle exec fastlane new_action
 ```
-
-:::message
-Fastlane をディレクトリの Gemfile で管理している場合、`bundle exec fastlane new_action` として実行する必要があります。
-:::
 
 以下のようにアクションの名前を入力するように求められます。
 例として、`escape_for_slack_message` という名前を入力します。
@@ -153,17 +150,23 @@ end
 
 https://rspec.info/
 
-RSpec をインストールします。
+`Gemfile` に RSpec を追加します。
 
-```shell
-gem install rspec
+```diff ruby:Gemfile
+source 'https://rubygems.org'
+
+gem 'fastlane'
++gem 'rspec'
+# Other dependencies...
 ```
 
-:::message
-Fastlane をディレクトリの Gemfile で管理している場合、`Gemfile` に `gem 'rspec'` を追記し、`bundle install` でインストールします。
-:::
+以下コマンドでインストールします。
 
-`spec/` ディレクトリを作成し、その中にテストコードを記述します。
+```shell
+bundle install
+```
+
+`spec/escape_for_slack_message_spec.rb` という名前でファイルを作成し、その中にテストコードを記述します。
 
 ```ruby:spec/escape_for_slack_message_spec.rb
 require 'fastlane/action'
@@ -189,12 +192,8 @@ end
 以下のコマンドでテストが実行できます。
 
 ```shell
-rspec
+bundle exec rspec
 ```
-
-:::message
-Fastlane をディレクトリの Gemfile で管理している場合、`bundle exec rspec` として実行する必要があります。
-:::
 
 以下のようにテスト結果が得られます。
 
