@@ -576,12 +576,99 @@ Cloud Tasks のサービスアカウント名は、サービスアカウント�
 - google_iam_workload_identity_pool_provider
 - google_service_account_iam_member
 
+## 自動生成に対応していないリソースの定義を仮で追加する
+
+このまま自動生成してもエラーが出ます。
+
+```log
+╷
+│ Error: Resource Not Implemented
+│
+│ The combined provider does not implement the requested resource type. This is always an issue in the provider implementation and should be reported to the provider developers.
+│
+│ Missing resource type: google_firebase_apple_app
+╵
+╷
+│ Error: Resource Not Implemented
+│
+│ The combined provider does not implement the requested resource type. This is always an issue in the provider implementation and should be reported to the provider developers.
+│
+│ Missing resource type: google_firebase_storage_bucket
+╵
+╷
+│ Error: Resource Not Implemented
+│
+│ The combined provider does not implement the requested resource type. This is always an issue in the provider implementation and should be reported to the provider developers.
+│
+│ Missing resource type: google_firebase_project
+╵
+╷
+│ Error: Resource Not Implemented
+│
+│ The combined provider does not implement the requested resource type. This is always an issue in the provider implementation and should be reported to the provider developers.
+│
+│ Missing resource type: google_firebase_android_app
+╵
+```
+
+このままだと、自動生成に対応していないリソースがあるため、一旦仮で定義を追加します。
+
+```diff hcl:main.tf
++variable "import_ios_android_application_id" {
++  type        = string
++  description = "Bundle ID of iOS app and application ID of Android app."
++}
++
+terraform {
+  required_providers {
+    google-beta = {
+      source  = "hashicorp/google-beta"
+      version = "5.34.0"
+    }
+  }
+}
++
++resource "google_firebase_project" "default" {
++  provider = google-beta
++  project  = var.import_google_project_id
++}
++
++resource "google_firebase_apple_app" "default" {
++  provider = google-beta
++
++  project      = google_firebase_project.default.project
++  display_name = "iOS"
++  bundle_id    = var.import_ios_android_application_id
++}
++
++resource "google_firebase_android_app" "default" {
++  provider = google-beta
++
++  project      = google_firebase_project.default.project
++  display_name = "Android"
++  package_name = var.import_ios_android_application_id
++}
++
++resource "google_firebase_storage_bucket" "default" {
++  provider = google-beta
++  project  = google_firebase_project.default.project
++}
+```
+
+```diff hcl:terraform.tfvars
+# ...
+import_firebase_android_app_id          = "{{Firebaseに登録されているAndroidアプリのアプリIDを記載}}"
++import_ios_android_application_id       = "{{iOSアプリのBundle IDとAndroidアプリのアプリIDを記載}}"
+import_firestore_ruleset_name           = "{{Firestoreのルールセット名を記載}}"
+# ...
+```
+
 # Terraform の定義ファイルを自動生成する
 
 以下のコマンドを実行します。
 
 ```shell
-terraform plan -generate=import
+terraform plan -generate-config-out=generated.tf
 ```
 
 # Terraform plan で差分なく定義されているか確認する
