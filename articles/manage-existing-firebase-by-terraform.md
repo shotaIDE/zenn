@@ -203,10 +203,14 @@ import {
 ```
 
 ```diff hcl:terraform.tfvars
-+import_google_project_id       = "{{ここにプロジェクトIDを記載}}"
-+import_firebase_apple_app_id   = "{{ここにAppleアプリIDを記載}}"
-+import_firebase_android_app_id = "{{ここにAndroidアプリIDを記載}}"
++import_google_project_id       = "{{GCPのプロジェクトIDを記載}}"
++import_firebase_apple_app_id   = "{{Firebaseに登録されているAppleアプリのアプリIDを記載}}"
++import_firebase_android_app_id = "{{Firebaseに登録されているAndroidアプリのアプリIDを記載}}"
 ```
+
+Firebase に登録されているアプリ ID は、Firebase Console から確認できます。
+
+![](/images/manage-existing-firebase-by-terraform/firebase-apple-app-id.png)
 
 ## Authentication
 
