@@ -6,7 +6,7 @@ topics: ["firebase", "terraform", "ios", "android"]
 published: false
 ---
 
-<!-- cspell:ignore cloudfunctions, firebaserules, ruleset, rulesets, tfstate, tfvars -->
+<!-- cspell:ignore appspot, cloudfunctions, firebaserules, ruleset, rulesets, tfstate, tfvars -->
 
 # 前提の方針
 
