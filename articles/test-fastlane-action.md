@@ -149,38 +149,61 @@ end
 
 ## 「アクション」に対してテストコードを書く
 
-自作のアクションに対してテストコードを書くには、Rspec を使用します。
+作成したアクションに対してテストコードを書くには、RSpec を使用します。
 
-まず、`Gemfile` に `rspec` を追加します。
+https://rspec.info/
 
-```ruby:Gemfile
-group :test do
-  gem 'rspec'
-end
+RSpec をインストールします。
+
+```shell
+gem install rspec
 ```
 
-以下のコマンドで、`rspec` をインストールします。
-
-```sh
-bundle install
-```
+:::message
+Fastlane をディレクトリの Gemfile で管理している場合、`Gemfile` に `gem 'rspec'` を追記し、`bundle install` でインストールします。
+:::
 
 `spec/` ディレクトリを作成し、その中にテストコードを記述します。
 
-```ruby:spec/test.rb
+```ruby:spec/escape_for_slack_message_spec.rb
+require 'fastlane/action'
+require './fastlane/actions/escape_for_slack_message'
 
+describe Fastlane::Actions::EscapeForSlackMessageAction do
+  let(:action) { Fastlane::Actions::EscapeForSlackMessageAction }
+
+  describe '#run' do
+    it '"&"はエスケープされる' do
+      expect(action.run(text: 'A & B')).to eq('A &amp; B')
+    end
+
+    it '通常の文字はエスケープされない' do
+      expect(action.run(text: 'A B')).to eq('A B')
+    end
+  end
+end
 ```
 
 ## テストを実行する
 
 以下のコマンドでテストが実行できます。
 
-```sh
-bundle exec rspec -format d
+```shell
+rspec
 ```
+
+:::message
+Fastlane をディレクトリの Gemfile で管理している場合、`bundle exec rspec` として実行する必要があります。
+:::
 
 以下のようにテスト結果が得られます。
 
-```sh
+```log
+Fastlane::Actions::EscapeForSlackMessageAction
+  #run
+    "&"はエスケープされる
+    通常の文字はエスケープされない
 
+Finished in 0.00243 seconds (files took 0.22909 seconds to load)
+2 examples, 0 failures
 ```
