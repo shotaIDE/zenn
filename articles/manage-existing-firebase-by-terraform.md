@@ -757,6 +757,11 @@ terraform plan -generate-config-out=generated.tf
 
 ![](/images/manage-existing-firebase-by-terraform/generated-terraform-file.png)
 
+:::message
+自動生成されたファイルは、そのままだと管理がしにくいので手作業で修正する必要があります。
+ID などを環境変数化したり、適切にファイル分割をするなどです。
+:::
+
 次に自動生成なしでコマンドを再度実行します。
 
 ```shell
@@ -819,15 +824,11 @@ ios_android_application_id       = "{{iOSアプリのBundle IDとAndroidアプ�
 terraform apply
 ```
 
-これにより、`tfstate` が生成され、リソースの状態が Terraform により管理されるようになります。
+これにより、`terraform.tfstate` が生成され、既存のリソース状態が Terraform により管理されるようになります。
 
-このあとは、Terraform の定義ファイルを修正してリソースを管理でき、晴れて Terraform の IaC 化が完了します。
+以後は、Terraform の定義ファイルを修正してリソースを管理できます。
 
-# 自動生成されたファイルなどの整理を行う
-
-自動生成されたファイルは、ID などが直書きされているので必要に応じて変数化を行います。
-
-また、ファイル分割などを行います。
+晴れて Firebase の IaC 化完了です。
 
 # まとめ
 
