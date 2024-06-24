@@ -755,7 +755,7 @@ terraform plan -generate-config-out=generated.tf
 
 これにより、Terraform の定義ファイルが `generated.tf` に生成されます。
 
-![生成されたTerraformファイル]()
+![](/images/manage-existing-firebase-by-terraform/generated-terraform-file.png)
 
 次に自動生成なしでコマンドを再度実行します。
 
