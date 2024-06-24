@@ -220,8 +220,6 @@ https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/f
 
 ![](/images/manage-existing-firebase-by-terraform/import-id-format-on-terraform-documents.png)
 
-私が実践したプロジェクトでのインポート例を、下に示していきます。
-
 ## (準備)Firebase のセキュリティールールの名前を調べておく
 
 :::message
