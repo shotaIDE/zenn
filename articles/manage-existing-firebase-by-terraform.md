@@ -111,6 +111,10 @@ provider "google-beta" {
 }
 ```
 
+`hashicorp/google-beta` の最新バージョン名は以下を確認してください。
+
+https://registry.terraform.io/providers/hashicorp/google-beta/latest
+
 :::message
 `user_project_override = true` は以下のエラーを回避するために設定しています。
 
@@ -135,16 +139,19 @@ provider "google-beta" {
 :::
 
 ```hcl:import.tf
+# インポート定義を記載するためのファイル
 # 後から記載するため、一旦空ファイルとしておく
 ```
 
 ```hcl:terraform.tfvars
+# 環境変数を定義するためのファイル
 # 後から記載するため、一旦空ファイルとしておく
 ```
 
-最新バージョン名は以下を確認してください。
+Terraform には環境変数を読み込む機能があり、`terraform.tfvars` に記載した変数は自動的に読み込まれます。
+このように環境変数として定義することで、センシティブな情報をバージョン管理対象外としたり、複数の環境での利用を容易にできます。
 
-https://registry.terraform.io/providers/hashicorp/google-beta/latest
+https://developer.hashicorp.com/terraform/language/values/variables#variable-definitions-tfvars-files
 
 以下コマンドを実行します。
 
@@ -154,18 +161,21 @@ terraform init
 
 生成されたファイルをコミットしておきます。
 
-# Terraform 上で Firebase を管理する方法について知る
+# Terraform 上で Firebase を管理するための知識を得る
 
 :::message
 本項目はオプションです。不要な方はスキップしてください。
 :::
 
+本記事の内容を先に進める場合、Firebase プロジェクトを作成し各種機能を有効にした際、リソースがどのようにプロビジョニングされているかの知識があるとスムーズです。
+
+そのため、以下公式ドキュメントにおける「Terraform をサポートする Firebase リソース」の部分を確認することをおすすめします。
+
 https://firebase.google.com/docs/projects/terraform/get-started?hl=ja#supported-resources
 
-Firebase プロジェクトをセットアップし各種機能を有効にした際、リソースがどのようにプロビジョニングされているかの知識が必要と思われます。
-そのため、Firebase のリソースを一旦 Terraform で定義してみることがおすすめです。
+また、Firebase のプロジェクトを Terraform によりゼロから作成してみることもおすすめです。
 
-https://firebase.google.com/docs/projects/terraform/get-started?hl=ja
+上記のドキュメントには、実際に Terraform で Firebase プロジェクトを構築するためのサンプルが豊富に記載されています。
 
 # Terraform に既存リソースのインポート定義を作成する
 
@@ -759,6 +769,8 @@ terraform apply
 ```
 
 これにより、`tfstate` が生成され、リソースの状態が Terraform により管理されるようになります。
+
+このあとは、Terraform の定義ファイルを修正してリソースを管理でき、晴れて Terraform の IaC 化が完了します。
 
 # 自動生成されたファイルなどの整理を行う
 
