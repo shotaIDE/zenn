@@ -189,8 +189,9 @@ https://developer.hashicorp.com/terraform/language/state/purpose
 
 tf ファイルにインポート定義を記載するには、以下の手順が必要です。
 
-- リソースを見つけ、その**インポートに必要な ID フォーマット**を確認し、Firebase や GCP のコンソール、CLI ツールから ID を取得
-- リソースに対し、Terraform 上で管理するための**名前をつける**
+1. **既存の構成に対応するリソースを見つける**
+2. そのリソースの**インポートに必要な ID フォーマットを確認**し、Firebase や GCP のコンソール、CLI ツールから ID を取得
+3. リソースに対し、**Terraform 上で管理するための名前をつける**
 
 そして、以下のような形式で Terraform ファイルに定義します。
 
@@ -258,12 +259,16 @@ projects/{{GCPのプロジェクトID}}/rulesets/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxx
 
 まず、プロジェクト本体と、Firebase に登録されているアプリのインポート定義を追加します。
 
+私のプロジェクトの場合、取り込む必要があるリソースは以下の通りでした。
+
 | リソース名                                                                                                                         | 説明                                    |
 | ---------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
 | [google_project](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_project)                    | GCP プロジェクト本体                    |
 | [google_firebase_project](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firebase_project)         | Firebase プロジェクト本体               |
 | [google_firebase_apple_app](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firebase_apple_app)     | Firebase に登録された Apple(iOS) アプリ |
 | [google_firebase_android_app](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firebase_android_app) | Firebase に登録された Android アプリ    |
+
+上記をもとに、以下のように定義しました。
 
 ```diff hcl:import.tf
 +variable "import_google_project_id" {
