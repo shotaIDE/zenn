@@ -773,6 +773,44 @@ terraform plan
 
 必要に応じて、Terraform の定義内に手動で変更を加えます。
 
+上記の差分を解消したい場合、以下のように修正できます。
+
+```diff hcl:main.tf
++variable "firebase_android_app_sha1_hashes" {
++  type        = list(string)
++  description = "Allowed SHA-1 hashes for Firebase Android app."
++}
++
+variable "ios_android_application_id" {
+  type        = string
+  description = "Bundle ID of iOS app and application ID of Android app."
+}
+
+# ...
+
+resource "google_firebase_android_app" "default" {
+  provider = google-beta
+
+  project      = google_firebase_project.default.project
+  display_name = "Android"
+  package_name = var.ios_android_application_id
++  sha1_hashes  = var.firebase_android_app_sha1_hashes
+}
+
+# ...
+```
+
+```diff hcl:terraform.tfvars
+# ...
+firebase_android_app_id = "{{Firebaseに登録されているAndroidアプリのアプリIDを記載}}"
++firebase_android_app_sha1_hashes = [
++  "9caa5a8af776c9eddfbfe01fbe620c25ad97e9f5",
++  "d8eed8412b16ad696870fc9cea0876dea4cc0aa4",
++]
+ios_android_application_id       = "{{iOSアプリのBundle IDとAndroidアプリのアプリIDを記載}}"
+# ...
+```
+
 # Terraform で一度適用する
 
 意図しない差分がなくなったら、以下のコマンドを実行します。
