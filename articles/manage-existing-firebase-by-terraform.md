@@ -167,7 +167,7 @@ Firebase プロジェクトをセットアップし各種機能を有効にし�
 
 https://firebase.google.com/docs/projects/terraform/get-started?hl=ja
 
-# Terraform に既存のリソースをインポートする
+# Terraform に既存リソースのインポート定義を作成する
 
 Terraform で既存のインフラリソースを管理するためには、各リソースを **Terraform にインポートする**必要があります。
 
@@ -203,7 +203,7 @@ import {
 
 私が実践したプロジェクトでのインポート例を、下に示していきます。
 
-## Firebase のセキュリティールールの名前を調べる
+## (準備)Firebase のセキュリティールールの名前を調べておく
 
 :::message
 本項目は、Firestore や Firebase Storage を利用している場合に必要な手順です。
