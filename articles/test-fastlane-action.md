@@ -1,5 +1,5 @@
 ---
-title: "fastlaneに記述しているロジックに対してテストコードを書く"
+title: "fastlaneで組んでいるロジックが複雑になってきたのでテストコードを書きたい"
 emoji: "🌟"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["fastlane", "rspec", "ruby", "ios", "android"]
