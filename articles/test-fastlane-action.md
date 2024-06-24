@@ -1,5 +1,5 @@
 ---
-title: "Fastlaneに記述しているロジックに対してテストコードを書く"
+title: "fastlaneに記述しているロジックに対してテストコードを書く"
 emoji: "🌟"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["fastlane", "rspec", "ruby", "ios", "android"]
@@ -8,28 +8,37 @@ published: false
 
 <!-- cspell:ignore gsub, testflight -->
 
-Fastlane とは、iOS や Android アプリのビルド、テスト、デプロイなどのタスクを自動化するためのツールです。
+fastlane とは、iOS や Android アプリのビルド、テスト、デプロイなどのタスクを自動化するためのツールです。
 
 https://fastlane.tools/
 
-Fastlane には、iOS や Android アプリ をテストしてリリースするまでに必要な様々な自動化の要望に応えてくれる標準機能が豊富に用意されています。
+fastlane には、iOS や Android アプリ をテストしてリリースするまでに必要な自動化タスクが標準で豊富に用意されています。
 
-しかし、自分のプロジェクトに合わせた複雑なロジックを含む処理を行いたい場合もあります。
+しかし、各プロジェクトの業務フローに合わせた**複雑なロジックを含む自動化タスクをカスタムで組みたい**シーンもあります。
 
-そのような場合には、処理のテストコードを書きたくなるのがエンジニアの性でしょう。
+そのような場合には、**複雑なロジックはテストコードを書いて武装しないと不安になる**こともあるでしょう。
 
-この記事では、Fastlane で自作の複雑なロジックに関してテストコードを書く方法について解説します。
+本記事では、fastlane で自作の複雑なロジックに関してテストコードを書く方法について解説します。
 
-## 前提条件
+# 想定する読者
 
-- Fastlane の基本的な使い方を理解していること
-- Fastlane をセットアップ済みのプロジェクトがあること
-- Bundler を利用して Fastlane を組み込んでいること(Fastlane の推奨)
-- Ruby の基本的な文法を理解していること
+fastlane の基本的な使い方を理解していることを前提として進めます。
 
-## 複雑なロジックは Fastlane の「アクション」として定義する
+# 前提など
 
-Fastlane では、1 つのタスクを「レーン」と呼ばれる単位で定義します。
+fastlane をセットアップ済みのプロジェクトがある前提で進めます。
+
+また、本記事で出てくる fastlane 関連のコマンドは、fastlane を Bundler により組み込んでいることを前提としています。
+
+詳しい情報は、以下ドキュメントにおける "Managed Ruby environment + Bundler (macOS/Linux/Windows)" の部分を参照してください。
+
+https://docs.fastlane.tools/
+
+# 実施方法
+
+## 複雑なロジックは fastlane の「アクション」として定義する
+
+fastlane では、1 つのタスクを「レーン」と呼ばれる単位で定義します。
 
 ```ruby:fastlane/Fastfile
 lane :send_results_to_slack do
@@ -40,11 +49,13 @@ lane :send_results_to_slack do
 end
 ```
 
-レーンの定義は、`Fastfile`というファイル名に記載し、この中では Ruby における DSL（Domain Specific Language）を使用して記述していきます。
+レーンの定義は、`Fastfile`というファイル名に記載します。
 
-DSL とは、特定のドメイン（分野）に特化した言語のことです。
+`Fastfile` 中では、Ruby におけるドメイン固有言語（Domain Specific Language ＝ DSL）を使用して記述していきます。
 
-Fastlane では、Ruby の言語上で動作する DSL を使用して、iOS や Android アプリのビルドやデプロイなどのタスクを記述します。
+DSL とは、特定の領域の内容を記述するのに特化した言語のことです。
+
+fastlane では、Ruby の言語上で動作する DSL を使用して、iOS や Android アプリのビルドやデプロイなどのタスクを記述します。
 
 これは、ビルドやデプロイなど、単純な手続的なタスクを記述することに適していると言えます。
 
