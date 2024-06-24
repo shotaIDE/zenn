@@ -54,7 +54,7 @@ https://firebase.google.com/docs/projects/terraform/get-started?hl=ja
 1. 必要なツールをインストールする
 2. 作業ディレクトリを用意する
 3. (オプション)Terraform 上で Firebase を管理する方法について知る
-4. Terraform で管理できるリソースを洗い出す
+4. Terraform に既存のリソースをインポートする
 5. Terraform で管理できるリソースを定義する。
 6. 各リソースを import するための ID を取得する。
 7. Terraform の定義ファイルを自動生成する。
@@ -167,7 +167,7 @@ Firebase プロジェクトをセットアップし各種機能を有効にし�
 
 https://firebase.google.com/docs/projects/terraform/get-started?hl=ja
 
-# 1. Terraform で管理できるリソースを洗い出す
+# Terraform に既存のリソースをインポートする
 
 Terraform で既存のインフラリソースを管理するためには、各リソースを **Terraform にインポートする**必要があります。
 
@@ -205,19 +205,24 @@ import {
 
 ## Firebase のセキュリティールールの名前を調べる
 
-Firebase CLI や GCP CLI から、Firebase のセキュリティールールの名前を調べる方法が分かっていません。
+:::message
+本項目は、Firestore や Firebase Storage を利用している場合に必要な手順です。
+:::
+
+Firebase CLI や GCP CLI から、Firebase のセキュリティールールの ID を調べる方法が分かりませんでした。
 そのため、一旦 Terraform で関連するリソースをインポートすることで、間接的にセキュリティールールの名前を調べることにします。
 
-まず、以下の一時ファイルを作成します。
-これは、Firestore と Storage のセキュリティールールのリソースをインポートするためのファイルです。
+まず、以下内容の一時ファイル `temporary.tf` を作成します。
 
 ```hcl:temporary.tf
+# Firestore のインポート定義
 resource "google_firebaserules_release" "firestore" {
   provider     = google-beta
   name         = "cloud.firestore"
   ruleset_name = ""
 }
 
+# Firebase Storage のインポート定義
 resource "google_firebaserules_release" "storage" {
   provider     = google-beta
   name         = "cloud.storage"
@@ -225,9 +230,7 @@ resource "google_firebaserules_release" "storage" {
 }
 ```
 
-GCP のプロジェクト ID を調べておきます。
-
-以下のコマンドを実行します。
+また、GCP のプロジェクト ID を調べてから、以下のコマンドを実行します。
 
 ```shell
 PROJECT_ID="{{GCPのプロジェクトIDを記載}}"
@@ -236,23 +239,20 @@ terraform import google_firebaserules_release.storage "projects/$PROJECT_ID/rele
 ```
 
 すると、`terraform.tfstate` という名前の JSON ファイルが生成されます。
-その中から、`ruleset_name` というキー名に対するバリューを探してメモしておきます。
+その中から、**`ruleset_name` というキーに対するバリュー**を探してメモしておきます。
 
 ![](/images/manage-existing-firebase-by-terraform/firebase-ruleset-name-in-tfstate.png)
 
-以下のようなフォーマットです。
+バリューは、以下のようなフォーマットになっているはずです。
 
 ```text
 projects/{{GCPのプロジェクトID}}/rulesets/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 ```
 
-`xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` の部分を後から利用します。
-
-:::message
 `x` は数字またはアルファベットを示しています。
-:::
+`xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` の部分を、後のステップで利用します。
 
-メモが完了したら、`temporary.tf` と `terraform.tfstate` を削除しておきます。
+メモが完了したら、**`temporary.tf` と `terraform.tfstate` を削除**しておきます。
 
 ## プロジェクトとアプリ
 
