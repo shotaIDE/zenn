@@ -10,7 +10,12 @@ published: false
 
 # 前提の方針
 
-以下は、現時点では Terraform による管理に対応していないため、手動でセットアップ＆管理する必要があります。
+:::message alert
+本記事では Terraform のプロバイダーや tf ファイル自動生成機能など、ベータ版の機能を多く利用しています。
+そのため、本番環境での適用はおすすめしません。
+:::
+
+以下について、記事執筆時点では Terraform による管理に対応していないため、手動でセットアップ＆管理する必要があります。
 
 - Firebase Cloud Messaging
 - Firebase Remote Config
@@ -18,6 +23,8 @@ published: false
 - Firebase Analytics
 
 上記以外に関しては、Terraform で管理します。
+
+![対応しているリソースはCodeで管理し、対応していないリソースは手動で管理する]()
 
 また、Terraform で管理されているリソースに関しては、Firebase Console での変更は避けるようにします。
 手動で変更すると、Terraform 側にその変更を伝えるために、tfstate ファイルにも変更を反映する必要があります。
@@ -45,7 +52,7 @@ https://firebase.google.com/docs/projects/terraform/get-started?hl=ja
 手順としては以下のように進めます。
 
 1. 必要なツールをインストールする
-2. 作業ディレクトリを作成する
+2. 作業ディレクトリを用意する
 3. (オプション)Terraform 上で Firebase を管理する方法について知る
 4. Terraform で管理できるリソースを洗い出す
 5. Terraform で管理できるリソースを定義する。
@@ -62,22 +69,25 @@ https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli
 また、以下のページを参考に Firebase CLI をセットアップします。
 CLI をインストールしたら、**CLI 上での Firebase へのログイン**も実施しておきます。
 
+ログインするアカウントは、**プロジェクトオーナーの権限を持つアカウント**で行うと便利です。
+これにより、Terraform コマンド実行時の権限エラーに悩まされることなく、手順をスムーズに進められます。
+
 https://firebase.google.com/docs/cli?hl=ja
 
 さらに、Google Cloud CLI もセットアップします。
 こちらも **CLI 上でのログイン**を実施しておきます。
 
+同様にログインするアカウントは、**プロジェクトオーナーの権限を持つアカウント**で行うと便利です。
+
 https://cloud.google.com/sdk/docs/install?hl=ja
 
 :::message
-Firebase CLI と Google Cloud CLI でログインするアカウントは、プロジェクトオーナーの権限を持つアカウントで行うと便利です。
-これにより、Terraform コマンド実行時の権限エラーに悩まされることなく、手順をスムーズに進められます。
-一方で、本格的にチームで運用する際や自動デプロイを組む場合は、必要最小限の権限を持つアカウントを用意することをおすすめします。
+本格的にチームで運用する際や自動デプロイを組む場合は、必要最小限の権限を持つアカウントを用意して利用することをおすすめします。
 :::
 
-# 作業ディレクトリを作成する
+# 作業ディレクトリを用意する
 
-作業用のディレクトリを作成し、その中に 3 つの Terraform の設定ファイルを配置します。
+作業用のディレクトリを作成し、その中に 3 つの Terraform のファイルを配置します。
 
 ```
 .
@@ -149,6 +159,8 @@ terraform init
 :::message
 本項目はオプションです。不要な方はスキップしてください。
 :::
+
+https://firebase.google.com/docs/projects/terraform/get-started?hl=ja#supported-resources
 
 Firebase プロジェクトをセットアップし各種機能を有効にした際、リソースがどのようにプロビジョニングされているかの知識が必要と思われます。
 そのため、Firebase のリソースを一旦 Terraform で定義してみることがおすすめです。
