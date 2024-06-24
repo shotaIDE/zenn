@@ -207,10 +207,18 @@ tf ファイルにインポート定義を記載するには、以下の手順�
 
 ```hcl:import.tf
 import {
-  id = "{{リソースの ID}}"
-  to = {{リソースの種別}}.{{リソースの管理のための名前}}
+  # id = "{{リソースの ID}}"
+  id = "projects/sample-project-id"
+  # to = {{リソースの種別}}.{{リソースの管理のための名前}}
+  to = google_firebase_project.default
 }
 ```
+
+インポートに必要な ID フォーマットは、各リソースの公式ドキュメントの "import" の項目に記載されています。
+
+https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firebase_project#import
+
+![](/images/manage-existing-firebase-by-terraform/import-id-format-on-terraform-documents.png)
 
 私が実践したプロジェクトでのインポート例を、下に示していきます。
 
@@ -267,6 +275,11 @@ projects/{{GCPのプロジェクトID}}/rulesets/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxx
 
 ## プロジェクトとアプリ
 
+:::message
+ここから先、Firebase のプロジェクトや各種機能に対応するリソースのインポート定義の例を列挙していきます。
+ご自身の Firebase プロジェクトで利用している機能によっては不要な手順も含まれる可能性があるので、適宜読み飛ばしてください。
+:::
+
 まず、プロジェクト本体と、Firebase に登録されているアプリのインポート定義を追加します。
 
 私のプロジェクトの場合、取り込む必要があるリソースは以下の通りでした。
@@ -322,6 +335,8 @@ projects/{{GCPのプロジェクトID}}/rulesets/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxx
 +import_firebase_apple_app_id   = "{{Firebaseに登録されているAppleアプリのアプリIDを記載}}"
 +import_firebase_android_app_id = "{{Firebaseに登録されているAndroidアプリのアプリIDを記載}}"
 ```
+
+`terraform.tfvars` については、中身の値を**ご自身のプロジェクトの情報に置き換える必要があります**。
 
 Firebase に登録されているアプリ ID は、Firebase Console から確認できます。
 
