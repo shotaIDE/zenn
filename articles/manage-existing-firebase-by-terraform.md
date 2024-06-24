@@ -292,46 +292,46 @@ projects/{{GCPのプロジェクトID}}/rulesets/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxx
 上記をもとに、以下のように定義しました。
 
 ```diff hcl:import.tf
-+variable "import_google_project_id" {
++variable "google_project_id" {
 +  type        = string
 +  description = "ID for GCP project."
 +}
 +
-+variable "import_firebase_apple_app_id" {
++variable "firebase_apple_app_id" {
 +  type        = string
 +  description = "App ID for Firebase Apple app, such as 1:000000000000:ios:xxxxxxxxxxxxxxxxxxxxxx."
 +}
 +
-+variable "import_firebase_android_app_id" {
++variable "firebase_android_app_id" {
 +  type        = string
 +  description = "App ID for Firebase Android app, such as 1:000000000000:android:xxxxxxxxxxxxxxxxxxxxxx."
 +}
 +
 +import {
-+  id = var.import_google_project_id
++  id = var.google_project_id
 +  to = google_project.default
 +}
 +
 +import {
-+  id = "projects/${var.import_google_project_id}"
++  id = "projects/${var.google_project_id}"
 +  to = google_firebase_project.default
 +}
 +
 +import {
-+  id = "projects/${var.import_google_project_id}/iosApps/${var.import_firebase_apple_app_id}"
++  id = "projects/${var.google_project_id}/iosApps/${var.firebase_apple_app_id}"
 +  to = google_firebase_apple_app.default
 +}
 +
 +import {
-+  id = "projects/${var.import_google_project_id}/androidApps/${var.import_firebase_android_app_id}"
++  id = "projects/${var.google_project_id}/androidApps/${var.firebase_android_app_id}"
 +  to = google_firebase_android_app.default
 +}
 ```
 
 ```diff hcl:terraform.tfvars
-+import_google_project_id       = "{{GCPのプロジェクトIDを記載}}"
-+import_firebase_apple_app_id   = "{{Firebaseに登録されているAppleアプリのアプリIDを記載}}"
-+import_firebase_android_app_id = "{{Firebaseに登録されているAndroidアプリのアプリIDを記載}}"
++google_project_id       = "{{GCPのプロジェクトIDを記載}}"
++firebase_apple_app_id   = "{{Firebaseに登録されているAppleアプリのアプリIDを記載}}"
++firebase_android_app_id = "{{Firebaseに登録されているAndroidアプリのアプリIDを記載}}"
 ```
 
 `terraform.tfvars` については、中身の値を**ご自身のプロジェクトの情報に置き換える必要があります**。
@@ -352,12 +352,12 @@ Firebase に登録されているアプリ ID は、Firebase Console から確�
 # ...
 
 import {
-  id = "projects/${var.import_google_project_id}/androidApps/${var.import_firebase_android_app_id}"
+  id = "projects/${var.google_project_id}/androidApps/${var.firebase_android_app_id}"
   to = google_firebase_android_app.default
 }
 +
 +import {
-+  id = var.import_google_project_id
++  id = var.google_project_id
 +  to = google_identity_platform_config.auth
 +}
 ```
@@ -375,48 +375,48 @@ Firestore に関するリソースのインポート定義を追加します。
 ```diff hcl:import.tf
 # ...
 
-variable "import_firebase_android_app_id" {
+variable "firebase_android_app_id" {
   type        = string
   description = "App ID for Firebase Android app, such as 1:000000000000:android:xxxxxxxxxxxxxxxxxxxxxx."
 }
 
-+variable "import_firestore_ruleset_name" {
++variable "firestore_ruleset_name" {
 +  type        = string
 +  description = "Firestore rule set name."
 +}
 +
 import {
-  id = var.import_google_project_id
+  id = var.google_project_id
   to = google_project.default
 }
 
 # ...
 
 import {
-  id = var.import_google_project_id
+  id = var.google_project_id
   to = google_identity_platform_config.auth
 }
 +
 +import {
-+  id = "projects/${var.import_google_project_id}/databases/(default)"
++  id = "projects/${var.google_project_id}/databases/(default)"
 +  to = google_firestore_database.default
 +}
 +
 +import {
-+  id = "projects/${var.import_google_project_id}/rulesets/${var.import_firestore_ruleset_name}"
++  id = "projects/${var.google_project_id}/rulesets/${var.firestore_ruleset_name}"
 +  to = google_firebaserules_ruleset.firestore
 +}
 +
 +import {
-+  id = "projects/${var.import_google_project_id}/releases/cloud.firestore"
++  id = "projects/${var.google_project_id}/releases/cloud.firestore"
 +  to = google_firebaserules_release.firestore
 +}
 ```
 
 ```diff hcl:terraform.tfvars
 # ...
-import_firebase_android_app_id = "{{Firebaseに登録されているAndroidアプリのアプリIDを記載}}"
-+import_firestore_ruleset_name  = "{{Firestoreのルールセット名を記載}}"
+firebase_android_app_id = "{{Firebaseに登録されているAndroidアプリのアプリIDを記載}}"
++firestore_ruleset_name  = "{{Firestoreのルールセット名を記載}}"
 ```
 
 Firebase で Firestore を有効にすると、データベース名が `(default)` になります。
@@ -449,35 +449,35 @@ Firebase Storage に関するリソースのインポート定義を追加しま
 # ...
 
 import {
-  id = "projects/${var.import_google_project_id}/releases/cloud.firestore"
+  id = "projects/${var.google_project_id}/releases/cloud.firestore"
   to = google_firebaserules_release.firestore
 }
 +
 +import {
-+  id = "projects/${var.import_google_project_id}/buckets/${var.import_google_project_id}.appspot.com"
++  id = "projects/${var.google_project_id}/buckets/${var.google_project_id}.appspot.com"
 +  to = google_firebase_storage_bucket.default
 +}
 +
 +import {
-+  id = "projects/${var.import_google_project_id}/rulesets/${var.import_firebase_storage_ruleset_name}"
++  id = "projects/${var.google_project_id}/rulesets/${var.firebase_storage_ruleset_name}"
 +  to = google_firebaserules_ruleset.storage
 +}
 +
 +import {
-+  id = "projects/${var.import_google_project_id}/releases/firebase.storage/${var.import_google_project_id}.appspot.com"
++  id = "projects/${var.google_project_id}/releases/firebase.storage/${var.google_project_id}.appspot.com"
 +  to = google_firebaserules_release.storage
 +}
 +
 +import {
-+  id = var.import_google_project_id
++  id = var.google_project_id
 +  to = google_app_engine_application.default
 +}
 ```
 
 ```diff hcl:terraform.tfvars
 # ...
-import_firestore_ruleset_name        = "{{Firestoreのルールセット名を記載}}"
-+import_firebase_storage_ruleset_name = "{{Firebase Storageのルールセット名を記載}}"
+firestore_ruleset_name        = "{{Firestoreのルールセット名を記載}}"
++firebase_storage_ruleset_name = "{{Firebase Storageのルールセット名を記載}}"
 ```
 
 Firebase Storage のルールセット名は、最初の方の手順でメモした以下のフォーマットのものを記載します。
@@ -501,17 +501,17 @@ Firebase でラップされている Cloud Functions ではなく、GCP の Clou
 | [google_cloudfunctions_function_iam_member](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloudfunctions_function_iam) | Cloud Functions の公開ポリシー |
 
 ```diff hcl:import.tf
-variable "import_google_project_id" {
+variable "google_project_id" {
   type        = string
   description = "ID for GCP project."
 }
 
-+variable "import_google_project_location" {
++variable "google_project_location" {
 +  type        = string
 +  description = "Location for GCP project."
 +}
 +
-variable "import_firebase_apple_app_id" {
+variable "firebase_apple_app_id" {
   type        = string
   description = "App ID for Firebase Apple app, such as 1:000000000000:ios:xxxxxxxxxxxxxxxxxxxxxx."
 }
@@ -519,25 +519,25 @@ variable "import_firebase_apple_app_id" {
 # ...
 
 import {
-  id = var.import_google_project_id
+  id = var.google_project_id
   to = google_app_engine_application.default
 }
 +
 +import {
-+  id = "${var.import_google_project_id}/${var.import_google_project_location}/function1"
++  id = "${var.google_project_id}/${var.google_project_location}/function1"
 +  to = google_cloudfunctions_function.function1
 +}
 +
 +import {
-+  id = "${var.import_google_project_id}/${var.import_google_project_location}/detect roles/cloudfunctions.invoker allUsers"
++  id = "${var.google_project_id}/${var.google_project_location}/detect roles/cloudfunctions.invoker allUsers"
 +  to = google_cloudfunctions_function_iam_member.function1_invoker
 +}
 ```
 
 ```diff hcl:terraform.tfvars
-import_google_project_id             = "{{GCPのプロジェクトIDを記載}}"
-+import_google_project_location       = "{{GCPプロジェクトのロケーションを記載}}"
-import_firebase_apple_app_id         = "{{Firebaseに登録されているAppleアプリのアプリIDを記載}}"
+google_project_id             = "{{GCPのプロジェクトIDを記載}}"
++google_project_location       = "{{GCPプロジェクトのロケーションを記載}}"
+firebase_apple_app_id         = "{{Firebaseに登録されているAppleアプリのアプリIDを記載}}"
 # ...
 ```
 
@@ -557,38 +557,38 @@ GCP の Cloud Tasks を利用していたので、以下のインポート定義
 ```diff hcl:import.tf
 # ...
 
-variable "import_firebase_storage_ruleset_name" {
+variable "firebase_storage_ruleset_name" {
   type        = string
   description = "Firebase Storage rule set name."
 }
 
-+variable "import_cloud_tasks_queue_id" {
++variable "cloud_tasks_queue_id" {
 +  type        = string
 +  description = "Cloud Tasks queue ID."
 +}
 +
 import {
-  id = var.import_google_project_id
+  id = var.google_project_id
   to = google_project.default
 }
 
 # ...
 
 import {
-  id = "${var.import_google_project_id}/${var.import_google_project_location}/detect roles/cloudfunctions.invoker allUsers"
+  id = "${var.google_project_id}/${var.google_project_location}/detect roles/cloudfunctions.invoker allUsers"
   to = google_cloudfunctions_function_iam_member.function1_invoker
 }
 +
 +import {
-+  id = "projects/${var.import_google_project_id}/locations/${var.import_google_project_location}/queues/${var.import_cloud_tasks_queue_id}"
++  id = "projects/${var.google_project_id}/locations/${var.google_project_location}/queues/${var.cloud_tasks_queue_id}"
 +  to = google_cloud_tasks_queue.default
 +}
 ```
 
 ```diff hcl:terraform.tfvars
 # ...
-import_firebase_storage_ruleset_name = "{{Firebase Storageのルールセット名を記載}}"
-+import_cloud_tasks_queue_id          = "{{Cloud TasksのキューIDを記載}}"
+firebase_storage_ruleset_name = "{{Firebase Storageのルールセット名を記載}}"
++cloud_tasks_queue_id          = "{{Cloud TasksのキューIDを記載}}"
 ```
 
 ## サービスアカウント
@@ -603,43 +603,43 @@ Cloud Tasks を Functions から呼び出すためのサービスアカウント
 ```diff hcl:import.tf
 # ...
 
-variable "import_cloud_tasks_queue_id" {
+variable "cloud_tasks_queue_id" {
   type        = string
   description = "Cloud Tasks queue ID."
 }
 
-+variable "import_cloud_tasks_service_account_name" {
++variable "cloud_tasks_service_account_name" {
 +  type        = string
 +  description = "Service account name for Cloud Tasks."
 +}
 +
 import {
-  id = var.import_google_project_id
+  id = var.google_project_id
   to = google_project.default
 }
 
 # ...
 
 import {
-  id = "projects/${var.import_google_project_id}/locations/${var.import_google_project_location}/queues/${var.import_cloud_tasks_queue_id}"
+  id = "projects/${var.google_project_id}/locations/${var.google_project_location}/queues/${var.cloud_tasks_queue_id}"
   to = google_cloud_tasks_queue.default
 }
 +
 +import {
-+  id = "projects/${var.import_google_project_id}/serviceAccounts/${var.import_cloud_tasks_service_account_name}@${var.import_google_project_id}.iam.gserviceaccount.com"
++  id = "projects/${var.google_project_id}/serviceAccounts/${var.cloud_tasks_service_account_name}@${var.google_project_id}.iam.gserviceaccount.com"
 +  to = google_service_account.cloud_tasks
 +}
 +
 +import {
-+  id = "${var.import_google_project_id} roles/cloudtasks.enqueuer serviceAccount:${var.import_cloud_tasks_service_account_name}@${var.import_google_project_id}.iam.gserviceaccount.com"
++  id = "${var.google_project_id} roles/cloudtasks.enqueuer serviceAccount:${var.cloud_tasks_service_account_name}@${var.google_project_id}.iam.gserviceaccount.com"
 +  to = google_project_iam_member.cloud_tasks_enqueuer
 +}
 ```
 
 ```diff hcl:terraform.tfvars
 # ...
-import_cloud_tasks_queue_id             = "{{Cloud TasksのキューIDを記載}}"
-+import_cloud_tasks_service_account_name = "{{Cloud Tasksのサービスアカウント名を記載}}"
+cloud_tasks_queue_id             = "{{Cloud TasksのキューIDを記載}}"
++cloud_tasks_service_account_name = "{{Cloud Tasksのサービスアカウント名を記載}}"
 ```
 
 Cloud Tasks のサービスアカウント名は、サービスアカウントのメールアドレスの `@` より前の部分を指定します。
@@ -684,7 +684,7 @@ Cloud Tasks のサービスアカウント名は、サービスアカウント�
 そのため、一旦仮で Terraform 定義を追加します。
 
 ```diff hcl:main.tf
-+variable "import_ios_android_application_id" {
++variable "ios_android_application_id" {
 +  type        = string
 +  description = "Bundle ID of iOS app and application ID of Android app."
 +}
@@ -704,7 +704,7 @@ provider "google-beta" {
 +
 +resource "google_firebase_project" "default" {
 +  provider = google-beta
-+  project  = var.import_google_project_id
++  project  = var.google_project_id
 +}
 +
 +resource "google_firebase_apple_app" "default" {
@@ -712,7 +712,7 @@ provider "google-beta" {
 +
 +  project      = google_firebase_project.default.project
 +  display_name = "iOS"
-+  bundle_id    = var.import_ios_android_application_id
++  bundle_id    = var.ios_android_application_id
 +}
 +
 +resource "google_firebase_android_app" "default" {
@@ -720,7 +720,7 @@ provider "google-beta" {
 +
 +  project      = google_firebase_project.default.project
 +  display_name = "Android"
-+  package_name = var.import_ios_android_application_id
++  package_name = var.ios_android_application_id
 +}
 +
 +resource "google_identity_platform_config" "auth" {
@@ -733,15 +733,15 @@ provider "google-beta" {
 +  provider = google-beta
 +
 +  project   = google_firebase_project.default.project
-+  bucket_id = "${var.import_google_project_id}.appspot.com"
++  bucket_id = "${var.google_project_id}.appspot.com"
 +}
 ```
 
 ```diff hcl:terraform.tfvars
 # ...
-import_firebase_android_app_id          = "{{Firebaseに登録されているAndroidアプリのアプリIDを記載}}"
-+import_ios_android_application_id       = "{{iOSアプリのBundle IDとAndroidアプリのアプリIDを記載}}"
-import_firestore_ruleset_name           = "{{Firestoreのルールセット名を記載}}"
+firebase_android_app_id          = "{{Firebaseに登録されているAndroidアプリのアプリIDを記載}}"
++ios_android_application_id       = "{{iOSアプリのBundle IDとAndroidアプリのアプリIDを記載}}"
+firestore_ruleset_name           = "{{Firestoreのルールセット名を記載}}"
 # ...
 ```
 
