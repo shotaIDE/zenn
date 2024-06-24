@@ -621,16 +621,9 @@ import_cloud_tasks_queue_id             = "{{Cloud TasksのキューIDを記載}
 
 Cloud Tasks のサービスアカウント名は、サービスアカウントのメールアドレスの `@` より前の部分を指定します。
 
-# その他 Terraform で管理するようになってから生成したもの
-
-- google_storage_bucket
-- google_iam_workload_identity_pool
-- google_iam_workload_identity_pool_provider
-- google_service_account_iam_member
-
 ## 自動生成に対応していないリソースの定義を仮で追加する
 
-このまま自動生成してもエラーが出ます。
+全てのリソースのインポート定義を追加したので、早速インポートと Terraform 定義の自動生成に進みたいですが、このまま進んでも定義の自動生成でエラーが出ます。
 
 ```log
 ╷
@@ -663,7 +656,9 @@ Cloud Tasks のサービスアカウント名は、サービスアカウント�
 ╵
 ```
 
-このままだと、自動生成に対応していないリソースがあるため、一旦仮で定義を追加します。
+**一部のリソースはインポートからの Terraform 定義の自動生成に対応していない**ためです。
+
+そのため、一旦仮で Terraform 定義を追加します。
 
 ```diff hcl:main.tf
 +variable "import_ios_android_application_id" {
