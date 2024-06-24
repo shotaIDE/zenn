@@ -732,7 +732,9 @@ terraform plan -generate-config-out=generated.tf
 
 これにより、Terraform の定義ファイルが `generated.tf` に生成されます。
 
-次に自動生成なしでコマンドを生成します。
+![生成されたTerraformファイル]()
+
+次に自動生成なしでコマンドを再度実行します。
 
 ```shell
 terraform plan
