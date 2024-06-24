@@ -10,7 +10,12 @@ published: false
 
 # 前提の方針
 
-以下は、現時点では Terraform による管理に対応していないため、手動でセットアップ＆管理する必要があります。
+:::message alert
+本記事では Terraform のプロバイダーや tf ファイル自動生成機能など、ベータ版の機能を多く利用しています。
+そのため、本番環境での適用はおすすめしません。
+:::
+
+以下について、記事執筆時点では Terraform による管理に対応していないため、手動でセットアップ＆管理する必要があります。
 
 - Firebase Cloud Messaging
 - Firebase Remote Config
@@ -18,6 +23,8 @@ published: false
 - Firebase Analytics
 
 上記以外に関しては、Terraform で管理します。
+
+![対応しているリソースはCodeで管理し、対応していないリソースは手動で管理する]()
 
 また、Terraform で管理されているリソースに関しては、Firebase Console での変更は避けるようにします。
 手動で変更すると、Terraform 側にその変更を伝えるために、tfstate ファイルにも変更を反映する必要があります。
@@ -45,9 +52,9 @@ https://firebase.google.com/docs/projects/terraform/get-started?hl=ja
 手順としては以下のように進めます。
 
 1. 必要なツールをインストールする
-2. 作業ディレクトリを作成する
+2. 作業ディレクトリを用意する
 3. (オプション)Terraform 上で Firebase を管理する方法について知る
-4. Terraform で管理できるリソースを洗い出す
+4. Terraform に既存のリソースをインポートする
 5. Terraform で管理できるリソースを定義する。
 6. 各リソースを import するための ID を取得する。
 7. Terraform の定義ファイルを自動生成する。
@@ -62,22 +69,25 @@ https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli
 また、以下のページを参考に Firebase CLI をセットアップします。
 CLI をインストールしたら、**CLI 上での Firebase へのログイン**も実施しておきます。
 
+ログインするアカウントは、**プロジェクトオーナーの権限を持つアカウント**で行うと便利です。
+これにより、Terraform コマンド実行時の権限エラーに悩まされることなく、手順をスムーズに進められます。
+
 https://firebase.google.com/docs/cli?hl=ja
 
 さらに、Google Cloud CLI もセットアップします。
 こちらも **CLI 上でのログイン**を実施しておきます。
 
+同様にログインするアカウントは、**プロジェクトオーナーの権限を持つアカウント**で行うと便利です。
+
 https://cloud.google.com/sdk/docs/install?hl=ja
 
 :::message
-Firebase CLI と Google Cloud CLI でログインするアカウントは、プロジェクトオーナーの権限を持つアカウントで行うと便利です。
-これにより、Terraform コマンド実行時の権限エラーに悩まされることなく、手順をスムーズに進められます。
-一方で、本格的にチームで運用する際や自動デプロイを組む場合は、必要最小限の権限を持つアカウントを用意することをおすすめします。
+本格的にチームで運用する際や自動デプロイを組む場合は、必要最小限の権限を持つアカウントを用意して利用することをおすすめします。
 :::
 
-# 作業ディレクトリを作成する
+# 作業ディレクトリを用意する
 
-作業用のディレクトリを作成し、その中に 3 つの Terraform の設定ファイルを配置します。
+作業用のディレクトリを作成し、その中に 3 つの Terraform のファイルを配置します。
 
 ```
 .
@@ -100,6 +110,10 @@ provider "google-beta" {
   user_project_override = true
 }
 ```
+
+`hashicorp/google-beta` の最新バージョン名は以下を確認してください。
+
+https://registry.terraform.io/providers/hashicorp/google-beta/latest
 
 :::message
 `user_project_override = true` は以下のエラーを回避するために設定しています。
@@ -125,16 +139,19 @@ provider "google-beta" {
 :::
 
 ```hcl:import.tf
+# インポート定義を記載するためのファイル
 # 後から記載するため、一旦空ファイルとしておく
 ```
 
 ```hcl:terraform.tfvars
+# 環境変数を定義するためのファイル
 # 後から記載するため、一旦空ファイルとしておく
 ```
 
-最新バージョン名は以下を確認してください。
+Terraform には環境変数を読み込む機能があり、`terraform.tfvars` に記載した変数は自動的に読み込まれます。
+このように環境変数として定義することで、センシティブな情報をバージョン管理対象外としたり、複数の環境での利用を容易にできます。
 
-https://registry.terraform.io/providers/hashicorp/google-beta/latest
+https://developer.hashicorp.com/terraform/language/values/variables#variable-definitions-tfvars-files
 
 以下コマンドを実行します。
 
@@ -144,60 +161,85 @@ terraform init
 
 生成されたファイルをコミットしておきます。
 
-# Terraform 上で Firebase を管理する方法について知る
+# Terraform 上で Firebase を管理するための知識を得る
 
 :::message
 本項目はオプションです。不要な方はスキップしてください。
 :::
 
-Firebase プロジェクトをセットアップし各種機能を有効にした際、リソースがどのようにプロビジョニングされているかの知識が必要と思われます。
-そのため、Firebase のリソースを一旦 Terraform で定義してみることがおすすめです。
+本記事の内容を先に進める場合、Firebase プロジェクトを作成し各種機能を有効にした際、リソースがどのようにプロビジョニングされているかの知識があるとスムーズです。
 
-https://firebase.google.com/docs/projects/terraform/get-started?hl=ja
+そのため、以下公式ドキュメントにおける「Terraform をサポートする Firebase リソース」の部分を確認することをおすすめします。
 
-# 1. Terraform で管理できるリソースを洗い出す
+https://firebase.google.com/docs/projects/terraform/get-started?hl=ja#supported-resources
 
-Terraform で既存のインフラリソースを管理するためには、各リソースを Terraform にインポートする操作が必要です。
-インポートにより、Terraform はリソースの状態を把握し、tfstate ファイルに記録します。
-Terraform は tfstate ファイルを参照して現状のリソースを把握し、さらにファイルに定義されたリソースの状態を比較し、必要な更新手順を計算します。
+また、Firebase のプロジェクトを Terraform によりゼロから作成してみることもおすすめです。
 
-インポートには、コマンドにより 1 つずつリソースをインポートする方法と、tf ファイルに定義されたリソースを一気にインポートする方法があります。
+上記のドキュメントには、実際に Terraform で Firebase プロジェクトを構築するためのサンプルが豊富に記載されています。
 
-今回は、tf ファイルに定義されたリソースを一気にインポートする方法を採用します。
+# Terraform に既存リソースのインポート定義を作成する
 
-一気にインポートする方法では、tf ファイル自体を自動生成するという機能もあるため、そちらを利用して tf ファイル生成も省力化して実施します。
+Terraform で既存のインフラリソースを管理するためには、各リソースを **Terraform にインポートする**必要があります。
 
-インポート定義を作成するには、以下の手順が必要です。
+インポートにより、Terraform はリソースの現在の状態を把握し、その結果を tfstate ファイルに記録します。
+Terraform は tfstate ファイルと、インフラリソースの目標状態が記載された tf ファイルを比較し、必要なインフラ設定の更新手順を計算します。
 
-- リソースを見つけ、その import に必要な ID フォーマットを確認し、Firebase や GCP のコンソール、CLI ツールから ID を取得します。
-- リソースに対し、Terraform 上で管理するための名前をつけます
+tfstate ファイルの存在意義は、公式にも解説があります。
+
+https://developer.hashicorp.com/terraform/language/state/purpose
+
+インポートには以下 2 種類の方法があります。
+
+1. コマンドにより 1 つずつリソースをインポート
+2. tf ファイルに記載されたインポート定義により一気にインポート
+
+今回は、試行錯誤がやりやすい、2 の **tf ファイルに記載されたインポート定義により一気にインポート**する方法を採用します。
+
+一気にインポートする方法では、**tf ファイル自体を自動生**成するという機能もあるため、そちらを利用して tf ファイル生成も省力化して実施します。
+
+tf ファイルにインポート定義を記載するには、以下の手順が必要です。
+
+1. **既存の構成に対応するリソースを見つける**
+2. そのリソースの**インポートに必要な ID フォーマットを確認**し、Firebase や GCP のコンソール、CLI ツールから ID を取得
+3. リソースに対し、**Terraform 上で管理するための名前をつける**
 
 そして、以下のような形式で Terraform ファイルに定義します。
 
 ```hcl:import.tf
 import {
-  id = "{{リソースの ID}}"
-  to = {{リソースの種別}}.{{リソースの管理名}}
+  # id = "{{リソースの ID}}"
+  id = "projects/sample-project-id"
+  # to = {{リソースの種別}}.{{リソースの管理のための名前}}
+  to = google_firebase_project.default
 }
 ```
 
-私のプロジェクトの場合、以下のようになりました。
+インポートに必要な ID フォーマットは、各リソースの公式ドキュメントの "import" の項目に記載されています。
 
-## Firebase のセキュリティールールの名前を調べる
+https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firebase_project#import
 
-Firebase CLI や GCP CLI から、Firebase のセキュリティールールの名前を調べる方法が分かっていません。
+![](/images/manage-existing-firebase-by-terraform/import-id-format-on-terraform-documents.png)
+
+## (準備)Firebase のセキュリティールールの名前を調べておく
+
+:::message
+本項目は、Firestore や Firebase Storage を利用している場合に必要な手順です。
+:::
+
+Firebase CLI や GCP CLI から、Firebase のセキュリティールールの ID を調べる方法が分かりませんでした。
 そのため、一旦 Terraform で関連するリソースをインポートすることで、間接的にセキュリティールールの名前を調べることにします。
 
-まず、以下の一時ファイルを作成します。
-これは、Firestore と Storage のセキュリティールールのリソースをインポートするためのファイルです。
+まず、以下内容の一時ファイル `temporary.tf` を作成します。
 
 ```hcl:temporary.tf
+# Firestore のインポート定義
 resource "google_firebaserules_release" "firestore" {
   provider     = google-beta
   name         = "cloud.firestore"
   ruleset_name = ""
 }
 
+# Firebase Storage のインポート定義
 resource "google_firebaserules_release" "storage" {
   provider     = google-beta
   name         = "cloud.storage"
@@ -205,9 +247,7 @@ resource "google_firebaserules_release" "storage" {
 }
 ```
 
-GCP のプロジェクト ID を調べておきます。
-
-以下のコマンドを実行します。
+また、GCP のプロジェクト ID を調べてから、以下のコマンドを実行します。
 
 ```shell
 PROJECT_ID="{{GCPのプロジェクトIDを記載}}"
@@ -216,27 +256,31 @@ terraform import google_firebaserules_release.storage "projects/$PROJECT_ID/rele
 ```
 
 すると、`terraform.tfstate` という名前の JSON ファイルが生成されます。
-その中から、`ruleset_name` というキー名に対するバリューを探してメモしておきます。
+その中から、**`ruleset_name` というキーに対するバリュー**を探してメモしておきます。
 
 ![](/images/manage-existing-firebase-by-terraform/firebase-ruleset-name-in-tfstate.png)
 
-以下のようなフォーマットです。
+バリューは、以下のようなフォーマットになっているはずです。
 
 ```text
 projects/{{GCPのプロジェクトID}}/rulesets/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 ```
 
-`xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` の部分を後から利用します。
-
-:::message
 `x` は数字またはアルファベットを示しています。
-:::
+`xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` の部分を、後のステップで利用します。
 
-メモが完了したら、`temporary.tf` と `terraform.tfstate` を削除しておきます。
+メモが完了したら、**`temporary.tf` と `terraform.tfstate` を削除**しておきます。
 
 ## プロジェクトとアプリ
 
+:::message
+ここから先、Firebase のプロジェクトや各種機能に対応するリソースのインポート定義の例を列挙していきます。
+ご自身の Firebase プロジェクトで利用している機能によっては不要な手順も含まれる可能性があるので、適宜読み飛ばしてください。
+:::
+
 まず、プロジェクト本体と、Firebase に登録されているアプリのインポート定義を追加します。
+
+私のプロジェクトの場合、取り込む必要があるリソースは以下の通りでした。
 
 | リソース名                                                                                                                         | 説明                                    |
 | ---------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
@@ -245,48 +289,52 @@ projects/{{GCPのプロジェクトID}}/rulesets/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxx
 | [google_firebase_apple_app](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firebase_apple_app)     | Firebase に登録された Apple(iOS) アプリ |
 | [google_firebase_android_app](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firebase_android_app) | Firebase に登録された Android アプリ    |
 
+上記をもとに、以下のように定義しました。
+
 ```diff hcl:import.tf
-+variable "import_google_project_id" {
++variable "google_project_id" {
 +  type        = string
 +  description = "ID for GCP project."
 +}
 +
-+variable "import_firebase_apple_app_id" {
++variable "firebase_apple_app_id" {
 +  type        = string
 +  description = "App ID for Firebase Apple app, such as 1:000000000000:ios:xxxxxxxxxxxxxxxxxxxxxx."
 +}
 +
-+variable "import_firebase_android_app_id" {
++variable "firebase_android_app_id" {
 +  type        = string
 +  description = "App ID for Firebase Android app, such as 1:000000000000:android:xxxxxxxxxxxxxxxxxxxxxx."
 +}
 +
 +import {
-+  id = var.import_google_project_id
++  id = var.google_project_id
 +  to = google_project.default
 +}
 +
 +import {
-+  id = "projects/${var.import_google_project_id}"
++  id = "projects/${var.google_project_id}"
 +  to = google_firebase_project.default
 +}
 +
 +import {
-+  id = "projects/${var.import_google_project_id}/iosApps/${var.import_firebase_apple_app_id}"
++  id = "projects/${var.google_project_id}/iosApps/${var.firebase_apple_app_id}"
 +  to = google_firebase_apple_app.default
 +}
 +
 +import {
-+  id = "projects/${var.import_google_project_id}/androidApps/${var.import_firebase_android_app_id}"
++  id = "projects/${var.google_project_id}/androidApps/${var.firebase_android_app_id}"
 +  to = google_firebase_android_app.default
 +}
 ```
 
 ```diff hcl:terraform.tfvars
-+import_google_project_id       = "{{GCPのプロジェクトIDを記載}}"
-+import_firebase_apple_app_id   = "{{Firebaseに登録されているAppleアプリのアプリIDを記載}}"
-+import_firebase_android_app_id = "{{Firebaseに登録されているAndroidアプリのアプリIDを記載}}"
++google_project_id       = "{{GCPのプロジェクトIDを記載}}"
++firebase_apple_app_id   = "{{Firebaseに登録されているAppleアプリのアプリIDを記載}}"
++firebase_android_app_id = "{{Firebaseに登録されているAndroidアプリのアプリIDを記載}}"
 ```
+
+`terraform.tfvars` については、中身の値を**ご自身のプロジェクトの情報に置き換える必要があります**。
 
 Firebase に登録されているアプリ ID は、Firebase Console から確認できます。
 
@@ -304,12 +352,12 @@ Firebase に登録されているアプリ ID は、Firebase Console から確�
 # ...
 
 import {
-  id = "projects/${var.import_google_project_id}/androidApps/${var.import_firebase_android_app_id}"
+  id = "projects/${var.google_project_id}/androidApps/${var.firebase_android_app_id}"
   to = google_firebase_android_app.default
 }
 +
 +import {
-+  id = var.import_google_project_id
++  id = var.google_project_id
 +  to = google_identity_platform_config.auth
 +}
 ```
@@ -327,48 +375,48 @@ Firestore に関するリソースのインポート定義を追加します。
 ```diff hcl:import.tf
 # ...
 
-variable "import_firebase_android_app_id" {
+variable "firebase_android_app_id" {
   type        = string
   description = "App ID for Firebase Android app, such as 1:000000000000:android:xxxxxxxxxxxxxxxxxxxxxx."
 }
 
-+variable "import_firestore_ruleset_name" {
++variable "firestore_ruleset_name" {
 +  type        = string
 +  description = "Firestore rule set name."
 +}
 +
 import {
-  id = var.import_google_project_id
+  id = var.google_project_id
   to = google_project.default
 }
 
 # ...
 
 import {
-  id = var.import_google_project_id
+  id = var.google_project_id
   to = google_identity_platform_config.auth
 }
 +
 +import {
-+  id = "projects/${var.import_google_project_id}/databases/(default)"
++  id = "projects/${var.google_project_id}/databases/(default)"
 +  to = google_firestore_database.default
 +}
 +
 +import {
-+  id = "projects/${var.import_google_project_id}/rulesets/${var.import_firestore_ruleset_name}"
++  id = "projects/${var.google_project_id}/rulesets/${var.firestore_ruleset_name}"
 +  to = google_firebaserules_ruleset.firestore
 +}
 +
 +import {
-+  id = "projects/${var.import_google_project_id}/releases/cloud.firestore"
++  id = "projects/${var.google_project_id}/releases/cloud.firestore"
 +  to = google_firebaserules_release.firestore
 +}
 ```
 
 ```diff hcl:terraform.tfvars
 # ...
-import_firebase_android_app_id = "{{Firebaseに登録されているAndroidアプリのアプリIDを記載}}"
-+import_firestore_ruleset_name  = "{{Firestoreのルールセット名を記載}}"
+firebase_android_app_id = "{{Firebaseに登録されているAndroidアプリのアプリIDを記載}}"
++firestore_ruleset_name  = "{{Firestoreのルールセット名を記載}}"
 ```
 
 Firebase で Firestore を有効にすると、データベース名が `(default)` になります。
@@ -401,35 +449,35 @@ Firebase Storage に関するリソースのインポート定義を追加しま
 # ...
 
 import {
-  id = "projects/${var.import_google_project_id}/releases/cloud.firestore"
+  id = "projects/${var.google_project_id}/releases/cloud.firestore"
   to = google_firebaserules_release.firestore
 }
 +
 +import {
-+  id = "projects/${var.import_google_project_id}/buckets/${var.import_google_project_id}.appspot.com"
++  id = "projects/${var.google_project_id}/buckets/${var.google_project_id}.appspot.com"
 +  to = google_firebase_storage_bucket.default
 +}
 +
 +import {
-+  id = "projects/${var.import_google_project_id}/rulesets/${var.import_firebase_storage_ruleset_name}"
++  id = "projects/${var.google_project_id}/rulesets/${var.firebase_storage_ruleset_name}"
 +  to = google_firebaserules_ruleset.storage
 +}
 +
 +import {
-+  id = "projects/${var.import_google_project_id}/releases/firebase.storage/${var.import_google_project_id}.appspot.com"
++  id = "projects/${var.google_project_id}/releases/firebase.storage/${var.google_project_id}.appspot.com"
 +  to = google_firebaserules_release.storage
 +}
 +
 +import {
-+  id = var.import_google_project_id
++  id = var.google_project_id
 +  to = google_app_engine_application.default
 +}
 ```
 
 ```diff hcl:terraform.tfvars
 # ...
-import_firestore_ruleset_name        = "{{Firestoreのルールセット名を記載}}"
-+import_firebase_storage_ruleset_name = "{{Firebase Storageのルールセット名を記載}}"
+firestore_ruleset_name        = "{{Firestoreのルールセット名を記載}}"
++firebase_storage_ruleset_name = "{{Firebase Storageのルールセット名を記載}}"
 ```
 
 Firebase Storage のルールセット名は、最初の方の手順でメモした以下のフォーマットのものを記載します。
@@ -453,17 +501,17 @@ Firebase でラップされている Cloud Functions ではなく、GCP の Clou
 | [google_cloudfunctions_function_iam_member](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/cloudfunctions_function_iam) | Cloud Functions の公開ポリシー |
 
 ```diff hcl:import.tf
-variable "import_google_project_id" {
+variable "google_project_id" {
   type        = string
   description = "ID for GCP project."
 }
 
-+variable "import_google_project_location" {
++variable "google_project_location" {
 +  type        = string
 +  description = "Location for GCP project."
 +}
 +
-variable "import_firebase_apple_app_id" {
+variable "firebase_apple_app_id" {
   type        = string
   description = "App ID for Firebase Apple app, such as 1:000000000000:ios:xxxxxxxxxxxxxxxxxxxxxx."
 }
@@ -471,25 +519,25 @@ variable "import_firebase_apple_app_id" {
 # ...
 
 import {
-  id = var.import_google_project_id
+  id = var.google_project_id
   to = google_app_engine_application.default
 }
 +
 +import {
-+  id = "${var.import_google_project_id}/${var.import_google_project_location}/function1"
++  id = "${var.google_project_id}/${var.google_project_location}/function1"
 +  to = google_cloudfunctions_function.function1
 +}
 +
 +import {
-+  id = "${var.import_google_project_id}/${var.import_google_project_location}/detect roles/cloudfunctions.invoker allUsers"
++  id = "${var.google_project_id}/${var.google_project_location}/detect roles/cloudfunctions.invoker allUsers"
 +  to = google_cloudfunctions_function_iam_member.function1_invoker
 +}
 ```
 
 ```diff hcl:terraform.tfvars
-import_google_project_id             = "{{GCPのプロジェクトIDを記載}}"
-+import_google_project_location       = "{{GCPプロジェクトのロケーションを記載}}"
-import_firebase_apple_app_id         = "{{Firebaseに登録されているAppleアプリのアプリIDを記載}}"
+google_project_id             = "{{GCPのプロジェクトIDを記載}}"
++google_project_location       = "{{GCPプロジェクトのロケーションを記載}}"
+firebase_apple_app_id         = "{{Firebaseに登録されているAppleアプリのアプリIDを記載}}"
 # ...
 ```
 
@@ -509,38 +557,38 @@ GCP の Cloud Tasks を利用していたので、以下のインポート定義
 ```diff hcl:import.tf
 # ...
 
-variable "import_firebase_storage_ruleset_name" {
+variable "firebase_storage_ruleset_name" {
   type        = string
   description = "Firebase Storage rule set name."
 }
 
-+variable "import_cloud_tasks_queue_id" {
++variable "cloud_tasks_queue_id" {
 +  type        = string
 +  description = "Cloud Tasks queue ID."
 +}
 +
 import {
-  id = var.import_google_project_id
+  id = var.google_project_id
   to = google_project.default
 }
 
 # ...
 
 import {
-  id = "${var.import_google_project_id}/${var.import_google_project_location}/detect roles/cloudfunctions.invoker allUsers"
+  id = "${var.google_project_id}/${var.google_project_location}/detect roles/cloudfunctions.invoker allUsers"
   to = google_cloudfunctions_function_iam_member.function1_invoker
 }
 +
 +import {
-+  id = "projects/${var.import_google_project_id}/locations/${var.import_google_project_location}/queues/${var.import_cloud_tasks_queue_id}"
++  id = "projects/${var.google_project_id}/locations/${var.google_project_location}/queues/${var.cloud_tasks_queue_id}"
 +  to = google_cloud_tasks_queue.default
 +}
 ```
 
 ```diff hcl:terraform.tfvars
 # ...
-import_firebase_storage_ruleset_name = "{{Firebase Storageのルールセット名を記載}}"
-+import_cloud_tasks_queue_id          = "{{Cloud TasksのキューIDを記載}}"
+firebase_storage_ruleset_name = "{{Firebase Storageのルールセット名を記載}}"
++cloud_tasks_queue_id          = "{{Cloud TasksのキューIDを記載}}"
 ```
 
 ## サービスアカウント
@@ -555,57 +603,50 @@ Cloud Tasks を Functions から呼び出すためのサービスアカウント
 ```diff hcl:import.tf
 # ...
 
-variable "import_cloud_tasks_queue_id" {
+variable "cloud_tasks_queue_id" {
   type        = string
   description = "Cloud Tasks queue ID."
 }
 
-+variable "import_cloud_tasks_service_account_name" {
++variable "cloud_tasks_service_account_name" {
 +  type        = string
 +  description = "Service account name for Cloud Tasks."
 +}
 +
 import {
-  id = var.import_google_project_id
+  id = var.google_project_id
   to = google_project.default
 }
 
 # ...
 
 import {
-  id = "projects/${var.import_google_project_id}/locations/${var.import_google_project_location}/queues/${var.import_cloud_tasks_queue_id}"
+  id = "projects/${var.google_project_id}/locations/${var.google_project_location}/queues/${var.cloud_tasks_queue_id}"
   to = google_cloud_tasks_queue.default
 }
 +
 +import {
-+  id = "projects/${var.import_google_project_id}/serviceAccounts/${var.import_cloud_tasks_service_account_name}@${var.import_google_project_id}.iam.gserviceaccount.com"
++  id = "projects/${var.google_project_id}/serviceAccounts/${var.cloud_tasks_service_account_name}@${var.google_project_id}.iam.gserviceaccount.com"
 +  to = google_service_account.cloud_tasks
 +}
 +
 +import {
-+  id = "${var.import_google_project_id} roles/cloudtasks.enqueuer serviceAccount:${var.import_cloud_tasks_service_account_name}@${var.import_google_project_id}.iam.gserviceaccount.com"
++  id = "${var.google_project_id} roles/cloudtasks.enqueuer serviceAccount:${var.cloud_tasks_service_account_name}@${var.google_project_id}.iam.gserviceaccount.com"
 +  to = google_project_iam_member.cloud_tasks_enqueuer
 +}
 ```
 
 ```diff hcl:terraform.tfvars
 # ...
-import_cloud_tasks_queue_id             = "{{Cloud TasksのキューIDを記載}}"
-+import_cloud_tasks_service_account_name = "{{Cloud Tasksのサービスアカウント名を記載}}"
+cloud_tasks_queue_id             = "{{Cloud TasksのキューIDを記載}}"
++cloud_tasks_service_account_name = "{{Cloud Tasksのサービスアカウント名を記載}}"
 ```
 
 Cloud Tasks のサービスアカウント名は、サービスアカウントのメールアドレスの `@` より前の部分を指定します。
 
-# その他 Terraform で管理するようになってから生成したもの
-
-- google_storage_bucket
-- google_iam_workload_identity_pool
-- google_iam_workload_identity_pool_provider
-- google_service_account_iam_member
-
 ## 自動生成に対応していないリソースの定義を仮で追加する
 
-このまま自動生成してもエラーが出ます。
+全てのリソースのインポート定義を追加したので、早速インポートと Terraform 定義の自動生成に進みたいですが、このまま進んでも定義の自動生成でエラーが出ます。
 
 ```log
 ╷
@@ -638,10 +679,12 @@ Cloud Tasks のサービスアカウント名は、サービスアカウント�
 ╵
 ```
 
-このままだと、自動生成に対応していないリソースがあるため、一旦仮で定義を追加します。
+**一部のリソースはインポートからの Terraform 定義の自動生成に対応していない**ためです。
+
+そのため、一旦仮で Terraform 定義を追加します。
 
 ```diff hcl:main.tf
-+variable "import_ios_android_application_id" {
++variable "ios_android_application_id" {
 +  type        = string
 +  description = "Bundle ID of iOS app and application ID of Android app."
 +}
@@ -661,7 +704,7 @@ provider "google-beta" {
 +
 +resource "google_firebase_project" "default" {
 +  provider = google-beta
-+  project  = var.import_google_project_id
++  project  = var.google_project_id
 +}
 +
 +resource "google_firebase_apple_app" "default" {
@@ -669,7 +712,7 @@ provider "google-beta" {
 +
 +  project      = google_firebase_project.default.project
 +  display_name = "iOS"
-+  bundle_id    = var.import_ios_android_application_id
++  bundle_id    = var.ios_android_application_id
 +}
 +
 +resource "google_firebase_android_app" "default" {
@@ -677,7 +720,7 @@ provider "google-beta" {
 +
 +  project      = google_firebase_project.default.project
 +  display_name = "Android"
-+  package_name = var.import_ios_android_application_id
++  package_name = var.ios_android_application_id
 +}
 +
 +resource "google_identity_platform_config" "auth" {
@@ -690,15 +733,15 @@ provider "google-beta" {
 +  provider = google-beta
 +
 +  project   = google_firebase_project.default.project
-+  bucket_id = "${var.import_google_project_id}.appspot.com"
++  bucket_id = "${var.google_project_id}.appspot.com"
 +}
 ```
 
 ```diff hcl:terraform.tfvars
 # ...
-import_firebase_android_app_id          = "{{Firebaseに登録されているAndroidアプリのアプリIDを記載}}"
-+import_ios_android_application_id       = "{{iOSアプリのBundle IDとAndroidアプリのアプリIDを記載}}"
-import_firestore_ruleset_name           = "{{Firestoreのルールセット名を記載}}"
+firebase_android_app_id          = "{{Firebaseに登録されているAndroidアプリのアプリIDを記載}}"
++ios_android_application_id       = "{{iOSアプリのBundle IDとAndroidアプリのアプリIDを記載}}"
+firestore_ruleset_name           = "{{Firestoreのルールセット名を記載}}"
 # ...
 ```
 
@@ -712,7 +755,14 @@ terraform plan -generate-config-out=generated.tf
 
 これにより、Terraform の定義ファイルが `generated.tf` に生成されます。
 
-次に自動生成なしでコマンドを生成します。
+![](/images/manage-existing-firebase-by-terraform/generated-terraform-file.png)
+
+:::message
+自動生成されたファイルは、そのままだと管理がしにくいので手作業で修正する必要があります。
+ID などを環境変数化したり、適切にファイル分割をするなどです。
+:::
+
+次に自動生成なしでコマンドを再度実行します。
 
 ```shell
 terraform plan
@@ -728,6 +778,44 @@ terraform plan
 
 必要に応じて、Terraform の定義内に手動で変更を加えます。
 
+上記の差分を解消したい場合、以下のように修正できます。
+
+```diff hcl:main.tf
++variable "firebase_android_app_sha1_hashes" {
++  type        = list(string)
++  description = "Allowed SHA-1 hashes for Firebase Android app."
++}
++
+variable "ios_android_application_id" {
+  type        = string
+  description = "Bundle ID of iOS app and application ID of Android app."
+}
+
+# ...
+
+resource "google_firebase_android_app" "default" {
+  provider = google-beta
+
+  project      = google_firebase_project.default.project
+  display_name = "Android"
+  package_name = var.ios_android_application_id
++  sha1_hashes  = var.firebase_android_app_sha1_hashes
+}
+
+# ...
+```
+
+```diff hcl:terraform.tfvars
+# ...
+firebase_android_app_id = "{{Firebaseに登録されているAndroidアプリのアプリIDを記載}}"
++firebase_android_app_sha1_hashes = [
++  "9caa5a8af776c9eddfbfe01fbe620c25ad97e9f5",
++  "d8eed8412b16ad696870fc9cea0876dea4cc0aa4",
++]
+ios_android_application_id       = "{{iOSアプリのBundle IDとAndroidアプリのアプリIDを記載}}"
+# ...
+```
+
 # Terraform で一度適用する
 
 意図しない差分がなくなったら、以下のコマンドを実行します。
@@ -736,13 +824,11 @@ terraform plan
 terraform apply
 ```
 
-これにより、`tfstate` が生成され、リソースの状態が Terraform により管理されるようになります。
+これにより、`terraform.tfstate` が生成され、既存のリソース状態が Terraform により管理されるようになります。
 
-# 自動生成されたファイルなどの整理を行う
+以後は、Terraform の定義ファイルを修正してリソースを管理できます。
 
-自動生成されたファイルは、ID などが直書きされているので必要に応じて変数化を行います。
-
-また、ファイル分割などを行います。
+晴れて Firebase の IaC 化完了です。
 
 # まとめ
 
