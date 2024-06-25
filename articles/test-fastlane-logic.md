@@ -4,7 +4,7 @@ emoji: "🌟"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["fastlane", "rspec", "ruby", "ios", "android"]
 publication_name: "sun_asterisk"
-published: false
+published: true
 ---
 
 <!-- cspell:ignore gsub, testflight -->
