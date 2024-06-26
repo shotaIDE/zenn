@@ -54,10 +54,8 @@ https://firebase.google.com/docs/projects/terraform/get-started?hl=ja
 2. 作業ディレクトリを用意する
 3. Terraform 上で Firebase を管理するための知識を得る
 4. Terraform に既存リソースのインポート定義を作成する
-5. Terraform で管理できるリソースを定義する。
-6. 各リソースを import するための ID を取得する。
-7. Terraform の定義ファイルを自動生成する。
-8. Terraform plan で差分なく定義されているか確認する。
+5. Terraform 定義ファイルを自動生成する
+6. Terraform で一度適用する
 
 # 1. 必要なツールをインストールする
 
@@ -749,7 +747,7 @@ firestore_ruleset_name           = "{{Firestoreのルールセット名を記載
 # ...
 ```
 
-# Terraform の定義ファイルを自動生成する
+# 5. Terraform 定義ファイルを自動生成する
 
 以下のコマンドを実行します。
 
@@ -820,7 +818,7 @@ ios_android_application_id       = "{{iOSアプリのBundle IDとAndroidアプ�
 # ...
 ```
 
-# Terraform で一度適用する
+# 6. Terraform で一度適用する
 
 意図しない差分がなくなったら、以下のコマンドを実行します。
 
