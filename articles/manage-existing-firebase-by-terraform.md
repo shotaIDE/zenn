@@ -19,8 +19,8 @@ published: false
 
 - Firebase Cloud Messaging
 - Firebase Remote Config
+- Google Analytics for Firebase
 - Firebase Crashlytics
-- Firebase Analytics
 
 上記以外に関しては、Terraform で管理します。
 
