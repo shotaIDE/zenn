@@ -1,5 +1,5 @@
 ---
-title: "Terraformで既存のFirebaseプロジェクトを管理する"
+title: "手動で作ったFirebaseのプロジェクトをTerraformで管理して幸せになる"
 emoji: "💭"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["firebase", "terraform", "ios", "android"]
@@ -8,44 +8,40 @@ published: false
 
 <!-- cspell:ignore appspot, cloudfunctions, cloudtasks, firebaserules, googleapi, gserviceaccount, identitytoolkit, ruleset, rulesets, tfstate, tfvars -->
 
+# 本記事で書かないこと
+
+本記事では、Terraform により新たに Firebase プロジェクトを作成する方法は書きません。
+あくまで、既存の Firebase プロジェクトを後付けで Terraform で管理する方法について書きます。
+
+:::message
+Terraform により新たに Firebase プロジェクトを作成する方法は、以下の公式サンプルが参考になります。
+
+https://firebase.google.com/docs/projects/terraform/get-started?hl=ja
+:::
+
+また、チーム開発における運用のための管理や、自動デプロイを組むところまでは書きません。
+ローカルマシンのみで、Terraform により Firebase のインフラを管理できるようになるところまでを書きます。
+
 # 前提の方針
 
 :::message alert
-本記事では Terraform のプロバイダーや tf ファイル自動生成機能など、ベータ版の機能を多く利用しています。
+本記事では Terraform のプロバイダーや Terraform ファイル自動生成機能など、ベータ版の機能を多く利用しています。
 そのため、本番環境での適用はおすすめしません。
 :::
 
-以下について、記事執筆時点では Terraform による管理に対応していないため、手動でセットアップ＆管理する必要があります。
+以下について、記事執筆時点では **Terraform による管理に対応していない**ため、手動でセットアップ＆管理する必要があります。
 
 - Firebase Cloud Messaging
 - Firebase Remote Config
+- Google Analytics for Firebase
 - Firebase Crashlytics
-- Firebase Analytics
 
-上記以外に関しては、Terraform で管理します。
+**上記以外に関しては、Terraform で管理する**方針とします。
 
 ![対応しているリソースはCodeで管理し、対応していないリソースは手動で管理する]()
 
-また、Terraform で管理されているリソースに関しては、Firebase Console での変更は避けるようにします。
-手動で変更すると、Terraform 側にその変更を伝えるために、tfstate ファイルにも変更を反映する必要があります。
-
-tfstate とは、Terraform が管理するリソースの状態を記録するファイルです。
-これを利用することで、Terraform はリソースの状態を把握し、変更があった場合にはその変更を計算し、必要な更新手順を提案します。
-
-また、tfstate ファイルは、GCP の Cloud Storage や AWS の S3 などのリモートストレージに保存し、チームで共有できます。
-本記事では、簡単のために、tfstate に関しては、ローカルに管理することとします。
-
-# 本記事で書くこと
-
-本記事では、新たに Firebase プロジェクトを作成する際に Terraform によりセットアップする方法は書きません。
-
-これは公式のサンプルの通りに作ればおおよそ問題ないためです。
-
-https://firebase.google.com/docs/projects/terraform/get-started?hl=ja
-
-また、実際に CI/CD を組んでデプロイを自動化するところまでは書きません。
-
-ローカルのマシンで Terraform で管理、デプロイするまでを本記事では書きます。
+**Terraform で管理するリソースに関しては、Firebase Console 上での手動変更は避ける**ようにします。
+手動で変更すると、Terraform が把握しているインフラの現在の状態と実際のインフラの状態が乖離してしまい、その乖離を解消する手間が発生するためです。
 
 # 手順の概要
 
@@ -53,14 +49,12 @@ https://firebase.google.com/docs/projects/terraform/get-started?hl=ja
 
 1. 必要なツールをインストールする
 2. 作業ディレクトリを用意する
-3. (オプション)Terraform 上で Firebase を管理する方法について知る
-4. Terraform に既存のリソースをインポートする
-5. Terraform で管理できるリソースを定義する。
-6. 各リソースを import するための ID を取得する。
-7. Terraform の定義ファイルを自動生成する。
-8. Terraform plan で差分なく定義されているか確認する。
+3. Terraform 上で Firebase を管理するための知識を得る
+4. Terraform に既存リソースのインポート定義を作成する
+5. Terraform 定義ファイルを自動生成する
+6. Terraform で一度適用する
 
-# 必要なツールをインストールする
+# 1. 必要なツールをインストールする
 
 以下のページを参考に Terraform をセットアップします。
 
@@ -85,7 +79,7 @@ https://cloud.google.com/sdk/docs/install?hl=ja
 本格的にチームで運用する際や自動デプロイを組む場合は、必要最小限の権限を持つアカウントを用意して利用することをおすすめします。
 :::
 
-# 作業ディレクトリを用意する
+# 2. 作業ディレクトリを用意する
 
 作業用のディレクトリを作成し、その中に 3 つの Terraform のファイルを配置します。
 
@@ -149,7 +143,7 @@ https://registry.terraform.io/providers/hashicorp/google-beta/latest
 ```
 
 Terraform には環境変数を読み込む機能があり、`terraform.tfvars` に記載した変数は自動的に読み込まれます。
-このように環境変数として定義することで、センシティブな情報をバージョン管理対象外としたり、複数の環境での利用を容易にできます。
+このように環境変数として定義することで、複数の環境への適用を容易にしたり、秘匿情報をバージョン管理対象外としたりできます。
 
 https://developer.hashicorp.com/terraform/language/values/variables#variable-definitions-tfvars-files
 
@@ -161,46 +155,47 @@ terraform init
 
 生成されたファイルをコミットしておきます。
 
-# Terraform 上で Firebase を管理するための知識を得る
+# 3. Terraform 上で Firebase を管理するための知識を得る
 
 :::message
 本項目はオプションです。不要な方はスキップしてください。
 :::
 
-本記事の内容を先に進める場合、Firebase プロジェクトを作成し各種機能を有効にした際、リソースがどのようにプロビジョニングされているかの知識があるとスムーズです。
+ここから先、Firebase プロジェクトを作成し各種機能を有効にした際、リソースがどのように構築されているかの知識があるとスムーズです。
 
-そのため、以下公式ドキュメントにおける「Terraform をサポートする Firebase リソース」の部分を確認することをおすすめします。
+そのため、以下公式ドキュメントにおける「Terraform をサポートする Firebase リソース」の部分を読んでみることをおすすめします。
 
 https://firebase.google.com/docs/projects/terraform/get-started?hl=ja#supported-resources
 
 また、Firebase のプロジェクトを Terraform によりゼロから作成してみることもおすすめです。
-
 上記のドキュメントには、実際に Terraform で Firebase プロジェクトを構築するためのサンプルが豊富に記載されています。
 
-# Terraform に既存リソースのインポート定義を作成する
+# 4. Terraform に既存リソースのインポート定義を作成する
 
 Terraform で既存のインフラリソースを管理するためには、各リソースを **Terraform にインポートする**必要があります。
 
-インポートにより、Terraform はリソースの現在の状態を把握し、その結果を tfstate ファイルに記録します。
-Terraform は tfstate ファイルと、インフラリソースの目標状態が記載された tf ファイルを比較し、必要なインフラ設定の更新手順を計算します。
+インポートにより、Terraform はリソースの現在の状態を把握し、その結果を State ファイル(`*.tfstate` ファイル)に記録します。
+Terraform は State ファイルと、インフラリソースの目標状態が記載された Terraform ファイル(`*.tf` ファイル)を比較し、必要なインフラ設定の手順を組み立てます。
 
-tfstate ファイルの存在意義は、公式にも解説があります。
+State ファイルについては、その存在意義を含めた解説が公式にあります。
 
 https://developer.hashicorp.com/terraform/language/state/purpose
 
 インポートには以下 2 種類の方法があります。
 
 1. コマンドにより 1 つずつリソースをインポート
-2. tf ファイルに記載されたインポート定義により一気にインポート
+2. Terraform ファイルに記載されたインポート定義により一気にインポート
 
-今回は、試行錯誤がやりやすい、2 の **tf ファイルに記載されたインポート定義により一気にインポート**する方法を採用します。
+今回は、試行錯誤がやりやすい、2 の **Terraform ファイルに記載されたインポート定義により一気にインポート**する方法を採用します。
 
-一気にインポートする方法では、**tf ファイル自体を自動生**成するという機能もあるため、そちらを利用して tf ファイル生成も省力化して実施します。
+一気にインポートする方法では、**Terraform ファイル自体を自動生成**するという機能もあるため、そちらを利用して Terraform ファイル作成を効率化します。
 
-tf ファイルにインポート定義を記載するには、以下の手順が必要です。
+https://developer.hashicorp.com/terraform/language/import/generating-configuration
 
-1. **既存の構成に対応するリソースを見つける**
-2. そのリソースの**インポートに必要な ID フォーマットを確認**し、Firebase や GCP のコンソール、CLI ツールから ID を取得
+Terraform ファイルにインポート定義を記載するには、以下の手順が必要です。
+
+1. **既存のインフラ構成に対応する Terraform のリソースを見つける**
+2. そのリソースの**インポートに必要な ID フォーマットを確認**し、Firebase や GCP のコンソール、CLI ツールから ID を取得する
 3. リソースに対し、**Terraform 上で管理するための名前をつける**
 
 そして、以下のような形式で Terraform ファイルに定義します。
@@ -223,7 +218,7 @@ https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/f
 ## (準備)Firebase のセキュリティールールの名前を調べておく
 
 :::message
-本項目は、Firestore や Firebase Storage を利用している場合に必要な手順です。
+本項目は、Cloud Firestore や Cloud Storage for Firebase を利用している場合に必要な手順です。
 :::
 
 Firebase CLI や GCP CLI から、Firebase のセキュリティールールの ID を調べる方法が分かりませんでした。
@@ -340,9 +335,9 @@ Firebase に登録されているアプリ ID は、Firebase Console から確�
 
 ![](/images/manage-existing-firebase-by-terraform/firebase-apple-app-id.png)
 
-## Authentication
+## Firebase Authentication
 
-次に、Firebase Authentication に関するリソースのインポート定義を追加します。
+Authentication に関して、以下のようにリソースのインポート定義を追加しました。
 
 | リソース名                                                                                                                                 | 説明                  |
 | ------------------------------------------------------------------------------------------------------------------------------------------ | --------------------- |
@@ -362,7 +357,7 @@ import {
 +}
 ```
 
-## Firestore
+## Cloud Firestore
 
 Firestore に関するリソースのインポート定義を追加します。
 
@@ -419,7 +414,7 @@ firebase_android_app_id = "{{Firebaseに登録されているAndroidアプリの
 +firestore_ruleset_name  = "{{Firestoreのルールセット名を記載}}"
 ```
 
-Firebase で Firestore を有効にすると、データベース名が `(default)` になります。
+Firebase で Firestore を有効にすると、**データベース名が `(default)` になります**。
 そのため、`google_firestore_database.default` の ID の末尾は `(default)` 固定にしています。
 
 もし、お使いの Firestore のデータベース名が `(default)` 以外の場合は、その名前を指定してください。
@@ -434,16 +429,16 @@ Firestore のルールセット名は、最初の方の手順でメモした以�
 xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 ```
 
-## Firebase Storage
+## Cloud Storage for Firebase
 
-Firebase Storage に関するリソースのインポート定義を追加します。
+Firebase Storage に関して、以下のようにリソースのインポート定義を追加しました。
 
-| リソース名                                                                                                                               | 説明                                              |
-| ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
-| [google_firebase_storage_bucket](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firebase_storage_bucket) | Firebase Storage 本体                             |
-| [google_firebaserules_ruleset](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firebaserules_ruleset)     | Firestore のセキュリティルール                    |
-| [google_firebaserules_release](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firebaserules_release)     | Firestore のセキュリティルールの適用状態          |
-| [google_app_engine_application](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/app_engine_application)   | Firestore によりプロビジョニングされる App Engine |
+| リソース名                                                                                                                               | 説明                                            |
+| ---------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| [google_firebase_storage_bucket](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firebase_storage_bucket) | Firebase Storage 本体                           |
+| [google_firebaserules_ruleset](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firebaserules_ruleset)     | Firestore のセキュリティルール                  |
+| [google_firebaserules_release](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firebaserules_release)     | Firestore のセキュリティルールの適用状態        |
+| [google_app_engine_application](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/app_engine_application)   | Firestore のために自動で有効化される App Engine |
 
 ```diff hcl:import.tf
 # ...
@@ -486,14 +481,15 @@ Firebase Storage のルールセット名は、最初の方の手順でメモし
 xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 ```
 
-Firestore を有効にすると、裏側で AppEngine が有効にされます。
+**Firebase Storage を有効にすると、裏側で AppEngine が有効にされます**。
 これを Terraform で管理する必要があります。
 
 `google_firebaserules_ruleset` と `google_firebaserules_release` は Firestore で取り込んだリソースの種類と同じです。
 
 ## Cloud Functions
 
-Firebase でラップされている Cloud Functions ではなく、GCP の Cloud Functions を直接利用していたので、以下のインポート定義を追加します。
+私のプロジェクトの場合、Firebase でラップされている Cloud Functions for Firebase ではなく、GCP の Cloud Functions を直接利用していました。
+そのため、以下のようにリソースのインポート定義を追加しました。
 
 | リソース名                                                                                                                                              | 説明                           |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
@@ -541,14 +537,16 @@ firebase_apple_app_id         = "{{Firebaseに登録されているAppleアプ�
 # ...
 ```
 
-Function を複数定義している場合は、それぞれに対してインポート定義が必要です。
+Function を**複数定義している場合は、それぞれに対してインポート定義が必要**です。
 
-関数は認証不要で全ユーザーがアクセスできるようにしていました。そのため、以下のような IAM ポリシーが設定されています。
-Terraform ではこのような IAM ポリシーもリソースとして定義されています。
+**Function は認証不要で全ユーザーがアクセスできるようにしていました**。そのため、以下のような IAM ポリシーが設定されています。
+Terraform では**このような IAM ポリシーも 1 つのリソースとして定義**されています。
+
+![](/images/manage-existing-firebase-by-terraform/access-iam-for-function.png)
 
 ## Cloud Tasks
 
-GCP の Cloud Tasks を利用していたので、以下のインポート定義を追加します。
+GCP の Cloud Tasks を利用していたので、以下のようにリソースのインポート定義を追加しました。
 
 | リソース名                                                                                                                   | 説明                 |
 | ---------------------------------------------------------------------------------------------------------------------------- | -------------------- |
@@ -593,7 +591,8 @@ firebase_storage_ruleset_name = "{{Firebase Storageのルールセット名を�
 
 ## サービスアカウント
 
-Cloud Tasks を Functions から呼び出すためのサービスアカウントを作成していたので、以下のインポート定義を追加します。
+Cloud Tasks を Functions から呼び出すためのサービスアカウントを作成していました。
+そのため、以下のようにリソースのインポート定義を追加しました。
 
 | リソース名                                                                                                                      | 説明                     |
 | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
@@ -745,7 +744,7 @@ firestore_ruleset_name           = "{{Firestoreのルールセット名を記載
 # ...
 ```
 
-# Terraform の定義ファイルを自動生成する
+# 5. Terraform 定義ファイルを自動生成する
 
 以下のコマンドを実行します。
 
@@ -816,7 +815,7 @@ ios_android_application_id       = "{{iOSアプリのBundle IDとAndroidアプ�
 # ...
 ```
 
-# Terraform で一度適用する
+# 6. Terraform で一度適用する
 
 意図しない差分がなくなったら、以下のコマンドを実行します。
 
@@ -824,11 +823,16 @@ ios_android_application_id       = "{{iOSアプリのBundle IDとAndroidアプ�
 terraform apply
 ```
 
-これにより、`terraform.tfstate` が生成され、既存のリソース状態が Terraform により管理されるようになります。
+これにより、State ファイル(`terraform.tfstate` ファイル)が生成され、既存のリソース群が Terraform により管理されるようになります。
 
-以後は、Terraform の定義ファイルを修正してリソースを管理できます。
+以後は、Terraform の定義ファイルを修正し、Terraform によりリソースに変更を自動で適用できます。
 
-晴れて Firebase の IaC 化完了です。
+:::message
+一度 Terraform による適用が完了し State ファイルも生成されたら、インポート用のファイル `import.tf` は削除しても問題ありません。
+他の Terraform 定義でも利用している環境変数の定義(`variable` 定義)などは別ファイルに移動した上で、`import` の定義自体は削除すると良いです。
+:::
+
+晴れて Firebase の Terraform 管理化の完了です！おめでとうございます！🎉
 
 # まとめ
 
