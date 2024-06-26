@@ -19,7 +19,7 @@ Terraform により新たに Firebase プロジェクトを作成する方法は
 https://firebase.google.com/docs/projects/terraform/get-started?hl=ja
 :::
 
-また、チーム開発における運用のための State 管理や、自動デプロイを組むところまでは書きません。
+また、チーム開発における運用のための管理や、自動デプロイを組むところまでは書きません。
 ローカルマシンのみで、Terraform により Firebase のインフラを管理できるようになるところまでを書きます。
 
 # 前提の方針
