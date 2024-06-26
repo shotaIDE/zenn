@@ -25,7 +25,7 @@ https://firebase.google.com/docs/projects/terraform/get-started?hl=ja
 # 前提の方針
 
 :::message alert
-本記事では Terraform のプロバイダーや tf ファイル自動生成機能など、ベータ版の機能を多く利用しています。
+本記事では Terraform のプロバイダーや Terraform ファイル自動生成機能など、ベータ版の機能を多く利用しています。
 そのため、本番環境での適用はおすすめしません。
 :::
 
@@ -179,26 +179,28 @@ https://firebase.google.com/docs/projects/terraform/get-started?hl=ja#supported-
 
 Terraform で既存のインフラリソースを管理するためには、各リソースを **Terraform にインポートする**必要があります。
 
-インポートにより、Terraform はリソースの現在の状態を把握し、その結果を tfstate ファイルに記録します。
-Terraform は tfstate ファイルと、インフラリソースの目標状態が記載された tf ファイルを比較し、必要なインフラ設定の更新手順を計算します。
+インポートにより、Terraform はリソースの現在の状態を把握し、その結果を State ファイル(`*.tfstate` ファイル)に記録します。
+Terraform は State ファイルと、インフラリソースの目標状態が記載された Terraform ファイル(`*.tf` ファイル)を比較し、必要なインフラ設定の手順を組み立てます。
 
-tfstate ファイルの存在意義は、公式にも解説があります。
+State ファイルについては、その存在意義を含めた解説が公式にあります。
 
 https://developer.hashicorp.com/terraform/language/state/purpose
 
 インポートには以下 2 種類の方法があります。
 
 1. コマンドにより 1 つずつリソースをインポート
-2. tf ファイルに記載されたインポート定義により一気にインポート
+2. Terraform ファイルに記載されたインポート定義により一気にインポート
 
-今回は、試行錯誤がやりやすい、2 の **tf ファイルに記載されたインポート定義により一気にインポート**する方法を採用します。
+今回は、試行錯誤がやりやすい、2 の **Terraform ファイルに記載されたインポート定義により一気にインポート**する方法を採用します。
 
-一気にインポートする方法では、**tf ファイル自体を自動生**成するという機能もあるため、そちらを利用して tf ファイル生成も省力化して実施します。
+一気にインポートする方法では、**Terraform ファイル自体を自動生成**するという機能もあるため、そちらを利用して Terraform ファイル作成を効率化します。
 
-tf ファイルにインポート定義を記載するには、以下の手順が必要です。
+https://developer.hashicorp.com/terraform/language/import/generating-configuration
 
-1. **既存の構成に対応するリソースを見つける**
-2. そのリソースの**インポートに必要な ID フォーマットを確認**し、Firebase や GCP のコンソール、CLI ツールから ID を取得
+Terraform ファイルにインポート定義を記載するには、以下の手順が必要です。
+
+1. **既存のインフラ構成に対応する Terraform のリソースを見つける**
+2. そのリソースの**インポートに必要な ID フォーマットを確認**し、Firebase や GCP のコンソール、CLI ツールから ID を取得する
 3. リソースに対し、**Terraform 上で管理するための名前をつける**
 
 そして、以下のような形式で Terraform ファイルに定義します。
@@ -221,7 +223,7 @@ https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/f
 ## (準備)Firebase のセキュリティールールの名前を調べておく
 
 :::message
-本項目は、Firestore や Firebase Storage を利用している場合に必要な手順です。
+本項目は、Cloud Firestore や Cloud Storage for Firebase を利用している場合に必要な手順です。
 :::
 
 Firebase CLI や GCP CLI から、Firebase のセキュリティールールの ID を調べる方法が分かりませんでした。
