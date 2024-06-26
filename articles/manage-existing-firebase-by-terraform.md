@@ -342,7 +342,7 @@ Firebase に登録されているアプリ ID は、Firebase Console から確�
 
 ## Firebase Authentication
 
-次に、Authentication に関するリソースのインポート定義を追加します。
+Authentication に関して、以下のようにリソースのインポート定義を追加しました。
 
 | リソース名                                                                                                                                 | 説明                  |
 | ------------------------------------------------------------------------------------------------------------------------------------------ | --------------------- |
@@ -419,7 +419,7 @@ firebase_android_app_id = "{{Firebaseに登録されているAndroidアプリの
 +firestore_ruleset_name  = "{{Firestoreのルールセット名を記載}}"
 ```
 
-Firebase で Firestore を有効にすると、データベース名が `(default)` になります。
+Firebase で Firestore を有効にすると、**データベース名が `(default)` になります**。
 そのため、`google_firestore_database.default` の ID の末尾は `(default)` 固定にしています。
 
 もし、お使いの Firestore のデータベース名が `(default)` 以外の場合は、その名前を指定してください。
@@ -436,14 +436,14 @@ xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 
 ## Cloud Storage for Firebase
 
-Firebase Storage に関するリソースのインポート定義を追加します。
+Firebase Storage に関して、以下のようにリソースのインポート定義を追加しました。
 
-| リソース名                                                                                                                               | 説明                                              |
-| ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
-| [google_firebase_storage_bucket](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firebase_storage_bucket) | Firebase Storage 本体                             |
-| [google_firebaserules_ruleset](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firebaserules_ruleset)     | Firestore のセキュリティルール                    |
-| [google_firebaserules_release](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firebaserules_release)     | Firestore のセキュリティルールの適用状態          |
-| [google_app_engine_application](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/app_engine_application)   | Firestore によりプロビジョニングされる App Engine |
+| リソース名                                                                                                                               | 説明                                            |
+| ---------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| [google_firebase_storage_bucket](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firebase_storage_bucket) | Firebase Storage 本体                           |
+| [google_firebaserules_ruleset](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firebaserules_ruleset)     | Firestore のセキュリティルール                  |
+| [google_firebaserules_release](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firebaserules_release)     | Firestore のセキュリティルールの適用状態        |
+| [google_app_engine_application](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/app_engine_application)   | Firestore のために自動で有効化される App Engine |
 
 ```diff hcl:import.tf
 # ...
@@ -486,15 +486,15 @@ Firebase Storage のルールセット名は、最初の方の手順でメモし
 xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 ```
 
-Firestore を有効にすると、裏側で AppEngine が有効にされます。
+**Firebase Storage を有効にすると、裏側で AppEngine が有効にされます**。
 これを Terraform で管理する必要があります。
 
 `google_firebaserules_ruleset` と `google_firebaserules_release` は Firestore で取り込んだリソースの種類と同じです。
 
 ## Cloud Functions
 
-Firebase でラップされている Cloud Functions for Firebase ではなく、GCP の Cloud Functions を直接利用していました。
-そのため、以下のインポート定義を追加します。
+私のプロジェクトの場合、Firebase でラップされている Cloud Functions for Firebase ではなく、GCP の Cloud Functions を直接利用していました。
+そのため、以下のようにリソースのインポート定義を追加しました。
 
 | リソース名                                                                                                                                              | 説明                           |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
@@ -542,14 +542,16 @@ firebase_apple_app_id         = "{{Firebaseに登録されているAppleアプ�
 # ...
 ```
 
-Function を複数定義している場合は、それぞれに対してインポート定義が必要です。
+Function を**複数定義している場合は、それぞれに対してインポート定義が必要**です。
 
-関数は認証不要で全ユーザーがアクセスできるようにしていました。そのため、以下のような IAM ポリシーが設定されています。
-Terraform ではこのような IAM ポリシーもリソースとして定義されています。
+**Function は認証不要で全ユーザーがアクセスできるようにしていました**。そのため、以下のような IAM ポリシーが設定されています。
+Terraform では**このような IAM ポリシーも 1 つのリソースとして定義**されています。
+
+![](/images/manage-existing-firebase-by-terraform/access-iam-for-function.png)
 
 ## Cloud Tasks
 
-GCP の Cloud Tasks を利用していたので、以下のインポート定義を追加します。
+GCP の Cloud Tasks を利用していたので、以下のようにリソースのインポート定義を追加しました。
 
 | リソース名                                                                                                                   | 説明                 |
 | ---------------------------------------------------------------------------------------------------------------------------- | -------------------- |
@@ -594,7 +596,8 @@ firebase_storage_ruleset_name = "{{Firebase Storageのルールセット名を�
 
 ## サービスアカウント
 
-Cloud Tasks を Functions から呼び出すためのサービスアカウントを作成していたので、以下のインポート定義を追加します。
+Cloud Tasks を Functions から呼び出すためのサービスアカウントを作成していました。
+そのため、以下のようにリソースのインポート定義を追加しました。
 
 | リソース名                                                                                                                      | 説明                     |
 | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
