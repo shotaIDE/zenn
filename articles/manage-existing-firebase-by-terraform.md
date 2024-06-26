@@ -19,7 +19,7 @@ Terraform により新たに Firebase プロジェクトを作成する方法は
 https://firebase.google.com/docs/projects/terraform/get-started?hl=ja
 :::
 
-また、チーム開発における運用のための設定や、自動デプロイを組むところまでは書きません。
+また、チーム開発における運用のための State 管理や、自動デプロイを組むところまでは書きません。
 ローカルマシンのみで、Terraform により Firebase のインフラを管理できるようになるところまでを書きます。
 
 # 前提の方針
@@ -42,9 +42,6 @@ https://firebase.google.com/docs/projects/terraform/get-started?hl=ja
 
 **Terraform で管理するリソースに関しては、Firebase Console 上での手動変更は避ける**ようにします。
 手動で変更すると、Terraform が把握しているインフラの現在の状態と実際のインフラの状態が乖離してしまい、その乖離を解消する手間が発生するためです。
-
-また、tfstate ファイルは、GCP の Cloud Storage や AWS の S3 などのリモートストレージに保存し、チームで共有できます。
-本記事では、簡単のために、tfstate に関しては、ローカルに管理することとします。
 
 # 手順の概要
 
@@ -826,11 +823,16 @@ ios_android_application_id       = "{{iOSアプリのBundle IDとAndroidアプ�
 terraform apply
 ```
 
-これにより、`terraform.tfstate` が生成され、既存のリソース状態が Terraform により管理されるようになります。
+これにより、State ファイル(`terraform.tfstate` ファイル)が生成され、既存のリソース群が Terraform により管理されるようになります。
 
-以後は、Terraform の定義ファイルを修正してリソースを管理できます。
+以後は、Terraform の定義ファイルを修正し、Terraform によりリソースに変更を自動で適用できます。
 
-晴れて Firebase の IaC 化完了です。
+:::message
+一度 Terraform による適用が完了し State ファイルも生成されたら、インポート用のファイル `import.tf` は削除しても問題ありません。
+他の Terraform 定義でも利用している環境変数の定義(`variable` 定義)などは別ファイルに移動した上で、`import` の定義自体は削除すると良いです。
+:::
+
+晴れて Firebase の Terraform 管理化の完了です！おめでとうございます！🎉
 
 # まとめ
 
