@@ -8,6 +8,20 @@ published: false
 
 <!-- cspell:ignore appspot, cloudfunctions, cloudtasks, firebaserules, googleapi, gserviceaccount, identitytoolkit, ruleset, rulesets, tfstate, tfvars -->
 
+# 本記事で書かないこと
+
+本記事では、Terraform により新たに Firebase プロジェクトを作成する方法は書きません。
+あくまで、既存の Firebase プロジェクトを後付けで Terraform で管理する方法について書きます。
+
+:::message
+Terraform により新たに Firebase プロジェクトを作成する方法は、以下の公式サンプルが参考になります。
+
+https://firebase.google.com/docs/projects/terraform/get-started?hl=ja
+:::
+
+また、チーム開発における運用のための設定や、自動デプロイを組むところまでは書きません。
+ローカルマシンのみで、Terraform により Firebase のインフラを管理できるようになるところまでを書きます。
+
 # 前提の方針
 
 :::message alert
@@ -15,37 +29,22 @@ published: false
 そのため、本番環境での適用はおすすめしません。
 :::
 
-以下について、記事執筆時点では Terraform による管理に対応していないため、手動でセットアップ＆管理する必要があります。
+以下について、記事執筆時点では **Terraform による管理に対応していない**ため、手動でセットアップ＆管理する必要があります。
 
 - Firebase Cloud Messaging
 - Firebase Remote Config
 - Google Analytics for Firebase
 - Firebase Crashlytics
 
-上記以外に関しては、Terraform で管理します。
+**上記以外に関しては、Terraform で管理する**方針とします。
 
 ![対応しているリソースはCodeで管理し、対応していないリソースは手動で管理する]()
 
-また、Terraform で管理されているリソースに関しては、Firebase Console での変更は避けるようにします。
-手動で変更すると、Terraform 側にその変更を伝えるために、tfstate ファイルにも変更を反映する必要があります。
-
-tfstate とは、Terraform が管理するリソースの状態を記録するファイルです。
-これを利用することで、Terraform はリソースの状態を把握し、変更があった場合にはその変更を計算し、必要な更新手順を提案します。
+**Terraform で管理するリソースに関しては、Firebase Console 上での手動変更は避ける**ようにします。
+手動で変更すると、Terraform が把握しているインフラの現在の状態と実際のインフラの状態が乖離してしまい、その乖離を解消する手間が発生するためです。
 
 また、tfstate ファイルは、GCP の Cloud Storage や AWS の S3 などのリモートストレージに保存し、チームで共有できます。
 本記事では、簡単のために、tfstate に関しては、ローカルに管理することとします。
-
-# 本記事で書くこと
-
-本記事では、新たに Firebase プロジェクトを作成する際に Terraform によりセットアップする方法は書きません。
-
-これは公式のサンプルの通りに作ればおおよそ問題ないためです。
-
-https://firebase.google.com/docs/projects/terraform/get-started?hl=ja
-
-また、実際に CI/CD を組んでデプロイを自動化するところまでは書きません。
-
-ローカルのマシンで Terraform で管理、デプロイするまでを本記事では書きます。
 
 # 手順の概要
 
@@ -53,14 +52,14 @@ https://firebase.google.com/docs/projects/terraform/get-started?hl=ja
 
 1. 必要なツールをインストールする
 2. 作業ディレクトリを用意する
-3. (オプション)Terraform 上で Firebase を管理する方法について知る
-4. Terraform に既存のリソースをインポートする
+3. Terraform 上で Firebase を管理するための知識を得る
+4. Terraform に既存リソースのインポート定義を作成する
 5. Terraform で管理できるリソースを定義する。
 6. 各リソースを import するための ID を取得する。
 7. Terraform の定義ファイルを自動生成する。
 8. Terraform plan で差分なく定義されているか確認する。
 
-# 必要なツールをインストールする
+# 1. 必要なツールをインストールする
 
 以下のページを参考に Terraform をセットアップします。
 
@@ -85,7 +84,7 @@ https://cloud.google.com/sdk/docs/install?hl=ja
 本格的にチームで運用する際や自動デプロイを組む場合は、必要最小限の権限を持つアカウントを用意して利用することをおすすめします。
 :::
 
-# 作業ディレクトリを用意する
+# 2. 作業ディレクトリを用意する
 
 作業用のディレクトリを作成し、その中に 3 つの Terraform のファイルを配置します。
 
@@ -149,7 +148,7 @@ https://registry.terraform.io/providers/hashicorp/google-beta/latest
 ```
 
 Terraform には環境変数を読み込む機能があり、`terraform.tfvars` に記載した変数は自動的に読み込まれます。
-このように環境変数として定義することで、センシティブな情報をバージョン管理対象外としたり、複数の環境での利用を容易にできます。
+このように環境変数として定義することで、複数の環境への適用を容易にしたり、秘匿情報をバージョン管理対象外としたりできます。
 
 https://developer.hashicorp.com/terraform/language/values/variables#variable-definitions-tfvars-files
 
@@ -161,23 +160,22 @@ terraform init
 
 生成されたファイルをコミットしておきます。
 
-# Terraform 上で Firebase を管理するための知識を得る
+# 3. Terraform 上で Firebase を管理するための知識を得る
 
 :::message
 本項目はオプションです。不要な方はスキップしてください。
 :::
 
-本記事の内容を先に進める場合、Firebase プロジェクトを作成し各種機能を有効にした際、リソースがどのようにプロビジョニングされているかの知識があるとスムーズです。
+ここから先、Firebase プロジェクトを作成し各種機能を有効にした際、リソースがどのように構築されているかの知識があるとスムーズです。
 
-そのため、以下公式ドキュメントにおける「Terraform をサポートする Firebase リソース」の部分を確認することをおすすめします。
+そのため、以下公式ドキュメントにおける「Terraform をサポートする Firebase リソース」の部分を読んでみることをおすすめします。
 
 https://firebase.google.com/docs/projects/terraform/get-started?hl=ja#supported-resources
 
 また、Firebase のプロジェクトを Terraform によりゼロから作成してみることもおすすめです。
-
 上記のドキュメントには、実際に Terraform で Firebase プロジェクトを構築するためのサンプルが豊富に記載されています。
 
-# Terraform に既存リソースのインポート定義を作成する
+# 4. Terraform に既存リソースのインポート定義を作成する
 
 Terraform で既存のインフラリソースを管理するためには、各リソースを **Terraform にインポートする**必要があります。
 
