@@ -33,8 +33,8 @@ https://firebase.google.com/docs/projects/terraform/get-started?hl=ja
 
 - Firebase Cloud Messaging
 - Firebase Remote Config
-- Google Analytics for Firebase
 - Firebase Crashlytics
+- Google Analytics for Firebase
 
 **上記以外に関しては、Terraform で管理する**方針とします。
 
