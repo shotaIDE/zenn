@@ -33,12 +33,12 @@ https://firebase.google.com/docs/projects/terraform/get-started?hl=ja
 
 - Firebase Cloud Messaging
 - Firebase Remote Config
-- Google Analytics for Firebase
 - Firebase Crashlytics
+- Google Analytics for Firebase
 
 **上記以外に関しては、Terraform で管理する**方針とします。
 
-![対応しているリソースはCodeで管理し、対応していないリソースは手動で管理する]()
+![](/images/manage-existing-firebase-by-terraform/manage-firebase-by-terraform-architecture.png)
 
 **Terraform で管理するリソースに関しては、Firebase Console 上での手動変更は避ける**ようにします。
 手動で変更すると、Terraform が把握しているインフラの現在の状態と実際のインフラの状態が乖離してしまい、その乖離を解消する手間が発生するためです。
@@ -110,7 +110,8 @@ provider "google-beta" {
 https://registry.terraform.io/providers/hashicorp/google-beta/latest
 
 :::message
-`user_project_override = true` は以下のエラーを回避するために設定しています。
+課金対象となっている GCP プロジェクトの場合、`user_project_override = true` が必要と考えられます。
+指定しない場合、インポート作業の際に以下のようなエラーが発生しました。
 
 ```log
 ╷
@@ -128,8 +129,10 @@ https://registry.terraform.io/providers/hashicorp/google-beta/latest
 │   }
 │ ]
 ╵
+
 ```
 
+参考: https://registry.terraform.io/providers/hashicorp/google-beta/latest/docs/guides/provider_reference#user_project_override
 :::
 
 ```hcl:import.tf
