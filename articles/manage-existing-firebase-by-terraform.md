@@ -110,7 +110,8 @@ provider "google-beta" {
 https://registry.terraform.io/providers/hashicorp/google-beta/latest
 
 :::message
-`user_project_override = true` は以下のエラーを回避するために設定しています。
+課金対象となっている GCP プロジェクトの場合、`user_project_override = true` が必要と考えられます。
+指定しない場合、インポート作業の際に以下のようなエラーが発生しました。
 
 ```log
 ╷
@@ -128,8 +129,10 @@ https://registry.terraform.io/providers/hashicorp/google-beta/latest
 │   }
 │ ]
 ╵
+
 ```
 
+参考: https://registry.terraform.io/providers/hashicorp/google-beta/latest/docs/guides/provider_reference#user_project_override
 :::
 
 ```hcl:import.tf
