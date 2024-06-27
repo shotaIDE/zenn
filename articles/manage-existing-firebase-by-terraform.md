@@ -38,7 +38,7 @@ https://firebase.google.com/docs/projects/terraform/get-started?hl=ja
 
 **上記以外に関しては、Terraform で管理する**方針とします。
 
-![対応しているリソースはCodeで管理し、対応していないリソースは手動で管理する]()
+![](/images/manage-existing-firebase-by-terraform/manage-firebase-by-terraform-architecture.png)
 
 **Terraform で管理するリソースに関しては、Firebase Console 上での手動変更は避ける**ようにします。
 手動で変更すると、Terraform が把握しているインフラの現在の状態と実際のインフラの状態が乖離してしまい、その乖離を解消する手間が発生するためです。
