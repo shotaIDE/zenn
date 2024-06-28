@@ -8,6 +8,10 @@ published: false
 
 <!-- cspell:ignore appspot, cloudfunctions, cloudtasks, firebaserules, googleapi, gserviceaccount, identitytoolkit, ruleset, rulesets, tfstate, tfvars -->
 
+# はじめに
+
+Terraform でインフラ構成を管理し、デプロイを自動化するの、とても便利でかっこいいですよね。
+
 # 本記事で書かないこと
 
 本記事では、Terraform により新たに Firebase プロジェクトを作成する方法は書きません。
