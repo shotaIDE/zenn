@@ -1,6 +1,6 @@
 ---
-title: "手動で作ったFirebaseのプロジェクトをTerraformで管理して幸せになる"
-emoji: "💭"
+title: "Firebaseのプロジェクトを後付けでTerraformで管理して幸せになる"
+emoji: "🔥"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["firebase", "terraform", "ios", "android"]
 published: false
@@ -8,7 +8,15 @@ published: false
 
 <!-- cspell:ignore appspot, cloudfunctions, cloudtasks, firebaserules, googleapi, gserviceaccount, identitytoolkit, ruleset, rulesets, tfstate, tfvars -->
 
-# 本記事で書かないこと
+# はじめに
+
+Terraform でインフラ構成を管理し、デプロイを自動化するの、とても便利でかっこいいですよね。
+
+そんな軽い動機で、既存の Firebase プロジェクトを Terraform で管理することにチャレンジしてみました。
+
+しかし、想像以上に手間取ることが多かったので、どなたかの役に立てばと思い、手順をまとめてみます。
+
+# 本記事で扱う内容
 
 本記事では、Terraform により新たに Firebase プロジェクトを作成する方法は書きません。
 あくまで、既存の Firebase プロジェクトを後付けで Terraform で管理する方法について書きます。
@@ -837,8 +845,8 @@ terraform apply
 
 晴れて Firebase の Terraform 管理化の完了です！おめでとうございます！🎉
 
-# まとめ
+# 最後に
 
-# 参考
+Firebase のリソースを Terraform で管理できるようになると、安心感が増しますね。
 
-https://zenn.dev/maretol/articles/d68bf92c76d0ba
+Firebase の扱えるリソース範囲が今より広がり、プロバイダーもベータ版から正式版に昇格すれば、今よりもっと活用できるシーンが増えると考えられるので、待ち遠しいです。
