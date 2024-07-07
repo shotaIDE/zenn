@@ -1,5 +1,5 @@
 ---
-title: "Firebaseのプロジェクトを後付けでTerraformで管理して幸せになる"
+title: "Firebaseのプロジェクトを後付けでTerraform管理して幸せになる"
 emoji: "🔥"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["firebase", "terraform", "ios", "android"]
