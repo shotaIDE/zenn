@@ -2,7 +2,7 @@ runs:
   using: "composite"
   steps:
     - name: Cache node modules always
-      uses: pat-s/always-upload-cache@v3
+      uses: pat-s/always-upload-cache@9a0d1c3e1a8260b05500f9b67a5be8f2a1299819 # v3
       env:
         cache-name: cache-node-modules
       with:
