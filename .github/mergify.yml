@@ -1,7 +1,0 @@
-pull_request_rules:
-  - name: Automatically merge PRs from dependabot
-    conditions:
-      - "author = dependabot[bot]"
-    actions:
-      merge:
-        method: squash

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "enabledManagers": ["github-actions", "npm"],
+  "extends": ["config:best-practices"],
+  "labels": ["dependencies"],
+  "packageRules": [
+    {
+      "matchManagers": ["github-actions"],
+      "addLabels": ["github_actions"],
+      "automerge": true
+    },
+    {
+      "matchManagers": ["npm"],
+      "addLabels": ["javascript"],
+      "automerge": true
+    }
+  ],
+  "prConcurrentLimit": 1,
+  "reviewers": ["shotaIDE"]
+}
