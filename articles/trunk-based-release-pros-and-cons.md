@@ -2,7 +2,7 @@
 title: "トランクベース開発におけるメリットとデメリット"
 emoji: "⛴️"
 type: "idea" # tech: 技術記事 / idea: アイデア
-topics: ["ios", "android"]
+topics: ["トランクベース開発"]
 published: false
 ---
 
