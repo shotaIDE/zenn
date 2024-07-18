@@ -499,7 +499,7 @@ xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 
 ## Cloud Functions
 
-私のプロジェクトの場合、Firebase でラップされている Cloud Functions for Firebase ではなく、Google Cloud の Cloud Functions を直接利用していました。
+私のプロジェクトの場合、Cloud Functions for Firebase ではなく、Google Cloud の Cloud Functions を直接利用していました。
 そのため、以下のようにリソースのインポート定義を追加しました。
 
 | リソース名                                                                                                                                              | 説明                           |
