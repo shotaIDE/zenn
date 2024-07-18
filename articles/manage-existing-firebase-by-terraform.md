@@ -118,7 +118,7 @@ provider "google-beta" {
 https://registry.terraform.io/providers/hashicorp/google-beta/latest
 
 :::message
-課金対象となっている GCP プロジェクトの場合、`user_project_override = true` が必要と考えられます。
+課金対象となっている Google Cloud プロジェクトの場合、`user_project_override = true` が必要と考えられます。
 指定しない場合、インポート作業の際に以下のようなエラーが発生しました。
 
 ```log
@@ -206,7 +206,7 @@ https://developer.hashicorp.com/terraform/language/import/generating-configurati
 Terraform ファイルにインポート定義を記載するには、以下の手順が必要です。
 
 1. **既存のインフラ構成に対応する Terraform のリソースを見つける**
-2. そのリソースの**インポートに必要な ID フォーマットを確認**し、Firebase や GCP のコンソール、CLI ツールから ID を取得する
+2. そのリソースの**インポートに必要な ID フォーマットを確認**し、Firebase や Google Cloud のコンソール、CLI ツールから ID を取得する
 3. リソースに対し、**Terraform 上で管理するための名前をつける**
 
 そして、以下のような形式で Terraform ファイルに定義します。
@@ -232,7 +232,7 @@ https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/f
 本項目は、Cloud Firestore や Cloud Storage for Firebase を利用している場合に必要な手順です。
 :::
 
-Firebase CLI や GCP CLI から、Firebase のセキュリティールールの ID を調べる方法が分かりませんでした。
+Firebase CLI や Google Cloud CLI から、Firebase のセキュリティールールの ID を調べる方法が分かりませんでした。
 そのため、一旦 Terraform で関連するリソースをインポートすることで、間接的にセキュリティールールの名前を調べることにします。
 
 まず、以下内容の一時ファイル `temporary.tf` を作成します。
@@ -253,10 +253,10 @@ resource "google_firebaserules_release" "storage" {
 }
 ```
 
-また、GCP のプロジェクト ID を調べてから、以下のコマンドを実行します。
+また、Google Cloud のプロジェクト ID を調べてから、以下のコマンドを実行します。
 
 ```shell
-PROJECT_ID="{{GCPのプロジェクトIDを記載}}"
+PROJECT_ID="{{Google CloudのプロジェクトIDを記載}}"
 terraform import google_firebaserules_release.firestore "projects/$PROJECT_ID/releases/cloud.firestore"
 terraform import google_firebaserules_release.storage "projects/$PROJECT_ID/releases/firebase.storage/$PROJECT_ID.appspot.com"
 ```
@@ -269,7 +269,7 @@ terraform import google_firebaserules_release.storage "projects/$PROJECT_ID/rele
 バリューは、以下のようなフォーマットになっているはずです。
 
 ```text
-projects/{{GCPのプロジェクトID}}/rulesets/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+projects/{{Google CloudのプロジェクトID}}/rulesets/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 ```
 
 `x` は数字またはアルファベットを示しています。
@@ -290,7 +290,7 @@ projects/{{GCPのプロジェクトID}}/rulesets/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxx
 
 | リソース名                                                                                                                         | 説明                                    |
 | ---------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
-| [google_project](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_project)                    | GCP プロジェクト本体                    |
+| [google_project](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_project)                    | Google Cloud プロジェクト本体           |
 | [google_firebase_project](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firebase_project)         | Firebase プロジェクト本体               |
 | [google_firebase_apple_app](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firebase_apple_app)     | Firebase に登録された Apple(iOS) アプリ |
 | [google_firebase_android_app](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/firebase_android_app) | Firebase に登録された Android アプリ    |
@@ -300,7 +300,7 @@ projects/{{GCPのプロジェクトID}}/rulesets/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxx
 ```diff hcl:import.tf
 +variable "google_project_id" {
 +  type        = string
-+  description = "ID for GCP project."
++  description = "ID for Google Cloud project."
 +}
 +
 +variable "firebase_apple_app_id" {
@@ -335,7 +335,7 @@ projects/{{GCPのプロジェクトID}}/rulesets/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxx
 ```
 
 ```diff hcl:terraform.tfvars
-+google_project_id       = "{{GCPのプロジェクトIDを記載}}"
++google_project_id       = "{{Google CloudのプロジェクトIDを記載}}"
 +firebase_apple_app_id   = "{{Firebaseに登録されているAppleアプリのアプリIDを記載}}"
 +firebase_android_app_id = "{{Firebaseに登録されているAndroidアプリのアプリIDを記載}}"
 ```
@@ -499,7 +499,7 @@ xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 
 ## Cloud Functions
 
-私のプロジェクトの場合、Firebase でラップされている Cloud Functions for Firebase ではなく、GCP の Cloud Functions を直接利用していました。
+私のプロジェクトの場合、Firebase でラップされている Cloud Functions for Firebase ではなく、Google Cloud の Cloud Functions を直接利用していました。
 そのため、以下のようにリソースのインポート定義を追加しました。
 
 | リソース名                                                                                                                                              | 説明                           |
@@ -510,12 +510,12 @@ xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 ```diff hcl:import.tf
 variable "google_project_id" {
   type        = string
-  description = "ID for GCP project."
+  description = "ID for Google Cloud project."
 }
 
 +variable "google_project_location" {
 +  type        = string
-+  description = "Location for GCP project."
++  description = "Location for Google Cloud project."
 +}
 +
 variable "firebase_apple_app_id" {
@@ -542,8 +542,8 @@ import {
 ```
 
 ```diff hcl:terraform.tfvars
-google_project_id             = "{{GCPのプロジェクトIDを記載}}"
-+google_project_location       = "{{GCPプロジェクトのロケーションを記載}}"
+google_project_id             = "{{Google CloudのプロジェクトIDを記載}}"
++google_project_location       = "{{Google Cloudプロジェクトのロケーションを記載}}"
 firebase_apple_app_id         = "{{Firebaseに登録されているAppleアプリのアプリIDを記載}}"
 # ...
 ```
@@ -557,7 +557,7 @@ Terraform では**このような IAM ポリシーも 1 つのリソースとし
 
 ## Cloud Tasks
 
-GCP の Cloud Tasks を利用していたので、以下のようにリソースのインポート定義を追加しました。
+Google Cloud の Cloud Tasks を利用していたので、以下のようにリソースのインポート定義を追加しました。
 
 | リソース名                                                                                                                   | 説明                 |
 | ---------------------------------------------------------------------------------------------------------------------------- | -------------------- |
