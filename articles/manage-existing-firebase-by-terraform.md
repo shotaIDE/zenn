@@ -7,8 +7,6 @@ publication_name: "sun_asterisk"
 published: false
 ---
 
-a
-
 <!-- cspell:ignore appspot, cloudfunctions, cloudtasks, firebaserules, googleapi, gserviceaccount, identitytoolkit, ruleset, rulesets, tfstate, tfvars -->
 
 # はじめに
