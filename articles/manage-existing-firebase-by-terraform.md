@@ -3,6 +3,7 @@ title: "Firebaseのプロジェクトを後付けでTerraform管理して幸せ�
 emoji: "🔥"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["firebase", "terraform", "ios", "android"]
+publication_name: "sun_asterisk"
 published: false
 ---
 
