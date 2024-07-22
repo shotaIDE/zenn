@@ -4,7 +4,7 @@ emoji: "🔥"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["firebase", "terraform", "ios", "android"]
 publication_name: "sun_asterisk"
-published: false
+published: true
 ---
 
 <!-- cspell:ignore appspot, cloudfunctions, cloudtasks, firebaserules, googleapi, gserviceaccount, identitytoolkit, ruleset, rulesets, tfstate, tfvars -->
