@@ -59,7 +59,7 @@ https://docs.renovatebot.com/configuration-options/#matchpackagenames
 
 これにより、以下のような PR が作成されます。
 
-![画像を挿入]()
+![](/images/group-flutter-firebase-libs-for-renovate/pr-updating-firebase-libraries.png)
 
 # 補足
 
