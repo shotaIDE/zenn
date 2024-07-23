@@ -24,7 +24,13 @@ Renovate では、初期状態だと 1 つ 1 つのライブラリしか更新�
 
 # やり方の概要
 
-Renovate の group を利用し、利用している Firebase のライブラリを指定します。
+Renovate の `matchPackageNames` を利用し、利用している Firebase のライブラリを 1 つの PR で更新するようにします。
+
+https://docs.renovatebot.com/configuration-options/#matchpackagenames
+
+# やり方の詳細
+
+以下のように Renovate の設定ファイルを構成します。
 
 ```json:renovate.json
 {
@@ -51,7 +57,9 @@ Renovate の group を利用し、利用している Firebase のライブラリ
 }
 ```
 
-# やり方の詳細
+これにより、以下のような PR が作成されます。
+
+![画像を挿入]()
 
 # 補足
 
@@ -62,3 +70,8 @@ https://firebase.google.com/docs/android/learn-more?hl=ja#bom
 これは、1 つのバージョンを指定することで、Firebase のライブラリ群の依存関係を解決するための仕組みです。
 
 Flutter ではこのような仕組みが提供されていないため、上記のような工夫が必要になります。
+
+また、Renovate には group のプリセットが用意されています。
+しかし、記事執筆時点では Firebase のライブラリはそのプリセットには含まれていませんでした。
+
+https://docs.renovatebot.com/presets-group/
