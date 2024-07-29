@@ -1,5 +1,5 @@
 ---
-title: "Flutterで利用しているFirebaseのライブラリを、Renovateでうまく自動更新する"
+title: "Flutterで利用している複数のFirebaseライブラリを、Renovateでうまく自動更新する"
 emoji: "🐡"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["flutter", "firebase", "renovate", "ios", "android"]
@@ -8,17 +8,17 @@ published: false
 
 # 背景
 
-Renovate とは利用しているライブラリのバージョンアップを効率化するためのツールです。
+Renovate は、依存しているライブラリのバージョンアップを効率化するためのツールです。
 
 https://docs.renovatebot.com/
 
-Flutter で Firebase のライブラリを導入している際、Firebase の各種ライブラリを複数導入していることがあります。
+Flutter で Firebase を使っていると、多くの場合 Firebase のライブラリを複数導入することになります。
 
-これらのライブラリは、同時に新しいバージョンがリリースされることも多く、かつ、依存関係もあります。
-そのため、同時に新しいバージョンに乗り換える必要が出てきます。
+これらのライブラリは、同時に新しいバージョンがリリースされることも多く、また、**同時にバージョンアップしないといけない制約が設定されている**こともあります。
 
-Renovate では、初期状態だと 1 つ 1 つのライブラリしか更新しません。
-そのため、上記のライブラリ間の依存関係の制約により自動更新に失敗する場合があります。
+一方で **Renovate は初期設定の状態だと、 1 回につき 1 つのライブラリしか更新しません**。
+
+そのため、Flutter における Firebase のライブラリを Renovate でアップデートしようとすると、バージョン制約の解決により失敗する場合があります。
 
 今回はその解決策を紹介します。
 
@@ -57,21 +57,27 @@ https://docs.renovatebot.com/configuration-options/#matchpackagenames
 }
 ```
 
-これにより、以下のような PR が作成されます。
+`matchPackageNames` は一例です。
+ご自身の管理する `pubspec.yaml` を参考に、利用している Firebase のライブラリを指定してください。
+
+上記の設定をメインブランチにマージすると、以下のように **Firebase のライブラリ群を同時に更新する PR が 1 つ作成されます**。
 
 ![](/images/group-flutter-firebase-libs-for-renovate/pr-updating-firebase-libraries.png)
 
-# 補足
+# 補足 1: Renovate におけるライブラリグループ化のプリセット
 
-Android ネイティブで Firebase を導入している場合、Firebase のライブラリ群の依存関係を解決するために、Firebase Android BoM を利用できます。
+本記事で紹介したライブラリ群のグループ化に関して、Renovate 自体にいくつかのプリセットが用意されています。
+しかし、記事執筆時点では Firebase のライブラリ群をグループ化するようなプリセットは見つかりませんでした。
+
+https://docs.renovatebot.com/presets-group/
+
+# 補足 2: Android ネイティブにおける Firebase のライブラリ群のバージョン制約解決
+
+また、Android ネイティブで Firebase を導入している場合、Firebase Android BoM が利用できます。
 
 https://firebase.google.com/docs/android/learn-more?hl=ja#bom
 
-これは、1 つのバージョンを指定することで、Firebase のライブラリ群の依存関係を解決するための仕組みです。
+これは、Firebase のライブラリ群のバージョン制約解決を効率的に行うための仕組みです。
+BoM に対するバージョンを 1 つだけ指定すれば、適切な Firebase のライブラリ群のバージョンを解決してくれます。
 
-Flutter ではこのような仕組みが提供されていないため、上記のような工夫が必要になります。
-
-また、Renovate には group のプリセットが用意されています。
-しかし、記事執筆時点では Firebase のライブラリはそのプリセットには含まれていませんでした。
-
-https://docs.renovatebot.com/presets-group/
+Flutter ではこのような仕組みが提供されていないため、本記事で紹介したような工夫が必要になります。
