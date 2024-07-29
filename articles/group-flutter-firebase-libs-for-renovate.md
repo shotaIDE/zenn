@@ -1,6 +1,6 @@
 ---
 title: "Flutterで利用している複数のFirebaseライブラリを、Renovateでうまく自動更新する"
-emoji: "🐡"
+emoji: "⛓"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["flutter", "firebase", "renovate", "ios", "android"]
 published: false
