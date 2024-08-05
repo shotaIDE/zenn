@@ -1,5 +1,5 @@
 ---
-title: "AndroidアプリのWebソケットクライアントで受信する一部のメッセージを遅延させる"
+title: "AndroidアプリのWebソケットクライアントで受信する一部のメッセージをプロキシから遅延させる"
 emoji: "😺"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["android", "mitmproxy", "kotlin"]
@@ -8,11 +8,29 @@ published: false
 
 <!-- cSpell:ignore asyncio, mitmproxy -->
 
+非常にニッチな内容です。
+
+図が必要か？
+
 # 手順
 
+前提として、Android アプリとプロキシーの通信内容を復号するため、Android アプリ側でユーザーがインストールしたルート証明書を信頼する必要があります。
+これには、Android アプリのネットワーク設定の修正が必要です。
+詳細は、以下の記事をご確認ください。
+
+手順としては以下です。
+
 1. mitmproxy をインストールする
-2. アプリの Web ソケットクライアントにプロキシーを設定する
-3. mitmproxy でメッセージを遅延させるスクリプトを書く
+2. Android 端末に、mitmproxy のルート証明書をインストールする
+3. アプリの Web ソケットクライアントにプロキシーを設定する
+4. mitmproxy でメッセージを遅延させるスクリプトを書く
+5. 動作確認
+
+# mitmproxy をインストールする
+
+公式ページを参考に、mitmproxy をインストールします。
+
+https://docs.mitmproxy.org/stable/overview-installation/
 
 # mitmproxy でメッセージを遅延させるスクリプトを書く
 
