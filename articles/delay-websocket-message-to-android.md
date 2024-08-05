@@ -6,7 +6,7 @@ topics: ["android", "mitmproxy", "kotlin"]
 published: false
 ---
 
-<!-- cSpell:ignore asyncio, mitmproxy -->
+<!-- cSpell:ignore asyncio, mitmdump, mitmproxy -->
 
 非常にニッチな内容です。
 
@@ -79,6 +79,14 @@ Issue など漁ってみましたが、原因や解決策が不明でした。�
 
 # mitmproxy でメッセージを遅延させるスクリプトを書く
 
+mitmproxy は、Python でスクリプトを書いて動作をカスタマイズできます。
+公式ページにサンプルスクリプトが載っているので、参考にしてください。
+
+https://docs.mitmproxy.org/stable/addons-examples/
+
+今回は、特定のメッセージを遅延させるスクリプトを書きます。
+以下のようにしました。
+
 ```python:delay-websocket-message.py
 # coding: utf-8
 
@@ -123,4 +131,16 @@ async def post_websocket_message_async(flow: http.HTTPFlow, message: str):
     ctx.master.commands.call("inject.websocket", flow, to_client, message.encode())
 
     logging.info(f"[{LOG_TAG}] Send the delayed message from the server: {message}")
+```
+
+以下のコマンドで mitmproxy を起動します。
+
+```shell
+mitmproxy -s delay-websocket-message.py
+```
+
+スクリプト内で出力しているログを確認するには、以下のコマンドにてログ出力モードにするとわかりやすいです。
+
+```shell
+mitmdump -s delay-websocket-message.py
 ```
