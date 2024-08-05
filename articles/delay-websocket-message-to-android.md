@@ -32,6 +32,32 @@ published: false
 
 https://docs.mitmproxy.org/stable/overview-installation/
 
+# Android 端末に、mitmproxy のルート証明書をインストールする
+
+公式ページを参考に、mitmproxy のルート証明書を Android 端末にインストールします。
+
+https://docs.mitmproxy.org/stable/concepts-certificates/
+
+以下は上記のページの内容を抜粋したものです。
+
+まず、mitmproxy を起動します。
+
+```bash
+mitmproxy
+```
+
+次に、Android 端末のプロキシーを以下のように設定します。
+
+- ホスト名: mitmproxy を起動している PC の IP アドレス
+- ポート: 8080
+  - mitmproxy のデフォルトのポート番号
+
+Android 端末のブラウザーで、 http://mitm.it にアクセスします。
+
+Android のボタンをタップし、ルート証明書をダウンロードします。
+
+OS 設定で「CA 証明書」で検索し、CA 証明書の画面を開きます。ダウンロードしたルート証明書をインストールします。
+
 # mitmproxy でメッセージを遅延させるスクリプトを書く
 
 ```python:delay-websocket-message.py
