@@ -4,7 +4,7 @@ emoji: "⛓"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["flutter", "firebase", "renovate", "ios", "android"]
 publication_name: "sun_asterisk"
-published: false
+published: true
 ---
 
 # 背景
