@@ -10,7 +10,9 @@ published: false
 
 非常にニッチな内容です。
 
-図が必要か？
+以下のようなことをやります。
+
+![](/images/delay-websocket-message-to-android/summary.png)
 
 # 手順
 
