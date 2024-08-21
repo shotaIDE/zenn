@@ -6,7 +6,7 @@ topics: ["android", "mitmproxy", "kotlin"]
 published: false
 ---
 
-<!-- cSpell:ignore asyncio, mitmdump, mitmproxy -->
+<!-- cSpell:ignore asyncio, inet, mitmdump, mitmproxy -->
 
 非常にニッチな内容です。
 
