@@ -46,26 +46,41 @@ https://docs.mitmproxy.org/stable/concepts-certificates/
 
 以下は上記のページの内容を抜粋したものです。
 
-まず、mitmproxy を起動します。
+まず、以下のコマンドにより mitmproxy を起動します。
 
 ```bash
 mitmproxy
 ```
 
-次に、Android 端末のプロキシーを以下のように設定します。
+次に、Android 端末のネットワーク設定におけるプロキシーを以下のように設定します。
 
-- ホスト名: mitmproxy を起動している PC の IP アドレス
-- ポート: 8080
-  - mitmproxy のデフォルトのポート番号
+| 項目       | 設定値                                              |
+| ---------- | --------------------------------------------------- |
+| ホスト名   | mitmproxy を起動している PC の LAN 内の IP アドレス |
+| ポート番号 | `8080`（mitmproxy のデフォルトのポート番号）        |
+
+![プロキシー設定のスクショ]()
 
 Android 端末のブラウザーで、 http://mitm.it にアクセスします。
+Android の証明書入手ボタンをタップし、ルート証明書を Android 端末にダウンロードします。
 
-Android のボタンをタップし、ルート証明書をダウンロードします。
+![証明書ダウンロードページのスクショ]()
 
-OS 設定で「CA 証明書」で検索し、CA 証明書の画面を開きます。ダウンロードしたルート証明書をインストールします。
+OS 設定で「CA 証明書」で検索し、CA 証明書の画面を開きます。
+![CA証明書のスクショ]()
+
+ダウンロードしたルート証明書を選択し、インストールします。
+
+![選択画面のスクショ]()
 
 ブラウザーで https://example.com にアクセスします。
 これにより、mitmproxy のコンソール画面に通信内容が表示されれば、設定は成功です。
+
+![](/images/delay-websocket-message-to-android/example-request-summary.png)
+
+各行をクリックすると詳細が表示されます。
+
+![](/images/delay-websocket-message-to-android/example-request-details.png)
 
 # アプリの Web ソケットクライアントにプロキシーを設定する
 
