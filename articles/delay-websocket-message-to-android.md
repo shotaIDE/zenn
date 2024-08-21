@@ -86,16 +86,46 @@ OS 設定で「CA 証明書」で検索し、CA 証明書の画面を開きま�
 
 アプリの Web ソケットクライアントにプロキシーを設定します。
 
-例えば、OkHttp を使用している場合、以下のように設定します。
+Web ソケットクライアントのライブラリは複数ありますが、本記事では OkHttp を使用した例を示します。
+
+https://github.com/square/okhttp
+
+プロキシーのセットアップにおいて、以下のように設定します。
+
+```diff kotlin
+class WebSocketClient : WebSocketListener() {
+    private val webSocket: WebSocket
+
+    init {
+        val client = OkHttpClient.Builder()
++            .proxy(
++                Proxy(
++                    Proxy.Type.HTTP,
++                    InetSocketAddress("192.168.11.13", 8080)
++                )
+            )
+            .build()
+        val request = Request.Builder()
+            .url("wss://your.domain/path")
+            .build()
+        webSocket = client.newWebSocket(request, this)
+    }
+
+    // ...
+}
+```
+
+`192.168.11.13` の部分は、mitmproxy を起動している PC の LAN 内の IP アドレスに置き換えてください。
 
 :::message
-Java-WebSocket を使用している場合、以下のようなエラーが出て、プロキシーが設定できませんでした。
+[Java-WebSocket](https://github.com/TooTallNate/Java-WebSocket) を使用している場合、以下のようなエラーが出て、プロキシーが設定できませんでした。
 
 ```log
 Invalid proxy
 ```
 
-Issue など漁ってみましたが、原因や解決策が不明でした。そのため、Java-WebSocket での動作確認はできていません。
+Issue など漁ってみましたが、原因や解決策が不明でした。
+そのため、Java-WebSocket での動作確認はできていません。
 :::
 
 # mitmproxy でメッセージを遅延させるスクリプトを書く
