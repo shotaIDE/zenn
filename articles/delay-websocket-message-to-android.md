@@ -115,6 +115,10 @@ class WebSocketClient : WebSocketListener() {
 }
 ```
 
+以下で Web ソケットのテストサーバーを利用できます。
+
+https://websocket.org/tools/websocket-echo-server/
+
 `192.168.11.13` の部分は、mitmproxy を起動している PC の LAN 内の IP アドレスに置き換えてください。
 
 :::message
