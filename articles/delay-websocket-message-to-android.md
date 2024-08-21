@@ -130,13 +130,13 @@ Issue など漁ってみましたが、原因や解決策が不明でした。
 
 # mitmproxy でメッセージを遅延させるスクリプトを書く
 
-mitmproxy は、Python でスクリプトを書いて動作をカスタマイズできます。
-公式ページにサンプルスクリプトが載っているので、参考にしてください。
+mitmproxy は、Python でスクリプトを書いてプロキシーの動作を細かくカスタマイズできます。
+公式ページにサンプルスクリプトが豊富に掲載されています。
 
 https://docs.mitmproxy.org/stable/addons-examples/
 
 今回は、特定のメッセージを遅延させるスクリプトを書きます。
-以下のようにしました。
+以下のような Python スクリプトを任意の場所に保存してください。
 
 ```python:delay-websocket-message.py
 # coding: utf-8
@@ -155,33 +155,36 @@ async def websocket_message(flow: http.HTTPFlow):
 
     assert flow.websocket is not None
 
-    # 最新のメッセージを取得
+    # Webソケットにおける最新のメッセージを取得
     latest_message = flow.websocket.messages[-1]
 
     if latest_message.from_client:
-        logging.info(f"[{LOG_TAG}] Received a message from the client: {latest_message.text}")
+        # クライアントから送信されたメッセージは、特に何もしない
+        logging.info(f"[{LOG_TAG}] Received a message from client: {latest_message.text}")
     else:
-        # スクリプト内で生成したメッセージに対して同じ処理を繰り返さないよう、`injected` フラグで識別
+        # サーバーから送信されたメッセージに対して、特定のキーワードが含まれていたら、遅延処理を行う
+        # また、スクリプト内で生成したメッセージに対して再起的に同じ処理を繰り返さないよう、`injected` フラグで識別
         if not latest_message.injected and 'keyword' in latest_message.text
-            logging.info(f"[{LOG_TAG}] Will delay a message from the server: {latest_message.text}")
+            logging.info(f"[{LOG_TAG}] Will delay a message from server: {latest_message.text}")
 
-            # サーバーから送信されたメッセージをキャンセルする
+            # サーバーから送信された元々のメッセージをキャンセルする
             latest_message.drop()
 
             # サーバーから送信されたメッセージと同一のメッセージを、遅延させた後に再送する
-            # websocket_message の処理をブロックすると、他のメッセージも送信されないため、非同期で処理する
+            # websocket_message の処理をブロックすると、後続の他メッセージも送信されずに止まってしまうため、非同期で処理する
             asyncio.create_task(post_websocket_message_async(flow, latest_message.text))
         else:
-            logging.info(f"[{LOG_TAG}] Received a message from the server: {latest_message.text}")
+            logging.info(f"[{LOG_TAG}] Received a message from server: {latest_message.text}")
 
 
 async def post_websocket_message_async(flow: http.HTTPFlow, message: str):
     await asyncio.sleep(0.5)
 
     to_client = True
+    # サーバーから送信されたメッセージと同じものをクライアントに再送信する
     ctx.master.commands.call("inject.websocket", flow, to_client, message.encode())
 
-    logging.info(f"[{LOG_TAG}] Send the delayed message from the server: {message}")
+    logging.info(f"[{LOG_TAG}] Send the delayed message from server: {message}")
 ```
 
 以下のコマンドで mitmproxy を起動します。
@@ -190,8 +193,14 @@ async def post_websocket_message_async(flow: http.HTTPFlow, message: str):
 mitmproxy -s delay-websocket-message.py
 ```
 
+`delay-websocket-message.py` の部分は、スクリプトのパスに適宜置き換えてください。
+
 スクリプト内で出力しているログを確認するには、以下のコマンドにてログ出力モードにするとわかりやすいです。
 
 ```shell
 mitmdump -s delay-websocket-message.py
 ```
+
+以下のように遅延処理が行われることを確認できます。
+
+![処理の様子]()
