@@ -115,10 +115,6 @@ class WebSocketClient : WebSocketListener() {
 }
 ```
 
-以下で Web ソケットのテストサーバーを利用できます。
-
-https://websocket.org/tools/websocket-echo-server/
-
 `192.168.11.13` の部分は、mitmproxy を起動している PC の LAN 内の IP アドレスに置き換えてください。
 
 :::message
@@ -131,6 +127,18 @@ Invalid proxy
 Issue など漁ってみましたが、原因や解決策が不明でした。
 そのため、Java-WebSocket での動作確認はできていません。
 :::
+
+本記事では、以下に用意された Web ソケットのテストサーバーを利用してみます。
+Web ソケットでクライアントからテキストを送信すると、サーバーから同じテキストが返ってきます。
+
+https://websocket.org/tools/websocket-echo-server/
+
+上記を利用した簡単な Android アプリを以下のように実装します。
+Web ソケットに接続し、0 から 1 ずつカウントアップするメッセージを送信できるアプリです。
+
+https://github.com/shotaIDE/web-socket-test/blob/ea1118947cc0b88ebae71c1cad8905190c208944/app/src/main/java/ide/shota/colomney/websockettest/MainActivity.kt
+
+![](/images/delay-websocket-message-to-android/web-socket-test-app.gif =300x)
 
 # mitmproxy でメッセージを遅延させるスクリプトを書く
 
@@ -160,4 +168,8 @@ mitmdump -s delay-websocket-message.py
 
 以下のように遅延処理が行われることを確認できます。
 
-![処理の様子]()
+![](/images/delay-websocket-message-to-android/delay-mitmdump-log.png)
+
+Android アプリでも、メッセージの受信が遅延して順番が入れ替わっていることが確認できます。
+
+![](/images/delay-websocket-message-to-android/delay-android-logcat.png)
