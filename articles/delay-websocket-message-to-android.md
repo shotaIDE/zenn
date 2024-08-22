@@ -160,12 +160,12 @@ Issue など漁ってみましたが、原因や解決策が不明でした。
 そのため、Java-WebSocket での動作確認はできていません。
 :::
 
-本記事では、以下に用意された Web ソケットのテストサーバーを利用してみます。
+具体的にテストする例として、本記事では、以下に用意された Web ソケットのテストサーバーを利用する方法を紹介します。
 Web ソケットでクライアントからテキストを送信すると、サーバーから同じテキストが返ってきます。
 
 https://websocket.org/tools/websocket-echo-server/
 
-上記を利用した簡単な Android アプリを以下のように実装します。
+上記のテストサーバーを利用した簡単な Android アプリを以下のように実装します。
 Web ソケットに接続し、0 から 1 ずつカウントアップするメッセージを送信できるアプリです。
 
 https://github.com/shotaIDE/web-socket-test/blob/ea1118947cc0b88ebae71c1cad8905190c208944/app/src/main/java/ide/shota/colomney/websockettest/MainActivity.kt
@@ -179,24 +179,23 @@ mitmproxy は、Python でスクリプトを書いてプロキシーの動作を
 
 https://docs.mitmproxy.org/stable/addons-examples/
 
-今回は、特定のメッセージを遅延させるスクリプトを書きます。
+今回は、`1` という内容のメッセージを遅延させるスクリプトを書きます。
 以下のような Python スクリプトを任意の場所に保存してください。
 
 https://github.com/shotaIDE/web-socket-test/blob/1ad3ed0af5bd5230a0f0160db5f1fbc51ef911fb/delay-websocket-message.py
 
-以下のコマンドで mitmproxy を起動します。
-
-```shell
-mitmproxy -s delay-websocket-message.py
-```
-
-`delay-websocket-message.py` の部分は、スクリプトのパスに適宜置き換えてください。
-
-スクリプト内で出力しているログを確認するには、以下のコマンドにてログ出力モードにするとわかりやすいです。
+以下のコマンドで mitmproxy のログ出力モードを起動します。
 
 ```shell
 mitmdump -s delay-websocket-message.py
 ```
+
+`delay-websocket-message.py` の部分は、スクリプトのパスに適宜置き換えてください。
+
+:::message
+スクリプト内で出力しているログを確認するために `mitmdump` コマンドを利用しています。
+これをそのまま `mitmproxy` に置き換えても動作確認できます。
+:::
 
 以下のように遅延処理が行われることを確認できます。
 
