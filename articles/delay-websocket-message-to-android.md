@@ -1,36 +1,32 @@
 ---
-title: "AndroidアプリのWebソケットクライアントで受信する一部のメッセージをプロキシから遅延させる"
-emoji: "😺"
+title: "AndroidアプリのWebソケットクライアントで送受信するメッセージを、プロキシで改ざんとか遅延させてみる"
+emoji: "🪢"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["android", "mitmproxy", "kotlin"]
+publication_name: "sun_asterisk"
 published: false
 ---
 
 <!-- cSpell:ignore asyncio, inet, mitmdump, mitmproxy -->
 
-非常にニッチな内容です。
+再現困難なバグの原因を特定するために習得した方法について、紹介してみます。
 
-以下のようなことをやります。
+以下のように、Android アプリの Web ソケットクライアントで受信するメッセージを、プロキシで遅延させる方法を紹介します。
 
 ![](/images/delay-websocket-message-to-android/summary.png)
 
+紹介するスクリプトの内容を変更することで、送信するメッセージに対象を広げたり、メッセージを改ざんしたりもできます。
+
 # 手順
-
-:::message
-前提として、Android アプリからプロキシーに対して暗号化通信をし、その内容をプロキシー側で復号します。
-これには、Android アプリのネットワーク設定において、ユーザーが後からインストールしたルート証明書を信頼し通信可能にする設定が必要です。
-詳細は、以下の公式ドキュメントをご確認ください。
-
-https://developer.android.com/privacy-and-security/security-config?hl=ja
-:::
 
 手順は以下の通りです。
 
 1. mitmproxy をインストールする
 2. Android 端末に、mitmproxy のルート証明書をインストールする
-3. アプリの Web ソケットクライアントにプロキシーを設定する
-4. mitmproxy でメッセージを遅延させるスクリプトを書く
-5. 動作確認
+3. アプリのネットワーク設定で、ユーザーが後からインストールしたルート証明書を信頼する
+4. アプリの Web ソケットクライアントにプロキシーを設定する
+5. mitmproxy でメッセージを遅延させるスクリプトを書く
+6. 動作確認
 
 # mitmproxy をインストールする
 
@@ -59,19 +55,19 @@ mitmproxy
 | ホスト名   | mitmproxy を起動している PC の LAN 内の IP アドレス |
 | ポート番号 | `8080`（mitmproxy のデフォルトのポート番号）        |
 
-![プロキシー設定のスクショ]()
+![](/images/delay-websocket-message-to-android/android-os-proxy-settings.png =300x)
 
 Android 端末のブラウザーで、 http://mitm.it にアクセスします。
 Android の証明書入手ボタンをタップし、ルート証明書を Android 端末にダウンロードします。
 
-![証明書ダウンロードページのスクショ]()
+![](/images/delay-websocket-message-to-android/mitmproxy-certificate-page.png =300x)
 
 OS 設定で「CA 証明書」で検索し、CA 証明書の画面を開きます。
-![CA証明書のスクショ]()
+![](/images/delay-websocket-message-to-android/android-os-ca-certificates-settings.png =300x)
 
 ダウンロードしたルート証明書を選択し、インストールします。
 
-![選択画面のスクショ]()
+![](/images/delay-websocket-message-to-android/select-root-certificates.png =300x)
 
 ブラウザーで https://example.com にアクセスします。
 これにより、mitmproxy のコンソール画面に通信内容が表示されれば、設定は成功です。
@@ -81,6 +77,43 @@ OS 設定で「CA 証明書」で検索し、CA 証明書の画面を開きま�
 各行をクリックすると詳細が表示されます。
 
 ![](/images/delay-websocket-message-to-android/example-request-details.png)
+
+# アプリのネットワーク設定で、ユーザーが後からインストールしたルート証明書を信頼する
+
+Android アプリのネットワーク設定で、ユーザーが後からインストールしたルート証明書を信頼するようにします。
+関連する公式ドキュメントは以下です。
+
+https://developer.android.com/privacy-and-security/security-config?hl=ja
+
+まず、Android Manifest に `networkSecurityConfig` の設定を追加します。
+
+```xml:app/src/main/AndroidManifest.xml
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <application
+        ...
+        android:networkSecurityConfig="@xml/network_security_config"
+        ...>
+    </application>
+</manifest>
+```
+
+ネットワークセキュリティの設定ファイルを作成します。
+
+```xml:app/src/main/res/xml/network_security_config.xml
+<network-security-config xmlns:tools="http://schemas.android.com/tools">
+    <debug-overrides>
+        <trust-anchors>
+            <certificates
+                src="user"
+                tools:ignore="AcceptsUserCertificates" />
+            <certificates src="system" />
+        </trust-anchors>
+    </debug-overrides>
+</network-security-config>
+```
+
+`<certificates src="user" />` の設定値により、ユーザーが後からインストールしたルート証明書を用いた暗号化通信が Android アプリで有効になります。
 
 # アプリの Web ソケットクライアントにプロキシーを設定する
 
@@ -115,10 +148,6 @@ class WebSocketClient : WebSocketListener() {
 }
 ```
 
-以下で Web ソケットのテストサーバーを利用できます。
-
-https://websocket.org/tools/websocket-echo-server/
-
 `192.168.11.13` の部分は、mitmproxy を起動している PC の LAN 内の IP アドレスに置き換えてください。
 
 :::message
@@ -132,6 +161,18 @@ Issue など漁ってみましたが、原因や解決策が不明でした。
 そのため、Java-WebSocket での動作確認はできていません。
 :::
 
+具体的にテストする例として、本記事では、以下に用意された Web ソケットのテストサーバーを利用する方法を紹介します。
+Web ソケットでクライアントからテキストを送信すると、サーバーから同じテキストが返ってきます。
+
+https://websocket.org/tools/websocket-echo-server/
+
+上記のテストサーバーを利用した簡単な Android アプリを以下のように実装します。
+Web ソケットに接続し、0 から 1 ずつカウントアップするメッセージを送信できるアプリです。
+
+https://github.com/shotaIDE/web-socket-test/blob/ea1118947cc0b88ebae71c1cad8905190c208944/app/src/main/java/ide/shota/colomney/websockettest/MainActivity.kt
+
+![](/images/delay-websocket-message-to-android/web-socket-test-app.gif =300x)
+
 # mitmproxy でメッセージを遅延させるスクリプトを書く
 
 mitmproxy は、Python でスクリプトを書いてプロキシーの動作を細かくカスタマイズできます。
@@ -139,72 +180,28 @@ mitmproxy は、Python でスクリプトを書いてプロキシーの動作を
 
 https://docs.mitmproxy.org/stable/addons-examples/
 
-今回は、特定のメッセージを遅延させるスクリプトを書きます。
+今回は、`1` という内容のメッセージを遅延させるスクリプトを書きます。
 以下のような Python スクリプトを任意の場所に保存してください。
 
-```python:delay-websocket-message.py
-# coding: utf-8
+https://github.com/shotaIDE/web-socket-test/blob/1ad3ed0af5bd5230a0f0160db5f1fbc51ef911fb/delay-websocket-message.py
 
-import asyncio
-import logging
-import json
-
-from mitmproxy import http
-from mitmproxy import ctx
-
-LOG_TAG = 'DelayWebSocketMessageAddon'
-
-async def websocket_message(flow: http.HTTPFlow):
-    global pending_message_from_server
-
-    assert flow.websocket is not None
-
-    # Webソケットにおける最新のメッセージを取得
-    latest_message = flow.websocket.messages[-1]
-
-    if latest_message.from_client:
-        # クライアントから送信されたメッセージは、特に何もしない
-        logging.info(f"[{LOG_TAG}] Received a message from client: {latest_message.text}")
-    else:
-        # サーバーから送信されたメッセージに対して、特定のキーワードが含まれていたら、遅延処理を行う
-        # また、スクリプト内で生成したメッセージに対して再起的に同じ処理を繰り返さないよう、`injected` フラグで識別
-        if not latest_message.injected and 'keyword' in latest_message.text
-            logging.info(f"[{LOG_TAG}] Will delay a message from server: {latest_message.text}")
-
-            # サーバーから送信された元々のメッセージをキャンセルする
-            latest_message.drop()
-
-            # サーバーから送信されたメッセージと同一のメッセージを、遅延させた後に再送する
-            # websocket_message の処理をブロックすると、後続の他メッセージも送信されずに止まってしまうため、非同期で処理する
-            asyncio.create_task(post_websocket_message_async(flow, latest_message.text))
-        else:
-            logging.info(f"[{LOG_TAG}] Received a message from server: {latest_message.text}")
-
-
-async def post_websocket_message_async(flow: http.HTTPFlow, message: str):
-    await asyncio.sleep(0.5)
-
-    to_client = True
-    # サーバーから送信されたメッセージと同じものをクライアントに再送信する
-    ctx.master.commands.call("inject.websocket", flow, to_client, message.encode())
-
-    logging.info(f"[{LOG_TAG}] Send the delayed message from server: {message}")
-```
-
-以下のコマンドで mitmproxy を起動します。
-
-```shell
-mitmproxy -s delay-websocket-message.py
-```
-
-`delay-websocket-message.py` の部分は、スクリプトのパスに適宜置き換えてください。
-
-スクリプト内で出力しているログを確認するには、以下のコマンドにてログ出力モードにするとわかりやすいです。
+以下のコマンドで mitmproxy のログ出力モードを起動します。
 
 ```shell
 mitmdump -s delay-websocket-message.py
 ```
 
+`delay-websocket-message.py` の部分は、スクリプトのパスに適宜置き換えてください。
+
+:::message
+スクリプト内で出力しているログを確認するために `mitmdump` コマンドを利用しています。
+これをそのまま `mitmproxy` に置き換えても動作確認できます。
+:::
+
 以下のように遅延処理が行われることを確認できます。
 
-![処理の様子]()
+![](/images/delay-websocket-message-to-android/delay-mitmdump-log.png)
+
+Android アプリでも、メッセージの受信が遅延して順番が入れ替わっていることが確認できます。
+
+![](/images/delay-websocket-message-to-android/delay-android-logcat.png)
