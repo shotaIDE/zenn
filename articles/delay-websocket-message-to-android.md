@@ -28,9 +28,10 @@ https://developer.android.com/privacy-and-security/security-config?hl=ja
 
 1. mitmproxy をインストールする
 2. Android 端末に、mitmproxy のルート証明書をインストールする
-3. アプリの Web ソケットクライアントにプロキシーを設定する
-4. mitmproxy でメッセージを遅延させるスクリプトを書く
-5. 動作確認
+3. アプリのネットワーク設定で、ユーザーが後からインストールしたルート証明書を信頼する
+4. アプリの Web ソケットクライアントにプロキシーを設定する
+5. mitmproxy でメッセージを遅延させるスクリプトを書く
+6. 動作確認
 
 # mitmproxy をインストールする
 
@@ -81,6 +82,38 @@ OS 設定で「CA 証明書」で検索し、CA 証明書の画面を開きま�
 各行をクリックすると詳細が表示されます。
 
 ![](/images/delay-websocket-message-to-android/example-request-details.png)
+
+# アプリのネットワーク設定で、ユーザーが後からインストールしたルート証明書を信頼する
+
+Android Manifest に `networkSecurityConfig` の設定を追加します。
+
+```xml:app/src/main/AndroidManifest.xml
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <application
+        ...
+        android:networkSecurityConfig="@xml/network_security_config"
+        ...>
+    </application>
+</manifest>
+```
+
+ネットワークセキュリティの設定ファイルを作成します。
+
+```xml:app/src/main/res/xml/network_security_config.xml
+<network-security-config xmlns:tools="http://schemas.android.com/tools">
+    <debug-overrides>
+        <trust-anchors>
+            <certificates
+                src="user"
+                tools:ignore="AcceptsUserCertificates" />
+            <certificates src="system" />
+        </trust-anchors>
+    </debug-overrides>
+</network-security-config>
+```
+
+`<certificates src="user" />` の設定値により、ユーザーが後からインストールしたルート証明書を用いた暗号化通信が Android アプリで有効になります。
 
 # アプリの Web ソケットクライアントにプロキシーを設定する
 
