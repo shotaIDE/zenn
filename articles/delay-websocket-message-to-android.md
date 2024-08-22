@@ -59,19 +59,19 @@ mitmproxy
 | ホスト名   | mitmproxy を起動している PC の LAN 内の IP アドレス |
 | ポート番号 | `8080`（mitmproxy のデフォルトのポート番号）        |
 
-![プロキシー設定のスクショ]()
+![](/images/delay-websocket-message-to-android/android-os-proxy-settings.png =300x)
 
 Android 端末のブラウザーで、 http://mitm.it にアクセスします。
 Android の証明書入手ボタンをタップし、ルート証明書を Android 端末にダウンロードします。
 
-![証明書ダウンロードページのスクショ]()
+![](/images/delay-websocket-message-to-android/mitmproxy-certificate-page.png =300x)
 
 OS 設定で「CA 証明書」で検索し、CA 証明書の画面を開きます。
-![CA証明書のスクショ]()
+![](/images/delay-websocket-message-to-android/android-os-ca-certificates-settings.png =300x)
 
 ダウンロードしたルート証明書を選択し、インストールします。
 
-![選択画面のスクショ]()
+![](/images/delay-websocket-message-to-android/select-root-certificates.png =300x)
 
 ブラウザーで https://example.com にアクセスします。
 これにより、mitmproxy のコンソール画面に通信内容が表示されれば、設定は成功です。
