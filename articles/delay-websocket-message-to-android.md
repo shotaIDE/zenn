@@ -1,6 +1,6 @@
 ---
 title: "AndroidアプリのWebソケットクライアントで送受信するメッセージを、プロキシで改ざんとか遅延させてみる"
-emoji: "😺"
+emoji: "🪢"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["android", "mitmproxy", "kotlin"]
 publication_name: "sun_asterisk"
