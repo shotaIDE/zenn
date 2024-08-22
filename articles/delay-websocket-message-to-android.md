@@ -3,6 +3,7 @@ title: "AndroidアプリのWebソケットクライアントで送受信する�
 emoji: "😺"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["android", "mitmproxy", "kotlin"]
+publication_name: "sun_asterisk"
 published: false
 ---
 
