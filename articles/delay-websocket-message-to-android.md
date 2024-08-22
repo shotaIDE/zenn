@@ -1,5 +1,5 @@
 ---
-title: "AndroidアプリのWebソケットクライアントで受信する一部のメッセージをプロキシから遅延させる"
+title: "AndroidアプリのWebソケットクライアントで送受信するメッセージを、プロキシで改ざんとか遅延させてみる"
 emoji: "😺"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["android", "mitmproxy", "kotlin"]
@@ -8,21 +8,15 @@ published: false
 
 <!-- cSpell:ignore asyncio, inet, mitmdump, mitmproxy -->
 
-非常にニッチな内容です。
+再現困難なバグの原因を特定するために習得した方法について、紹介してみます。
 
-以下のようなことをやります。
+以下のように、Android アプリの Web ソケットクライアントで受信するメッセージを、プロキシで遅延させる方法を紹介します。
 
 ![](/images/delay-websocket-message-to-android/summary.png)
 
+紹介するスクリプトの内容を変更することで、送信するメッセージに対象を広げたり、メッセージを改ざんしたりもできます。
+
 # 手順
-
-:::message
-前提として、Android アプリからプロキシーに対して暗号化通信をし、その内容をプロキシー側で復号します。
-これには、Android アプリのネットワーク設定において、ユーザーが後からインストールしたルート証明書を信頼し通信可能にする設定が必要です。
-詳細は、以下の公式ドキュメントをご確認ください。
-
-https://developer.android.com/privacy-and-security/security-config?hl=ja
-:::
 
 手順は以下の通りです。
 
@@ -85,7 +79,12 @@ OS 設定で「CA 証明書」で検索し、CA 証明書の画面を開きま�
 
 # アプリのネットワーク設定で、ユーザーが後からインストールしたルート証明書を信頼する
 
-Android Manifest に `networkSecurityConfig` の設定を追加します。
+Android アプリのネットワーク設定で、ユーザーが後からインストールしたルート証明書を信頼するようにします。
+関連する公式ドキュメントは以下です。
+
+https://developer.android.com/privacy-and-security/security-config?hl=ja
+
+まず、Android Manifest に `networkSecurityConfig` の設定を追加します。
 
 ```xml:app/src/main/AndroidManifest.xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
