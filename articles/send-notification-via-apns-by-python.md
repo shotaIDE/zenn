@@ -14,21 +14,7 @@ published: false
 - デバイストークンが取得できている
 - APNs の認証キー(`*.p8`ファイル)が取得できている
 
-# 1. httpx をインストールする
-
-APNs にリクエストを送信するためには、HTTP/2 に対応している HTTP クライアントが必要です。
-
-そのため、今回は httpx を使用します。
-
-https://www.python-httpx.org/
-
-以下のコマンドでインストールします。
-
-```bash
-pip install httpx
-```
-
-# 2. jwt をインストールする
+# 1. PyJWT をインストールする
 
 APNs にリクエストを送信するには、認証キーを使って JWT を生成する必要があります。
 
@@ -40,6 +26,20 @@ https://pyjwt.readthedocs.io/en/stable/
 
 ```bash
 pip install PyJWT
+```
+
+# 2. httpx をインストールする
+
+APNs にリクエストを送信するためには、HTTP/2 に対応している HTTP クライアントが必要です。
+
+そのため、今回は httpx を使用します。
+
+https://www.python-httpx.org/
+
+以下のコマンドでインストールします。
+
+```bash
+pip install httpx
 ```
 
 # 3. JWT を生成する
@@ -93,11 +93,7 @@ import httpx
 
 
 BUNDLE_ID = 'com.example.PushTest' # iOS アプリの Bundle ID
-USE_SANDBOX = True # プッシュ通知でサンドボックス環境を使用するかどうか
-if USE_SANDBOX:
-    URL_PREFIX = 'https://api.sandbox.push.apple.com/3/device/'
-else:
-    URL_PREFIX = 'https://api.push.apple.com/3/device/'
+URL_PREFIX = 'https://api.sandbox.push.apple.com/3/device/'
 
 device_tokens = [
     # 1 台目の iOS デバイストークンの例
@@ -134,6 +130,25 @@ async with httpx.AsyncClient(http2=True) as client:
         print(f'#{index}: device token = {device_token}')
         print(f'Response status code: {response.status_code}')
 ```
+
+APNs サーバーは、開発用と本番用の 2 種類があり、それぞれ以下の URL でアクセスできます。
+本記事では開発用のサーバーを使用します。
+
+- 開発用: `api.sandbox.push.apple.com`
+- 本番用: `api.push.apple.com`
+
+iOS アプリでエンタイトルメントファイル中の "APS Environment" に設定している値に応じて、APNs サーバーの URL を選択する必要があります。
+
+| APS Environment | APNs サーバー                |
+| --------------- | ---------------------------- |
+| development     | `api.sandbox.push.apple.com` |
+| production      | `api.push.apple.com`         |
+
+以下は、APS Environment の設定画面の例です。
+
+![](/images/send-notification-via-apns-by-python/aps-environment.png)
+
+https://developer.apple.com/documentation/bundleresources/entitlements/aps-environment
 
 httpx で HTTP/2 の通信する方法の詳細は以下のリンクを参照してください。
 
@@ -178,11 +193,7 @@ def __generate_jwt_token():
 
 async def send_notification():
     BUNDLE_ID = 'com.example.PushTest' # iOS アプリの Bundle ID
-    USE_SANDBOX = True # プッシュ通知でサンドボックス環境を使用するかどうか
-    if USE_SANDBOX:
-        URL_PREFIX = 'https://api.sandbox.push.apple.com/3/device/'
-    else:
-        URL_PREFIX = 'https://api.push.apple.com/3/device/'
+    URL_PREFIX = 'https://api.sandbox.push.apple.com/3/device/'
 
     device_tokens = [
         # 1 台目の iOS デバイストークンの例
