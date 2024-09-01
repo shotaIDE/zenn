@@ -10,13 +10,27 @@ published: false
 
 Python を使って APNs 経由にプッシュ通知を送信する方法を調べていたのですが、意外と情報が少なかったので、試した方法をまとめました。
 
-APNs は **HTTP/2 を使用して通信する必要があります**。そのため、HTTP/2 に対応したクライアントライブラリが必要になります。
+ポイントは、APNs への通信は **HTTP/2 のプロトコルを利用する必要がある**ことです。
+そのため、HTTP/2 に対応した HTTP クライアントライブラリが必要になります。
 
 # 前提
 
-- iOS でプッシュ通知を受信する準備ができている
-- デバイストークンが取得できている
-- APNs の認証キー(`*.p8`ファイル)が取得できている
+以下のように、何かしらの iOS アプリでプッシュ通知を受信する準備ができていることを前提として記事を進めます。
+
+- プッシュ通知受信のための Capability や権限取得が済んでいる
+- 特定の端末向けのデバイストークンを 16 進数表現した値（以下のような値）が取得できている
+  - 例: `3dcb4cb72e9abbdaa73a89d8fff449e0de4093cc2c0cbfa5ee9bed21c0a88a72`
+
+また、保有している Apple Developer アカウントにて APNs 認証キー(`*.p8`ファイル)が取得できていることを前提とします。
+
+:::message
+iOS で APNs 認証キーを利用してプッシュ通知を送信する方法の概要は、以下を参照してください。
+
+https://developer.apple.com/jp/help/account/configure-app-capabilities/communicate-with-apns-using-authentication-tokens/
+:::
+
+本記事では APNs サーバーとやりとりする際に Python を使用します。
+動作確認した Python のバージョンは 3.12.5 です。
 
 # 1. PyJWT をインストールする
 
