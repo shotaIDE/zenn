@@ -100,9 +100,9 @@ else:
     URL_PREFIX = 'https://api.push.apple.com/3/device/'
 
 device_tokens = [
-    # iOS のデバイストークン、1台目
+    # 1 台目の iOS デバイストークンの例
     '3dcb4cb72e9abbdaa73a89d8fff449e0de4093cc2c0cbfa5ee9bed21c0a88a72',
-    # iOS のデバイストークン、2台目
+    # 2 台目の iOS デバイストークンの例
     '6f80ab76a6237ba9498a469e6f23c580d9572c0303706aa2c01a90dca3e795f6'
 ]
 
@@ -185,9 +185,9 @@ async def send_notification():
         URL_PREFIX = 'https://api.push.apple.com/3/device/'
 
     device_tokens = [
-        # iOS のデバイストークン、1台目
+        # 1 台目の iOS デバイストークンの例
         '3dcb4cb72e9abbdaa73a89d8fff449e0de4093cc2c0cbfa5ee9bed21c0a88a72',
-        # iOS のデバイストークン、2台目
+        # 2 台目の iOS デバイストークンの例
         '6f80ab76a6237ba9498a469e6f23c580d9572c0303706aa2c01a90dca3e795f6'
     ]
 
