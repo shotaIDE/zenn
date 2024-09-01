@@ -131,8 +131,8 @@ async with httpx.AsyncClient(http2=True) as client:
             json=payload
         )
 
-        print(f'#{index}: device token = {device_token}')
-        print(f'Response status code: {response.status_code}')
+        print(f'#{index} - device token: {device_token}')
+        print(f'#{index} - response status code: {response.status_code}')
 ```
 
 APNs サーバーは、開発用と本番用の 2 種類があり、それぞれ以下の URL でアクセスできます。
@@ -233,13 +233,12 @@ async def send_notification():
                 json=payload
             )
 
-            print(f'#{index}: device token = {device_token}')
-            print(f'Response status code: {response.status_code}')
+            print(f'#{index} - device token: {device_token}')
+            print(f'#{index} - response status code: {response.status_code}')
 
 
 if __name__ == '__main__':
-    loop = asyncio.get_event_loop()
-    response = loop.run_until_complete(
+    asyncio.run(
         send_notification()
     )
 ```
@@ -247,8 +246,8 @@ if __name__ == '__main__':
 上記を実行すると、以下のように各デバイストークンに対してプッシュ通知の送信が成功することを確認できます。
 
 ```log
-#0: device token = 3dcb4cb72e9abbdaa73a89d8fff449e0de4093cc2c0cbfa5ee9bed21c0a88a72
-Response status code: 200
-#1: device token = 6f80ab76a6237ba9498a469e6f23c580d9572c0303706aa2c01a90dca3e795f6
-Response status code: 200
+#0 - device token: 3dcb4cb72e9abbdaa73a89d8fff449e0de4093cc2c0cbfa5ee9bed21c0a88a72
+#0 - response status code: 200
+#1 - device token: 6f80ab76a6237ba9498a469e6f23c580d9572c0303706aa2c01a90dca3e795f6
+#1 - response status code: 200
 ```
