@@ -1,8 +1,8 @@
 ---
 title: "Pythonを使ってAPNs経由でプッシュ通知を送信する"
-emoji: "🐕"
+emoji: "📳"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["ios", "python", "apns"]
+topics: ["ios", "python"]
 published: false
 ---
 
