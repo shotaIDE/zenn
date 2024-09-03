@@ -1,5 +1,5 @@
 ---
-title: "Pythonを使ってAPNs経由でプッシュ通知を送信する"
+title: "Pythonを使ってAPNs経由でiOS端末にプッシュ通知を送信する"
 emoji: "📳"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["ios", "python"]
@@ -8,7 +8,7 @@ published: false
 
 <!-- cSpell:ignore asyncio, httpx -->
 
-Python を使って APNs 経由にプッシュ通知を送信する方法を調べていたのですが、意外と情報が少なかったので、試した方法をまとめました。
+Python を使って APNs 経由で iOS 端末にプッシュ通知を送信する方法を調べていたのですが、意外と情報が少なかったので、試した方法をまとめてみました。
 
 ポイントは、APNs への通信は **HTTP/2 のプロトコルを利用する必要がある**ことです。
 そのため、HTTP/2 に対応した HTTP クライアントライブラリが必要になります。
@@ -17,14 +17,14 @@ Python を使って APNs 経由にプッシュ通知を送信する方法を調�
 
 以下のように、何かしらの iOS アプリでプッシュ通知を受信する準備ができていることを前提として記事を進めます。
 
-- プッシュ通知受信のための Capability や権限取得が済んでいる
-- 特定の端末向けのデバイストークンを 16 進数表現した値（以下のような値）が取得できている
+- Xcode 上でプッシュ通知受信のための Capability 追加が済んでいる
+- 特定の iOS 端末向けのデバイストークンを 16 進数表現した値（以下のような値）が取得できている
   - 例: `3dcb4cb72e9abbdaa73a89d8fff449e0de4093cc2c0cbfa5ee9bed21c0a88a72`
 
 また、保有している Apple Developer アカウントにて APNs 認証キー(`*.p8`ファイル)が取得できていることを前提とします。
 
 :::message
-iOS で APNs 認証キーを利用してプッシュ通知を送信する方法の概要は、以下を参照してください。
+上記の前提のやり方に関しては、以下が参照になります。
 
 https://developer.apple.com/jp/help/account/configure-app-capabilities/communicate-with-apns-using-authentication-tokens/
 :::
@@ -60,9 +60,10 @@ https://www.python-httpx.org/
 pip install httpx
 ```
 
-# 3. JWT を生成する
+# 3. JWT を生成するスクリプトを書く
 
 APNs にリクエストを送信するためには、JWT トークンを生成する必要があります。
+関連するドキュメントは以下です。
 
 https://developer.apple.com/documentation/usernotifications/establishing-a-token-based-connection-to-apns
 
@@ -98,15 +99,16 @@ token = jwt.encode(
 
 `token` として得られた値を、リクエストヘッダーの `authorization` に `bearer {token}` の形式で設定します。
 
-# 4. プッシュ通知のリクエストを送信する
+# 4. プッシュ通知のリクエストを送信するスクリプトを書く
 
 APNs に対してプッシュ通知のリクエストを送信します。
+関連するドキュメントは以下です。
 
 https://developer.apple.com/documentation/usernotifications/sending-notification-requests-to-apns
 
 以下のスクリプトでプッシュ通知のリクエストを送信します。
 
-```python
+```python:send-push-notification.py
 import httpx
 
 
@@ -149,39 +151,50 @@ async with httpx.AsyncClient(http2=True) as client:
         print(f'#{index} - response status code: {response.status_code}')
 ```
 
-APNs サーバーは、開発用と本番用の 2 種類があり、それぞれ以下の URL でアクセスできます。
+APNs サーバーは、開発用と本番用の 2 種類があり、それぞれ以下のドメインでアクセスできます。
 本記事では開発用のサーバーを使用します。
 
 - 開発用: `api.sandbox.push.apple.com`
 - 本番用: `api.push.apple.com`
 
-iOS アプリでエンタイトルメントファイル中の "APS Environment" に設定している値に応じて、APNs サーバーの URL を選択する必要があります。
+上記は、iOS アプリでエンタイトルメントファイル中の "APS Environment" に設定している値に応じて使い分ける必要があります。
 
-| APS Environment | APNs サーバー                |
-| --------------- | ---------------------------- |
-| development     | `api.sandbox.push.apple.com` |
-| production      | `api.push.apple.com`         |
+| APS Environment | APNs サーバー |
+| --------------- | ------------- |
+| development     | 開発用        |
+| production      | 本番用        |
 
 以下は、APS Environment の設定画面の例です。
 
 ![](/images/send-notification-via-apns-by-python/aps-environment.png)
 
+APS Entitlements の詳細については以下のドキュメントを参照してください。
+
 https://developer.apple.com/documentation/bundleresources/entitlements/aps-environment
 
-httpx で HTTP/2 の通信する方法の詳細は以下のリンクを参照してください。
+また、httpx で HTTP/2 の通信をするため、`AsyncClient` に `http2=True` を指定して通信クライアントを初期化しています。
+
+```python
+httpx.AsyncClient(http2=True)
+```
+
+さらに、すべてのリクエストが完了した際に HTTP 通信が適切に閉じられるようにするため、`async with` を使用しています。
+非同期処理を含むため、`with` の代わりに `async with` を使用しています。
+
+```python
+async with httpx.AsyncClient(http2=True) as client:
+    # ...
+```
+
+httpx で HTTP/2 の通信をする方法に関しては、以下のドキュメントが参考になります。
 
 https://www.python-httpx.org/http2/
 
-本記事では、`AsyncClient` に `http2=True` を指定して、HTTP/2 で通信するようにしています。
-
-また、すべてのリクエストが完了した際に HTTP 通信が適切に閉じられるようにするため、`async with` を使用しています。
-非同期処理を含むため、`with` の代わりに `async with` を使用しています。
-
-# 5. Python スクリプトを実行する
+# 5. スクリプトを合わせて実行する
 
 前述のスクリプトを組み合わせると、以下のようになります。
 
-```python
+```python:main.py
 # coding: utf-8
 
 import asyncio
@@ -262,7 +275,7 @@ if __name__ == '__main__':
     )
 ```
 
-上記を実行すると、以下のように各デバイストークンに対してプッシュ通知の送信が成功することを確認できます。
+上記を実行すると、以下のように各デバイストークンに対してプッシュ通知のリクエスト送信の成功が確認できます。
 
 ```log
 #0 - device token: 3dcb4cb72e9abbdaa73a89d8fff449e0de4093cc2c0cbfa5ee9bed21c0a88a72
