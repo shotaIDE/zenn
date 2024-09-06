@@ -25,7 +25,7 @@ Python を使って APNs 経由で iOS 端末にプッシュ通知を送信す�
 また、保有している Apple Developer アカウントにて APNs 認証キー(`*.p8`ファイル)が取得できていることを前提とします。
 
 :::message
-上記の前提のやり方に関しては、以下が参照になります。
+上記の前提のやり方に関しては、以下を参照してください。
 
 https://developer.apple.com/jp/help/account/configure-app-capabilities/communicate-with-apns-using-authentication-tokens/
 :::
