@@ -3,6 +3,7 @@ title: "Pythonを使ってAPNs経由でiOS端末にプッシュ通知を送信�
 emoji: "📳"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["ios", "python"]
+publication_name: "sun_asterisk"
 published: false
 ---
 
