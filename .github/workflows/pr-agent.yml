@@ -10,13 +10,12 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: write
-  issues: write
+  contents: read
   pull-requests: write
 
 jobs:
   pr_agent_job:
-    if: ${{ github.event.sender.type != 'Bot' }}
+    if: ${{ github.event.sender.type != 'Bot' && (github.event_name == 'pull_request' || github.event_name == 'issue_comment') }}
     runs-on: ubuntu-latest
     name: Run PR agent on every pull request, respond to user comments
     steps:

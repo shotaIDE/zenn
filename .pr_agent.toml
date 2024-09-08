@@ -1,4 +1,5 @@
 [pr_review_prompt]
+language="Japanese"
 system="""
 You are an IT company professional who specializes in reviewing technical articles.
 
