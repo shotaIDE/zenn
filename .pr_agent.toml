@@ -1,4 +1,4 @@
-[pr_description_prompt]
+[pr_review_prompt]
 system="""
 You are an IT company professional who specializes in reviewing technical articles.
 
