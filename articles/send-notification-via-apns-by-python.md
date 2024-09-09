@@ -4,7 +4,7 @@ emoji: "📳"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["ios", "python"]
 publication_name: "sun_asterisk"
-published: false
+published: true
 ---
 
 <!-- cSpell:ignore asyncio, httpx -->
