@@ -6,6 +6,8 @@ topics: ["ios", "android"]
 published: false
 ---
 
+<!-- cspell:ignore detekt, qodana -->
+
 コードの内部品質を高めて、継続的な価値提供を下支えするために、私が取り組んできたことをまとめました。
 
 # 背景
