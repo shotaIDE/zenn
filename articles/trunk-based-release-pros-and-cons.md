@@ -29,7 +29,7 @@ https://dora.dev/capabilities/trunk-based-development/
 # メリット
 
 トランクブランチ開発は、生存期間の長いブランチを許容しないことが最大の特徴です。
-その点が異なる Git-flow や GitLab-flow、GitHub-flow などのブランチ戦略と比較した、メリット・デメリットを記載します。
+Git-flow や GitLab-flow、GitHub-flow などのブランチ戦略と比較し、実際に感じた、メリット・デメリットを記載します。
 
 ## ブランチ管理が限りなく簡単になり、コストやリスクが低減する
 
