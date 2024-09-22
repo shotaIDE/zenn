@@ -1,6 +1,6 @@
 ---
 title: "「ブランチ戦略疲れ」を解消！トランクベース開発でシンプル＆効率的に"
-emoji: "⛴️"
+emoji: "🛫"
 type: "idea" # tech: 技術記事 / idea: アイデア
 topics: ["トランクベース開発"]
 published: false
