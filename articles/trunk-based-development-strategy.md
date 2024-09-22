@@ -1,10 +1,16 @@
 ---
 title: "「ブランチ戦略疲れ」を解消！トランクベース開発でシンプル＆効率的に"
-emoji: "⛴️"
+emoji: "🛫"
 type: "idea" # tech: 技術記事 / idea: アイデア
 topics: ["トランクベース開発"]
 published: false
 ---
+
+はじめまして、モバイルエンジニアのころむにーです。
+
+普段は、モバイルアプリを通じたユーザーへの価値提供を目指すプロジェクトに、技術リードという立場で参画しています。
+
+本記事では、開発プロセスの設計におけるブランチ戦略について、私個人が最近考えていることをまとめてみます。
 
 # はじめに
 
@@ -62,14 +68,14 @@ https://dora.dev/devops-capabilities/technical/trunk-based-development/
 - バグ発生時の原因特定が難しい
 - 特定のエンジニアだけの知見しか反映されず、他のエンジニアの知見が活かされにくい
 
-![長期、大規模な修正を特定のエンジニアだけで行うのは悪い](/images/mobile-trunk-based-release-strategy/merge-large-changes.png)
+![長期、大規模な修正を特定のエンジニアだけで行うのは悪い](/images/trunk-based-development-strategy/merge-large-changes.png)
 
 以下のような**リリースブランチを作り最後にトランクブランチへマージするという営み**も同様のリスクがあります。
 
 - 開発ブランチからリリースブランチを分岐させ、受け入れ試験で発生したバグ修正をそこに適用し、最後に開発ブランチへマージする
   - このような戦略は、開発ブランチを触っているエンジニアとリリースブランチを触っているエンジニアが異なるため、コンフリクトが発生しやすい
 
-![リリースブランチを作り、最後にマージする](/images/mobile-trunk-based-release-strategy/merge-release-branch.png)
+![リリースブランチを作り、最後にマージする](/images/trunk-based-development-strategy/merge-release-branch.png)
 
 Git-flow などの一般的なブランチ戦略では、よくみられるものです。
 
@@ -88,13 +94,13 @@ Git-flow などの一般的なブランチ戦略では、よくみられるも�
 小さな修正を頻繁に行い全員が見えるところに公開していきます。
 また、リリースブランチはリリースのためだけの使い捨てのものとし、トランクブランチにはマージしないようにします。
 
-![小さな修正をこまめにマージする](/images/mobile-trunk-based-release-strategy/trunk-base.png)
+![小さな修正をこまめにマージする](/images/trunk-based-development-strategy/trunk-base.png)
 
 以下、普段の開発とリリースフロー（定期リリースと hotfix リリース）に焦点を当てて解説していきます。
 
 ## 普段の開発
 
-![普段の開発](/images/mobile-trunk-based-release-strategy/development-flow.png)
+![普段の開発](/images/trunk-based-development-strategy/development-flow.png)
 
 エンジニアは、**機能開発やバグ修正などのバックログにおけるチケット種別や、ターゲットのリリースバージョンに関わらず、全ての修正をトランクブランチにマージ**します。
 
@@ -126,7 +132,7 @@ flowchart TD
 
 ### 初回ビルド
 
-![1回目のブランチ戦略・弾くコミットがない場合](/images/mobile-trunk-based-release-strategy/trunk-based-regular-release_01.png)
+![1回目のブランチ戦略・弾くコミットがない場合](/images/trunk-based-development-strategy/trunk-based-regular-release_01.png)
 
 基本的には**トランクブランチの最新コミットからリリースブランチを分岐**させます。
 分岐させたブランチ上で初回ビルドを行います。
@@ -138,7 +144,7 @@ flowchart TD
 - デグレを引き起こすことが明確に分かっている
 - 後のリリースで提供したい機能である
 
-![1回目のブランチ戦略・弾くコミットがある場合](/images/mobile-trunk-based-release-strategy/trunk-based-regular-release_02.png)
+![1回目のブランチ戦略・弾くコミットがある場合](/images/trunk-based-development-strategy/trunk-based-regular-release_02.png)
 
 :::message
 基本的には上記のように特定のコミットだけリリースに含めないということは、後述するようにリリース戦略が複雑になるため避けるべきです。
@@ -150,7 +156,7 @@ flowchart TD
 
 ### 2 回目以降のビルド
 
-![2回目以降のビルドのブランチ戦略](/images/mobile-trunk-based-release-strategy/trunk-based-regular-release_03.png)
+![2回目以降のビルドのブランチ戦略](/images/trunk-based-development-strategy/trunk-based-regular-release_03.png)
 
 ビルドされたアプリでテストを行い、バグが見つかった場合には**トランクブランチに修正を適用**します。
 
@@ -170,7 +176,7 @@ flowchart TD
 
 トランクブランチとリリースブランチの乖離が大きいと上記の戦略は破綻するため、以下の図に示すような乖離部分が大きくならないよう開発フローや品質を最適化していく必要があります。
 
-![乖離が大きくなってはいけない](/images/mobile-trunk-based-release-strategy/diff-trunk-and-release.png)
+![乖離が大きくなってはいけない](/images/trunk-based-development-strategy/diff-trunk-and-release.png)
 
 :::message
 バグ修正を適用した時点のトランクブランチのコミットで 2 回目以降のビルドを行うという選択肢もあります。
@@ -202,7 +208,7 @@ flowchart TD
 
 ブランチの図で示すと以下のようになります。
 
-![hotfixのブランチ戦略](/images/mobile-trunk-based-release-strategy/trunk-based-hotfix-release.png)
+![hotfixのブランチ戦略](/images/trunk-based-development-strategy/trunk-based-hotfix-release.png)
 
 定期リリースの 2 回目以降のビルドと同様に、**排他的なかき集め**フェーズと捉えることができます。
 
@@ -210,7 +216,7 @@ flowchart TD
 
 リリースが完了し、次の定期リリースのビルドを開始したい場合は、**再度トランクブランチの最新コミットからリリースブランチを作成**します。
 
-![](/images/mobile-trunk-based-release-strategy/next-release.png)
+![](/images/trunk-based-development-strategy/next-release.png)
 
 前回のリリースブランチ(v1.0 リリースブランチ)は、利用しません。
 
