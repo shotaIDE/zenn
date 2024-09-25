@@ -48,6 +48,8 @@ https://dora.dev/capabilities/trunk-based-development/
 フィーチャートグルとは、機能の発動有無をコードの再デプロイを伴うことなく動的に変えることができる仕組みです。
 :::
 
+# 導入しているプロジェクト
+
 # メリット
 
 Git-flow や GitLab-flow、GitHub-flow などのブランチ戦略と比較し、実際に感じたメリットを記載していきます。
