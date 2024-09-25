@@ -50,6 +50,12 @@ https://dora.dev/capabilities/trunk-based-development/
 
 # 導入しているプロジェクト
 
+私が参加していてトランクベース開発を導入しているプロジェクトは、以下のような特徴があります。
+
+- iOS/Android アプリの開発。iOS と Android でそれぞれ独立して開発。
+- iOS と Android でそれぞれエンジニア 4〜5 名ずつ、QA 4〜5 名の計 12〜15 名程度のメンバーで開発とテストを行う。
+- 1 ヶ月〜2 ヶ月に 1 回程度、リリースする。
+
 # メリット
 
 Git-flow や GitLab-flow、GitHub-flow などのブランチ戦略と比較し、実際に感じたメリットを記載していきます。
