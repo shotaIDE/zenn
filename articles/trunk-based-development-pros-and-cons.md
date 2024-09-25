@@ -54,7 +54,7 @@ https://dora.dev/capabilities/trunk-based-development/
 
 - iOS/Android アプリの開発。iOS と Android でそれぞれ独立して開発。
 - iOS と Android でそれぞれエンジニア 4〜5 名ずつ、QA 4〜5 名の計 12〜15 名程度のメンバーで開発とテストを行う。
-- 1 ヶ月〜2 ヶ月に 1 回程度、リリースする。
+- 1 ヶ月に 1 回程度、リリースする。
 
 # メリット
 
