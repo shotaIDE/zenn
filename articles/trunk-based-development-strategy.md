@@ -48,6 +48,11 @@ https://dora.dev/devops-capabilities/technical/trunk-based-development/
 - トランクベース開発の概要やメリット・デメリット
 - トランクベース開発における具体的なツールやプラクティス
 
+トランクベース開発のメリット・デメリットに関しては、別の記事で書いています。
+気になる方は、こちらも参考にしてみてください。
+
+https://zenn.dev/sun_asterisk/articles/trunk-based-development-pros-and-cons
+
 # トランクベース開発で解決したい問題
 
 一般的によく使われる Git のブランチ機能を多用する開発戦略では、以下のような状況が発生しやすいです。

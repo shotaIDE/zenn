@@ -4,7 +4,7 @@ emoji: "🚄"
 type: "idea" # tech: 技術記事 / idea: アイデア
 topics: ["トランクベース開発"]
 publication_name: "sun_asterisk"
-published: false
+published: true
 ---
 
 こんにちは、モバイルエンジニアのころむにーです。
@@ -24,6 +24,11 @@ https://dora.dev/capabilities/trunk-based-development/
 しかし、実際にプロジェクトで運用してみると、メリットが大きいことは間違いないものの、デメリットも一定程度あると感じました。
 
 本記事では、私が実際にトランクベース開発を導入し、運用している中で感じたメリットとデメリットを具体的なシーンを含めて簡単にまとめてみます。
+
+トランクベース開発に関する具体的な戦略に関しては、以前別の記事に書いています。
+気になる方は、こちらも参考にしてみてください。
+
+https://zenn.dev/sun_asterisk/articles/trunk-based-development-strategy
 
 # トランクベース開発の概要
 
