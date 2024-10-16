@@ -30,6 +30,6 @@
     "zenn-cli": "^0.1.107"
   },
   "devDependencies": {
-    "cspell": "8.15.2"
+    "cspell": "8.15.3"
   }
 }
