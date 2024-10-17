@@ -189,6 +189,10 @@ iOS や Android アプリでは、API を通じてデータのやり取りする
 
 そのため、dependabot や Renovate などのツールを導入し、ライブラリのバージョンアップの PR が自動で作成されるようにしました。
 
+https://docs.github.com/ja/code-security/dependabot/working-with-dependabot
+
+https://docs.renovatebot.com/
+
 - スプリント開発用のビルドのデプロイ自動化
 - リリース用のビルドのデプロイ半自動化（トランクベース開発を考慮）
 - E2E 自動テスト実行時の画面収録を蓄積
