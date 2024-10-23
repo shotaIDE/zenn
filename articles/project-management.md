@@ -4,7 +4,7 @@ emoji: "🧑‍🔧"
 type: "idea" # tech: 技術記事 / idea: アイデア
 topics: ["プロジェクトマネージャー"]
 publication_name: "sun_asterisk"
-published: false
+published: true
 ---
 
 こんにちは、モバイルエンジニアのころむにーです。
