@@ -151,8 +151,46 @@ Android のプッシュ通知に関して、受信後の仕組みを EOL に伴�
 
 ## 4-3. リスク低減
 
-- 各種ツールで利用する Ruby のバージョンを厳密に固定
-- PR 提出時に、正しい Jira への紐付けを自動チェック
+ビルドツールで fastlane を利用しています。
+
+https://fastlane.tools/
+
+fastlane では Ruby を利用しています。
+リポジトリに `.ruby-version` ファイルをコミットしておき、この Ruby のバージョンを利用するようにしました。
+
+```text:.ruby-version
+3.3.5
+```
+
+:::message
+`.ruby-version` ファイルは Ruby のバージョン管理システムの rbenv で利用されるファイルです。
+https://github.com/rbenv/rbenv#readme
+
+fastlane のコマンドや CI/CD のワークフローは以下のようにして動作させています。
+
+- rbenv を利用する
+- 他の Ruby のバージョン管理システムにこのファイルの Ruby バージョンを用いて動作させる
+  :::
+
+これにより、開発者の環境によって動かないなどの差分が出ることや、CI/CD 上で突然動かなくなるなどのリスクを低減しました。
+
+これにより、以下のようなことができるようになりました
+
+> Ruby のバージョンを更新するメンテナンスを行うタイミングで、CI/CD のワークフローが動かなくなることが分かり、原因調査を行うことができた。
+
+また、GitHub の PR 提出時に正しいバックログのチケットへのリンクが紐づけられているかを自動でチェックするようにしました。
+
+これには、Danger を利用しています。
+
+https://danger.systems/ruby/
+
+GitHub のブランチ保護ルールで、Danger によるチェックがパスしない場合はマージを禁止するようにしています。
+
+https://docs.github.com/ja/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/managing-a-branch-protection-rule
+
+これにより、以下のようなことができるようになりました
+
+- PR に必ずバックログのチケットが紐づけられるようになり、紐付け漏れが 0 になった
 
 # 5. 内部品質を継続的に改善する
 
