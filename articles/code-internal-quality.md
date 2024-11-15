@@ -114,11 +114,11 @@ published: false
 
 具体的には、 PR での自動チェックとして以下のような内容を設定しました。
 
-| 項目                         | 利用ツール                                   |
-| ---------------------------- | -------------------------------------------- |
-| 静的解析の指摘が増えていない | SwiftLint、SwiftFormat、Android Lint、detekt |
-| デッドコードが増えていない   | Periphery、Qodana                            |
-| Typo が増えていない          | CSpell                                       |
+| 項目                         | 利用ツール                                                                                                                                                                                                        |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 静的解析の指摘が増えていない | [SwiftLint](https://realm.github.io/SwiftLint/)、[SwiftFormat](https://github.com/nicklockwood/SwiftFormat)、[Android Lint](https://developer.android.com/studio/write/lint?hl=ja)、[detekt](https://detekt.dev/) |
+| デッドコードが増えていない   | [Periphery](https://github.com/peripheryapp/periphery)、[Qodana](https://www.jetbrains.com/help/qodana/getting-started.html)                                                                                      |
+| Typo が増えていない          | [CSpell](https://cspell.org/)                                                                                                                                                                                     |
 
 :::message
 途中からこのような仕組みを導入したため、導入時点の指摘は一旦 Baseline のような形で無視するようにました。
