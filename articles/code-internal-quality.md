@@ -2,7 +2,7 @@
 title: "コードの内部品質を高める動きをチームに浸透させたい"
 emoji: "🥝"
 type: "idea" # tech: 技術記事 / idea: アイデア
-topics: ["チーム開発", "品質", "リファクタリング"]
+topics: ["チーム開発", "品質", "リファクタリング", "ios", "android"]
 published: false
 ---
 
@@ -29,7 +29,11 @@ https://mtx2s.hatenablog.com/entry/2023/04/26/230917
 
 ## 私の立場
 
-iOS、Android アプリの開発を担当しているエンジニアがそれぞれ 4 人程度いるチームで、両方を統括する技術リードを担当しています。
+iOS、Android アプリの開発を担当しているエンジニアがそれぞれ 4 人程度いるチームで、モバイル全体のリードを担当しています。
+
+![](/images/code-internal-quality/team-structure.png)
+
+iOS、Android それぞれには、リードエンジニアが 1 人ずついて、それぞれのチームを牽引しています。
 
 ## この記事で書くこと
 
