@@ -97,6 +97,12 @@ iOS/Android のモバイルアプリを開発するプロジェクトです。
 
 トランクベース開発は、リリースのために大きなマージをするなどのイベントを減らし、リリースのスピードを上げることができます。
 
+トランクベース開発についてはいくつか記事を書いたことがあるので、こちらも参考にしてみてください。
+
+https://zenn.dev/sun_asterisk/articles/trunk-based-development-strategy
+
+https://zenn.dev/sun_asterisk/articles/trunk-based-development-pros-and-cons
+
 そのため、短いサイクルでのリリースに適していると考えているので、トランクベース開発を導入しました。
 
 以下のような取り組みをしています。
