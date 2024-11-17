@@ -93,17 +93,12 @@ iOS/Android のモバイルアプリを開発するプロジェクトです。
 
 そこで、短いサイクルでのリリースに耐えうるプロセスを構築しました。
 
-### 2-1. トランクベース開発の導入
+### 2-1. ブランチ管理の最適化
 
-トランクベース開発は、リリースのために大きなマージをするなどのイベントを減らし、リリースのスピードを上げることができます。
+ブランチ管理は、複数人での開発する上で重要な要素です。
+しかし
 
-トランクベース開発についてはいくつか記事を書いたことがあるので、こちらも参考にしてみてください。
-
-https://zenn.dev/sun_asterisk/articles/trunk-based-development-strategy
-
-https://zenn.dev/sun_asterisk/articles/trunk-based-development-pros-and-cons
-
-そのため、短いサイクルでのリリースに適していると考えているので、トランクベース開発を導入しました。
+トランクベース開発は、リリースのために大きなマージをするなどの間違いや意図しないバグが発生するリスクを極力減らし、リリースのスピードを上げることができます。
 
 以下のような取り組みをしています。
 
@@ -112,6 +107,14 @@ https://zenn.dev/sun_asterisk/articles/trunk-based-development-pros-and-cons
 - CI の導入
   - トランクブランチへの PR マージ前に静的解析、単体テストなどをチェックし、パスしていない場合はマージを禁止する
   - トランクブランチでの E2E テストを実行し、失敗した場合はすぐに修正する
+
+トランクベース開発についてはいくつか記事を書いたことがあるので、こちらも参考にしてみてください。
+
+https://zenn.dev/sun_asterisk/articles/trunk-based-development-strategy
+
+https://zenn.dev/sun_asterisk/articles/trunk-based-development-pros-and-cons
+
+そのため、短いサイクルでのリリースに適していると考えているので、トランクベース開発を導入しました。
 
 ### 2-2. デプロイとロールアウトの分離
 
