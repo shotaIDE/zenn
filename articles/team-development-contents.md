@@ -258,6 +258,10 @@ https://docs.github.com/ja/repositories/configuring-branches-and-merges-in-your-
 - エンジニアメンバーによる開発プロセスに関する訂正的なアンケートの実施と集計
 - コード品質のメトリクス(単体テストのコードカバレッジ)の定量的な測定と観察
 
+![](/images/team-development-contents/quantitative-metrics-dashboard.png)
+
+![](/images/team-development-contents/qualitative-research.png)
+
 これにより、以下のような効果がありました。
 
 - コード品質が順調に維持・向上しているかを確認できるようになった
