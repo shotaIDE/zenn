@@ -226,7 +226,6 @@ https://docs.github.com/ja/repositories/configuring-branches-and-merges-in-your-
 ## 5. 内部品質を継続的に改善する
 
 中長期的な期間で継続的に価値提供していくサービスにおいては、コードのメンテナンス性などの内部品質を高く保ち続ける取り組みが必須です。
-
 内部品質が継続的に改善し続けないと、バグが増えるなどの外部品質に悪影響を及ぼし、機能提供のスピードが落ちていくなど、価値提供に悪影響を及ぼします。
 
 そのため、以下のような内部品質を継続的に改善し続けるための取り組みを行いました。
@@ -236,11 +235,13 @@ https://docs.github.com/ja/repositories/configuring-branches-and-merges-in-your-
 コードの内部品質が悪化しないようにすることが重要です。
 エンジニア同士のコードレビューで指摘していく方法もありますが、CI で自動的にチェックすることで、エンジニアの負担を減らし、コードの品質を保つことができます。
 
-以下のような取り組みを行いました。
+以下のようなチェックを行いました。
 
 - 静的解析による指摘事項が増えないようにする
 - デッドコードが増えないようにする
 - PR 提出時に、Typo が増えないことを自動チェック
+
+![](/images/team-development-contents/pr-checks.png)
 
 これにより以下のような効果がありました。
 
@@ -257,6 +258,10 @@ https://docs.github.com/ja/repositories/configuring-branches-and-merges-in-your-
 - エンジニアメンバーによる開発プロセスに関する訂正的なアンケートの実施と集計
 - コード品質のメトリクス(単体テストのコードカバレッジ)の定量的な測定と観察
 
+![](/images/team-development-contents/quantitative-metrics-dashboard.png)
+
+![](/images/team-development-contents/qualitative-research.png)
+
 これにより、以下のような効果がありました。
 
 - コード品質が順調に維持・向上しているかを確認できるようになった
@@ -269,6 +274,8 @@ https://docs.github.com/ja/repositories/configuring-branches-and-merges-in-your-
 以下のような開発プロセスを効率化する取り組みを行いました。
 
 ### 6-1. 開発やテストを効率化するための仕組み
+
+開発やテストは繰り返し行う作業なので、細かい効率化でも大きな効果があります。
 
 iOS や Android アプリでは、API を通じてデータのやり取りすることが多いです。
 その際に、API のリクエストやレスポンスを確認したり、遅延や改ざんなどをしたりすることで、開発やテストに役立つことが多くあります。
@@ -289,6 +296,8 @@ https://www.charlesproxy.com/
 
 ### 6-2. ワークフロー効率化
 
+開発内容の計画や、タスク管理なども繰り返し行う作業なので、細かい効率化でも大きな効果を得られます。
+
 アプリに利用しているライブラリは、定期的にバージョンアップされています。
 これを手動で行うと、手間がかかるだけでなく、対応漏れが発生する可能性もあります。
 
@@ -297,10 +306,3 @@ https://www.charlesproxy.com/
 https://docs.github.com/ja/code-security/dependabot/working-with-dependabot
 
 https://docs.renovatebot.com/
-
-## その他メモ
-
-- スプリント開発用のビルドのデプロイ自動化
-- リリース用のビルドのデプロイ半自動化（トランクベース開発を考慮）
-- E2E 自動テスト実行時の画面収録を蓄積
-- E2E 自動テストにおけるテストケースと確認観点のドキュメントデプロイを自動化
