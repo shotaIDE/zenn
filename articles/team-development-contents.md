@@ -306,8 +306,3 @@ https://www.charlesproxy.com/
 https://docs.github.com/ja/code-security/dependabot/working-with-dependabot
 
 https://docs.renovatebot.com/
-
-## その他メモ
-
-- E2E 自動テスト実行時の画面収録を蓄積
-- E2E 自動テストにおけるテストケースと確認観点のドキュメントデプロイを自動化
