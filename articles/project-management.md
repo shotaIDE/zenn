@@ -2,7 +2,7 @@
 title: "エンジニアの私が、プロジェクトマネージャーのノウハウを自分なりに解釈する"
 emoji: "🧑‍🔧"
 type: "idea" # tech: 技術記事 / idea: アイデア
-topics: ["プロジェクトマネージャー"]
+topics: ["management", "プロジェクトマネージャー"]
 publication_name: "sun_asterisk"
 published: true
 ---

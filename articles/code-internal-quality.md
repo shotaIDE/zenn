@@ -2,7 +2,7 @@
 title: "コードの内部品質を高める動きをチームに浸透させたい"
 emoji: "🥝"
 type: "idea" # tech: 技術記事 / idea: アイデア
-topics: ["チーム開発", "品質", "リファクタリング", "ios", "android"]
+topics: ["チームビルディング", "チーム開発", "品質", "リファクタリング"]
 published: false
 ---
 

@@ -2,7 +2,7 @@
 title: "チーム開発をうまくやるためのプロセス"
 emoji: "🕌"
 type: "idea" # tech: 技術記事 / idea: アイデア
-topics: ["ios", "android"]
+topics: ["チームビルディング", "ios", "android"]
 published: false
 ---
 
