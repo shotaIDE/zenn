@@ -2,7 +2,7 @@
 title: "チーム開発をうまくやるために技術リードとして取り組んだ内容"
 emoji: "🕌"
 type: "idea" # tech: 技術記事 / idea: アイデア
-topics: ["ios", "android"]
+topics: ["テックリード", "team", "ios", "android"]
 published: false
 ---
 
