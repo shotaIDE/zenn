@@ -202,7 +202,7 @@ https://zenn.dev/sun_asterisk/articles/trunk-based-development-pros-and-cons
 この際、サーバーからプッシュ通知を送信した後、Android 端末でどの程度正常に遅延なく表示されているかを収集できる仕組みを作りました。
 以下のようにダッシュボードを作り、分析ができるようにしています。
 
-![](/images/team-development-contents/android-push-notification-dashboard.png)
+![](/images/tech-lead-contents/android-push-notification-dashboard.png)
 
 これにより、まず一部ユーザーに変更をロールアウトし、遅延が悪化していないことをデータを元に確認し、その後全ユーザーに変更をロールアウトできました。
 
@@ -263,7 +263,7 @@ https://docs.github.com/ja/repositories/configuring-branches-and-merges-in-your-
   - デッドコードの数
   - Typo の数
 
-![](/images/team-development-contents/pr-checks.png)
+![](/images/tech-lead-contents/pr-checks.png)
 
 エンジニア同士のコードレビューで指摘していく方法もありますが、CI で自動的にチェックすることで、エンジニアの負担を減らし、コードの品質を保つことができます。
 
@@ -285,9 +285,9 @@ https://docs.github.com/ja/repositories/configuring-branches-and-merges-in-your-
 - コード品質のメトリクス(単体テストのコードカバレッジ)の定量的な測定と観察
 - エンジニアメンバーによる開発プロセスに関する訂正的なアンケートの実施と集計
 
-![](/images/team-development-contents/quantitative-metrics-dashboard.png)
+![](/images/tech-lead-contents/quantitative-metrics-dashboard.png)
 
-![](/images/team-development-contents/qualitative-research.png)
+![](/images/tech-lead-contents/qualitative-research.png)
 
 これにより、以下のような効果がありました。
 
