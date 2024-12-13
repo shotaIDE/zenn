@@ -7,8 +7,6 @@ publication_name: "sun_asterisk"
 published: false
 ---
 
-<!-- cspell:ignore detekt, qodana -->
-
 こんにちは、モバイルエンジニアのころむにーです。
 
 普段、モバイルアプリを通じたユーザーへの価値提供を目指すプロジェクトに、技術リードという立場で参加しています。
