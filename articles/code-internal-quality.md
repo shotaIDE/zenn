@@ -3,10 +3,9 @@ title: "コードの内部品質を高める動きをチームに浸透させた
 emoji: "🥝"
 type: "idea" # tech: 技術記事 / idea: アイデア
 topics: ["チームビルディング", "チーム開発", "品質", "リファクタリング"]
+publication_name: "sun_asterisk"
 published: false
 ---
-
-<!-- cspell:ignore detekt, qodana -->
 
 こんにちは、モバイルエンジニアのころむにーです。
 
