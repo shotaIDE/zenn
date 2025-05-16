@@ -8,7 +8,11 @@ published: false
 
 # はじめに
 
-Flutter プロジェクトで iOS 向けに SPM（Swift Package Manager）を利用している際、"Module shared_preferences_foundation not found" という旨のエラーが出たので、その対処法を簡単にメモしておきます。
+Flutter プロジェクトで iOS 向けに Swift Package Manager(以下、SPM と記載)を利用している際、以下のようなエラーが出たので、その対処法を簡単にメモしておきます。
+
+```log
+Module `shared_preferences_foundation` not found
+```
 
 # 前提
 
