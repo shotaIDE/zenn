@@ -10,6 +10,10 @@ published: false
 
 Flutter の iOS ビルド時に "Module shared_preferences_foundation not found" という旨のエラーが出たので、その際の対処法を簡単にメモしておきます。
 
+# 結論
+
+依存関係の再構築（`pubspec.yaml` から `shared_preferences` を一度削除し、再度追加して `flutter pub get` を実行）でビルドエラーが解消しました。
+
 # 発生したエラー
 
 ```log
