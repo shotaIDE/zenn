@@ -43,7 +43,7 @@ https://docs.flutter.dev/packages-and-plugins/swift-package-manager/for-app-deve
 
 ```log
 Launching lib/main.dart on iOS 17 iPhone in debug mode...
-Automatically signing iOS for device deployment using specified development team in Xcode project: 4UGYN353AH
+Automatically signing iOS for device deployment using specified development team in Xcode project: xxxxxxxxxx
 Xcode build done.                                           52.5s
 Failed to build iOS app
 Could not build the precompiled application for the device.
