@@ -37,9 +37,8 @@ https://docs.flutter.dev/packages-and-plugins/swift-package-manager/for-app-deve
 
 エラーが発生しているモジュールの大元となっている Flutter の依存関係を一旦削除し、再度追加することで、ビルドエラーが解決しました。
 
-1. `pubspec.yaml` から `shared_preferences` を一度削除し、`flutter pub get --no-example` を実行
-2. 再度 `shared_preferences` を追加し、`flutter pub get --no-example` を実行
-3. iOS のビルドを実行
+1. `pubspec.yaml` から `shared_preferences` を一度削除し、iOS のビルドを実行
+2. 再度 `shared_preferences` を追加し、iOS のビルドを実行
 
 # 詳細
 
