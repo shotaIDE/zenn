@@ -1,9 +1,9 @@
 ---
 title: "FlutterでSPMを利用している際に `Module not found` エラーが出た時の対処法メモ"
-emoji: "🕌"
+emoji: "🫧"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["ios", "flutter"]
-published: false
+topics: ["flutter", "spm", "ios"]
+published: true
 ---
 
 # はじめに
@@ -40,7 +40,7 @@ https://docs.flutter.dev/packages-and-plugins/swift-package-manager/for-app-deve
 1. `pubspec.yaml` から `shared_preferences` を一度削除し、iOS のビルドを実行
 2. 再度 `shared_preferences` を追加し、iOS のビルドを実行
 
-# 詳細
+# 詳細な対応ログ
 
 まず、以下のようなエラーが発生しました。
 
