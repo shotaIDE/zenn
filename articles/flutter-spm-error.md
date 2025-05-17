@@ -14,6 +14,10 @@ Flutter プロジェクトで iOS 向けに Swift Package Manager(以下、SPM �
 Module `shared_preferences_foundation` not found
 ```
 
+:::message
+根本原因の深掘りはしていないので、同じような事象が起きた際の参考程度にしてください 🙏
+:::
+
 # 前提
 
 以下の環境で発生したエラーです。
