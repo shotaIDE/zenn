@@ -43,3 +43,24 @@ flutterfire upload-crashlytics-symbols --upload-symbols-script-path="$PATH_TO_CR
 `if [ -z "$PODS_ROOT" ]; then` で、CocoaPods を使っていない判定をしている。
 
 一方で、Crashlytics は SPM 対応しているので、CocoaPods を使わずに SPM で導入している場合は、`PODS_ROOT` は空になる。
+
+以下のようにするとビルドエラーが解消した。
+
+```shell
+#!/bin/bash
+PATH="${PATH}:$FLUTTER_ROOT/bin:$HOME/.pub-cache/bin"
+
+# Although cocoapods is partially used, it is not used by Crashlytics.
+# Because of this situation, the following conditional branch does not work as intended,
+# so it is commented out.
+# if [ -z "$PODS_ROOT" ]; then
+  # Cannot use "BUILD_DIR%/Build/*" as per Firebase documentation, it points to "flutter-project/build/ios/*" path which doesn't have run script
+  DERIVED_DATA_PATH=$(echo "$BUILD_ROOT" | sed -E 's|(.*DerivedData/[^/]+).*|\1|')
+  PATH_TO_CRASHLYTICS_UPLOAD_SCRIPT="${DERIVED_DATA_PATH}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
+# else
+#   PATH_TO_CRASHLYTICS_UPLOAD_SCRIPT="$PODS_ROOT/FirebaseCrashlytics/run"
+# fi
+
+# Command to upload symbols script used to upload symbols to Firebase server
+flutterfire upload-crashlytics-symbols --upload-symbols-script-path="$PATH_TO_CRASHLYTICS_UPLOAD_SCRIPT" --platform=ios --apple-project-path="${SRCROOT}" --env-platform-name="${PLATFORM_NAME}" --env-configuration="${CONFIGURATION}" --env-project-dir="${PROJECT_DIR}" --env-built-products-dir="${BUILT_PRODUCTS_DIR}" --env-dwarf-dsym-folder-path="${DWARF_DSYM_FOLDER_PATH}" --env-dwarf-dsym-file-name="${DWARF_DSYM_FILE_NAME}" --env-infoplist-path="${INFOPLIST_PATH}" --build-configuration=${CONFIGURATION}
+```
