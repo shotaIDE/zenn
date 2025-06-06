@@ -6,7 +6,7 @@ topics: ["flutter", "ios", "xcode", "apple"]
 published: false
 ---
 
-<!-- cSpell:ignore textlint -->
+<!-- cSpell:ignore textlint, xcarchive -->
 
 Flutter プロジェクトで「Apple でサインイン」を実装している際に、以下の事象に遭遇しました。
 
