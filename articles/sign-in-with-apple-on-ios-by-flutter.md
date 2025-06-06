@@ -39,25 +39,30 @@ flutter build ios --no-codesign
 
 # iOSネイティブをアーカイブ
 xcodebuild archive \
-    CODE_SIGNING_ALLOWED=NO
-   -workspace ./ios/Runner.xcworkspace \
-   -scheme Runner \
-   -configuration Release \
-    -archivePath ./build/ios/Runner.xcarchive
+    CODE_SIGNING_ALLOWED=NO \
+    -workspace ./ios/Runner.xcworkspace \
+    -scheme Runner \
+    -configuration Release \
     -archivePath ./build/ios/Runner.xcarchive \
     -authenticationKeyIssuerID "${APPLE_API_ISSUER_ID}" \
     -authenticationKeyID "${APPLE_API_KEY_ID}" \
     -authenticationKeyPath "${APP_STORE_CONNECT_API_KEY_ABSOLUTE_PATH}"
 
+xcodebuild archive CODE_SIGNING_ALLOWED=NO
+    -workspace ./ios/Runner.xcworkspace \
+    -scheme 'prod' \
+    -configuration 'Release-prod' \
+    -archivePath ./build/ios/Runner.xcarchive
+
 # iOSネイティブをipaファイルにエクスポート
 xcodebuild -exportArchive \
-   -archivePath ./build/ios/Runner.xcarchive \
-   -exportPath ./build/ios/ipa \
-   -exportOptionsPlist "${EXPORT_OPTIONS_PLIST_RELATIVE_PATH}" \
-   -allowProvisioningUpdates \
-   -authenticationKeyIssuerID "${APPLE_API_ISSUER_ID}" \
-   -authenticationKeyID "${APPLE_API_KEY_ID}" \
-   -authenticationKeyPath "${APP_STORE_CONNECT_API_KEY_ABSOLUTE_PATH}"
+    -archivePath ./build/ios/Runner.xcarchive \
+    -exportPath ./build/ios/ipa \
+    -exportOptionsPlist "${EXPORT_OPTIONS_PLIST_RELATIVE_PATH}" \
+    -allowProvisioningUpdates \
+    -authenticationKeyIssuerID "${APPLE_API_ISSUER_ID}" \
+    -authenticationKeyID "${APPLE_API_KEY_ID}" \
+    -authenticationKeyPath "${APP_STORE_CONNECT_API_KEY_ABSOLUTE_PATH}"
 ```
 
 :::message
