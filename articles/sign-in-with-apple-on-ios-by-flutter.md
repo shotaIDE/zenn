@@ -22,7 +22,7 @@ Flutter プロジェクトで「Apple でサインイン」を実装している
 
 また、Xcode プロジェクトファイルの設定で、Automatic Signing が有効になっています。
 
-![Automatic Signingが有効]()
+![Automatic Signingが有効](/images/sign-in-with-apple-on-ios-by-flutter/automatic-signing.png)
 
 一方で、Test Flight にアップロードするアプリは、**Manual Signing によりビルド**したものとしていました。
 具体的には、以下のようなコマンドでビルドしていました。
@@ -52,6 +52,38 @@ xcodebuild -exportArchive \
    -authenticationKeyIssuerID "${APPLE_API_ISSUER_ID}" \
    -authenticationKeyID "${APPLE_API_KEY_ID}" \
    -authenticationKeyPath "${APP_STORE_CONNECT_API_KEY_ABSOLUTE_PATH}"
+```
+
+`-exportOptionsPlist` オプションの `EXPORT_OPTIONS_PLIST_RELATIVE_PATH` には、以下のような内容のファイルを指定していました。
+
+```xml:ExportOptions.plist
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>destination</key>
+	<string>export</string>
+	<key>manageAppVersionAndBuildNumber</key>
+	<false/>
+	<key>method</key>
+	<string>app-store-connect</string>
+	<key>provisioningProfiles</key>
+	<dict>
+		<key>my.application.bundle.identifier</key>
+		<string>My Application for App Store</string>
+	</dict>
+	<key>signingCertificate</key>
+	<string>Apple Distribution</string>
+	<key>signingStyle</key>
+	<string>manual</string>
+	<key>stripSwiftSymbols</key>
+	<true/>
+	<key>teamID</key>
+	<string>XXXXXXXXXX</string>
+	<key>uploadSymbols</key>
+	<true/>
+</dict>
+</plist>
 ```
 
 ## 結論
