@@ -88,11 +88,20 @@ xcodebuild -exportArchive \
 
 ## 結論
 
+Xcode プロジェクトの構成を Manual Signing に変更し、ビルドコマンド時に署名周りの設定を付け替える必要がないようにしました。
+この設定によりビルドしたアプリを Test Flight にアップロードすると、「Apple でサインイン」機能が正常に動作しました。
+
+## 詳細
+
+具体的には以下の通りの手順で設定しています。
+
 **Xcode プロジェクトファイルの構成そのものを Manual Signing に変更**しました。
-これに伴い、Flutter のビルドコマンド 1 つで TestFlight へのアップロードに使うアプリが生成できるようになりました。
+Test Flight にアップロードする用の構成(`Release-prod`)のみ変更を適用しています。
+
+![Manual Signingに変更](/images/sign-in-with-apple-on-ios-by-flutter/manual-signing.png)
+
+また、署名周りの設定の付け替えが必要なくなったため、Flutter のビルドコマンド 1 つで TestFlight へのアップロードに使うアプリが生成できるようになりました。
 
 ```shell
 flutter build ipa --export-options-plist "${EXPORT_OPTIONS_PLIST_RELATIVE_PATH}"
 ```
-
-このアプリを Test Flight にアップロードすると、「Apple でサインイン」機能が正常に動作するようになりました。
