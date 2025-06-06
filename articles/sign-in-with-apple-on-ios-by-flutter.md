@@ -8,8 +8,8 @@ published: false
 
 Flutter プロジェクトで「Apple でサインイン」を実装している際に、以下の事象に遭遇しました。
 
-- TestFlight にアップロードしたアプリで「Apple でサインイン」を実行すると、内部で何かしらのエラーが発生し、サインインモーダルが表示されない
-- ローカルでビルドしたアプリでは問題なく「Apple でサインイン」が動作する
+- **TestFlight にアップロードしたアプリで「Apple でサインイン」**すると、内部で何かしらのエラーが発生し、**サインインモーダルが表示されない**
+- **ローカルでビルドしたアプリ**では問題なく「Apple でサインイン」が**動作する**
 
 解決策をメモしておきます。
 
@@ -17,13 +17,44 @@ Flutter プロジェクトで「Apple でサインイン」を実装している
 
 - Flutter プロジェクトにおける iOS アプリ
 - Apple でサインイン機能を実装済み
-- Xcode プロジェクトファイルの設定は以下の通り
-  - Automatic Signing が有効
-- Flutter のビルドコマンドと xcodebuild コマンドを使用して、**Manual Signing によりビルド**したものを TestFlight にアップロード
+
+また、Xcode プロジェクトファイルの設定で、Automatic Signing が有効になっています。
+
+![Automatic Signingが有効]()
+
+一方で、Test Flight にアップロードするアプリは、**Manual Signing によりビルド**したものとしていました。
+具体的には、以下のようなコマンドでビルドしていました。
+
+```shell
+# Flutter部分をビルド
+flutter build ios --no-codesign
+
+# iOSネイティブをアーカイブ
+xcodebuild archive \
+    CODE_SIGNING_ALLOWED=NO
+   -workspace ./ios/Runner.xcworkspace \
+   -scheme Runner \
+   -configuration Release \
+    -archivePath ./build/ios/Runner.xcarchive
+    -archivePath ./build/ios/Runner.xcarchive \
+    -authenticationKeyIssuerID "${APPLE_API_ISSUER_ID}" \
+    -authenticationKeyID "${APPLE_API_KEY_ID}" \
+    -authenticationKeyPath "${APP_STORE_CONNECT_API_KEY_ABSOLUTE_PATH}"
+
+# iOSネイティブをipaファイルにエクスポート
+xcodebuild -exportArchive \
+   -archivePath ./build/ios/Runner.xcarchive \
+   -exportPath ./build/ios/ipa \
+   -exportOptionsPlist "${EXPORT_OPTIONS_PLIST_RELATIVE_PATH}" \
+   -allowProvisioningUpdates \
+   -authenticationKeyIssuerID "${APPLE_API_ISSUER_ID}" \
+   -authenticationKeyID "${APPLE_API_KEY_ID}" \
+   -authenticationKeyPath "${APP_STORE_CONNECT_API_KEY_ABSOLUTE_PATH}"
+```
 
 ## 結論
 
-Xcode プロジェクトファイルの構成そのものを Manual Signing に変更しました。
+**Xcode プロジェクトファイルの構成そのものを Manual Signing に変更**しました。
 これにより、TestFlight にアップロードしたアプリでも「Apple でサインイン」機能が正常に動作するようになりました。
 
 ## 詳細
