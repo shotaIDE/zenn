@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx cspell:*)",
+      "Bash(npx textlint:*)"
+    ],
+    "deny": []
+  }
+}
