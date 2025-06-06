@@ -79,8 +79,6 @@ xcodebuild -exportArchive \
 <dict>
 	<key>destination</key>
 	<string>export</string>
-	<key>manageAppVersionAndBuildNumber</key>
-	<false/>
 	<key>method</key>
 	<string>app-store-connect</string>
 	<key>provisioningProfiles</key>
@@ -92,12 +90,9 @@ xcodebuild -exportArchive \
 	<string>Apple Distribution</string>
 	<key>signingStyle</key>
 	<string>manual</string>
-	<key>stripSwiftSymbols</key>
-	<true/>
 	<key>teamID</key>
 	<string>XXXXXXXXXX</string>
-	<key>uploadSymbols</key>
-	<true/>
+	<!-- ... -->
 </dict>
 </plist>
 ```
