@@ -1,31 +1,30 @@
 ---
-title: "FlutterプロジェクトでのSign in with Apple実装時のコード署名設定メモ"
+title: "FlutterによるiOSアプリでTestFlightにアップロードしたアプリのみ「Appleでサインイン」が失敗する問題の解消法メモ"
 emoji: "🍎"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: ["flutter", "ios", "signin", "apple", "xcode"]
+topics: ["flutter", "ios", "xcode", "apple"]
 published: false
 ---
 
-こんにちは、モバイルエンジニアのころむにーです。
+Flutter プロジェクトで「Apple でサインイン」を実装している際に、以下の事象に遭遇しました。
 
-Flutter プロジェクトで Sign in with Apple を実装した際、Automatic Signing と xcodebuild の組み合わせで機能が無効になる問題へ遭遇しました。
+- TestFlight にアップロードしたアプリで「Apple でサインイン」を実行すると、内部で何かしらのエラーが発生し、サインインモーダルが表示されない
+- ローカルでビルドしたアプリでは問題なく「Apple でサインイン」が動作する
 
-最終的には Manual Signing を使用して解決できたため、その経緯と解決策をメモとして残します。
+解決策をメモしておきます。
 
 ## 前提
 
-- Flutter プロジェクト（iOS）
-- Sign in with Apple 機能を実装済み
-- CI/CD で xcodebuild コマンドを使用してビルド
+- Flutter プロジェクトにおける iOS アプリ
+- Apple でサインイン機能を実装済み
+- Xcode プロジェクトファイルの設定は以下の通り
+  - Automatic Signing が有効
+- Flutter のビルドコマンドと xcodebuild コマンドを使用して、**Manual Signing によりビルド**したものを TestFlight にアップロード
 
 ## 結論
 
-**Release 構成を Automatic Signing から Manual Signing に変更することで解決**
-
-以下の手順で設定を変更します：
-
-- Xcode で Release 構成を Manual Signing に設定
-- Flutter の `build ipa` コマンド実行時に、構成で指定した Signing Identity と Provisioning Profile を使用
+Xcode プロジェクトファイルの構成そのものを Manual Signing に変更しました。
+これにより、TestFlight にアップロードしたアプリでも「Apple でサインイン」機能が正常に動作するようになりました。
 
 ## 詳細
 
