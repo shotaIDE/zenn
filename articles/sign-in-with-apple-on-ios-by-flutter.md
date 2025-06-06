@@ -44,15 +44,9 @@ xcodebuild archive \
     -scheme Runner \
     -configuration Release \
     -archivePath ./build/ios/Runner.xcarchive \
-    -authenticationKeyIssuerID "${APPLE_API_ISSUER_ID}" \
-    -authenticationKeyID "${APPLE_API_KEY_ID}" \
-    -authenticationKeyPath "${APP_STORE_CONNECT_API_KEY_ABSOLUTE_PATH}"
-
-xcodebuild archive CODE_SIGNING_ALLOWED=NO
-    -workspace ./ios/Runner.xcworkspace \
-    -scheme 'prod' \
-    -configuration 'Release-prod' \
-    -archivePath ./build/ios/Runner.xcarchive
+    -authenticationKeyIssuerID "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" \
+    -authenticationKeyID "XXXXXXXXXX" \
+    -authenticationKeyPath ./ios/fastlane/app-store-connect-api-key.p8
 
 # iOSネイティブをipaファイルにエクスポート
 xcodebuild -exportArchive \
@@ -60,19 +54,19 @@ xcodebuild -exportArchive \
     -exportPath ./build/ios/ipa \
     -exportOptionsPlist "${EXPORT_OPTIONS_PLIST_RELATIVE_PATH}" \
     -allowProvisioningUpdates \
-    -authenticationKeyIssuerID "${APPLE_API_ISSUER_ID}" \
-    -authenticationKeyID "${APPLE_API_KEY_ID}" \
-    -authenticationKeyPath "${APP_STORE_CONNECT_API_KEY_ABSOLUTE_PATH}"
+    -authenticationKeyIssuerID "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" \
+    -authenticationKeyID "XXXXXXXXXX" \
+    -authenticationKeyPath ./ios/fastlane/app-store-connect-api-key.p8
 ```
 
 :::message
 このような段階を踏んだビルド方法を取っていたのは、ローカルマシンの開発時には Automatic Signing を有効にしておきたかったためです。
 :::
 
-`-exportOptionsPlist` オプションの `EXPORT_OPTIONS_PLIST_RELATIVE_PATH` には、以下のような内容のファイルを指定していました。
+`-exportOptionsPlist` オプションのファイルには、以下のような内容を指定していました。
 **Manual Signing の設定が含まれた**ものになっています。
 
-```xml:ExportOptions.plist
+```xml:./ios/ExportOptions.plist
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
