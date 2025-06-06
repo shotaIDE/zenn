@@ -8,7 +8,7 @@ published: false
 
 こんにちは、モバイルエンジニアのころむにーです。
 
-Flutter プロジェクトで Sign in with Apple を実装した際に、Automatic Signing と xcodebuild を組み合わせた場合に Sign in with Apple 機能が無効になる問題に遭遇しました。最終的に Manual Signing を使用することで解決できたので、その経緯と解決策をメモとして残します。
+Flutter プロジェクトで Sign in with Apple を実装した際、Automatic Signing と xcodebuild を組み合わせた場合にその機能が無効になる問題へ遭遇しました。最終的には Manual Signing を使用して解決できたため、その経緯と解決策をメモとして残します。
 
 ## 前提
 
@@ -49,7 +49,7 @@ xcodebuild -archivePath path/to/archive \
 
 ### 最終的な解決策: Manual Signing の採用
 
-上記の問題を受けて、Release 構成を最初から Manual Signing に設定する方針に変更しました。
+上記の問題を受けて、Release 構成を最初から Manual Signing へ設定する方針へ変更しました。
 
 #### 設定手順
 
@@ -68,7 +68,7 @@ xcodebuild -archivePath path/to/archive \
 
 Flutter プロジェクトで Sign in with Apple 機能を実装する際は、以下の点が重要と考えています：
 
-- Automatic Signing は便利ですが、Sign in with Apple 機能との組み合わせで問題が発生する可能性がある
+- Automatic Signing は便利ですが、Sign in with Apple 機能との組み合わせで問題の発生する可能性がある
 - Manual Signing を使用することで、より予測可能で安定したビルド結果を得られる
 - CI/CD パイプラインでの運用を考慮した署名設定の選択が重要
 
