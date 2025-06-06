@@ -1,3 +1,5 @@
+<!-- cSpell:ignore textlint -->
+
 # 執筆ガイドライン
 
 ## 文体とキャラクター
