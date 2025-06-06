@@ -13,19 +13,25 @@ Flutter プロジェクトで「Apple でサインイン」を実装している
 - **Test Flight にアップロードしたアプリで「Apple でサインイン**」すると、内部で何かしらのエラーが発生し、**サインインモーダルが表示されない**
 - **ローカルでビルドしたアプリでは問題なく「Apple でサインイン」が動作する**
 
+サインインモーダルは以下を指しています。
+
+![Appleでサインインのモーダル](/images/sign-in-with-apple-on-ios-by-flutter/sign-in-with-apple-modal.png =300x)
+
 解決策をメモしておきます。
 
 ## 前提
 
+以下のプロジェクトです。
+
 - Flutter プロジェクトにおける iOS アプリ
 - Apple でサインイン機能を実装済み
 
-また、Xcode プロジェクトファイルの設定で、Automatic Signing が有効になっています。
+また、Xcode プロジェクトファイルの設定で、**Automatic Signing を有効に**しています。
 
 ![Automatic Signingが有効](/images/sign-in-with-apple-on-ios-by-flutter/automatic-signing.png)
 
 一方で、Test Flight にアップロードするアプリは、**Manual Signing によりビルド**したものとしていました。
-具体的には、以下のようなコマンドでビルドしていました。
+具体的には、以下のような一連のコマンドでビルドしたものをアップロードしていました。
 
 ```shell
 # Flutter部分をビルド
