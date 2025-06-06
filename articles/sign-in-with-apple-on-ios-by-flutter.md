@@ -6,6 +6,8 @@ topics: ["flutter", "ios", "xcode", "apple"]
 published: false
 ---
 
+<!-- cSpell:ignore textlint -->
+
 Flutter プロジェクトで「Apple でサインイン」を実装している際に、以下の事象に遭遇しました。
 
 - **TestFlight にアップロードしたアプリで「Apple でサインイン」**すると、内部で何かしらのエラーが発生し、**サインインモーダルが表示されない**
