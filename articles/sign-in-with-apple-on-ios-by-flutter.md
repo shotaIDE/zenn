@@ -59,6 +59,7 @@ xcodebuild -exportArchive \
 :::
 
 `-exportOptionsPlist` オプションの `EXPORT_OPTIONS_PLIST_RELATIVE_PATH` には、以下のような内容のファイルを指定していました。
+**Manual Signing の設定が含まれた**ものになっています。
 
 ```xml:ExportOptions.plist
 <?xml version="1.0" encoding="UTF-8"?>
