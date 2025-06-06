@@ -39,24 +39,24 @@ flutter build ios --no-codesign
 
 # iOSネイティブをアーカイブ
 xcodebuild archive \
-    CODE_SIGNING_ALLOWED=NO \
-    -workspace ./ios/Runner.xcworkspace \
-    -scheme Runner \
-    -configuration Release \
-    -archivePath ./build/ios/Runner.xcarchive \
-    -authenticationKeyIssuerID "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" \
-    -authenticationKeyID "XXXXXXXXXX" \
-    -authenticationKeyPath ./ios/fastlane/app-store-connect-api-key.p8
+  CODE_SIGNING_ALLOWED=NO \
+  -workspace ./ios/Runner.xcworkspace \
+  -scheme Runner \
+  -configuration Release \
+  -archivePath ./build/ios/Runner.xcarchive \
+  -authenticationKeyIssuerID "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" \
+  -authenticationKeyID "XXXXXXXXXX" \
+  -authenticationKeyPath ./ios/fastlane/app-store-connect-api-key.p8
 
 # iOSネイティブをipaファイルにエクスポート
 xcodebuild -exportArchive \
-    -archivePath ./build/ios/Runner.xcarchive \
-    -exportPath ./build/ios/ipa \
-    -exportOptionsPlist "${EXPORT_OPTIONS_PLIST_RELATIVE_PATH}" \
-    -allowProvisioningUpdates \
-    -authenticationKeyIssuerID "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" \
-    -authenticationKeyID "XXXXXXXXXX" \
-    -authenticationKeyPath ./ios/fastlane/app-store-connect-api-key.p8
+  -archivePath ./build/ios/Runner.xcarchive \
+  -exportPath ./build/ios/ipa \
+  -exportOptionsPlist "${EXPORT_OPTIONS_PLIST_RELATIVE_PATH}" \
+  -allowProvisioningUpdates \
+  -authenticationKeyIssuerID "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" \
+  -authenticationKeyID "XXXXXXXXXX" \
+  -authenticationKeyPath ./ios/fastlane/app-store-connect-api-key.p8
 ```
 
 :::message
@@ -108,5 +108,6 @@ Test Flight にアップロードする用の構成(`Release-prod`)のみ変更�
 また、署名周りの設定の付け替えが必要なくなったため、Flutter のビルドコマンド 1 つで TestFlight へのアップロードに使うアプリが生成できるようになりました。
 
 ```shell
-flutter build ipa --export-options-plist "${EXPORT_OPTIONS_PLIST_RELATIVE_PATH}"
+flutter build ipa \
+  --export-options-plist ./ios/ExportOptions.plist
 ```
