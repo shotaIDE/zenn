@@ -54,6 +54,10 @@ xcodebuild -exportArchive \
    -authenticationKeyPath "${APP_STORE_CONNECT_API_KEY_ABSOLUTE_PATH}"
 ```
 
+:::message
+このような段階を踏んだビルド方法を取っていたのは、ローカルマシンの開発時には Automatic Signing を有効にしておきたかったためです。
+:::
+
 `-exportOptionsPlist` オプションの `EXPORT_OPTIONS_PLIST_RELATIVE_PATH` には、以下のような内容のファイルを指定していました。
 
 ```xml:ExportOptions.plist
