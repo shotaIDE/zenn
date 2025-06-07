@@ -39,24 +39,17 @@ flutter build ios --no-codesign
 
 # iOSネイティブをアーカイブ
 xcodebuild archive \
-  CODE_SIGNING_ALLOWED=NO \
   -workspace ./ios/Runner.xcworkspace \
-  -scheme Runner \
-  -configuration Release \
-  -archivePath ./build/ios/Runner.xcarchive \
-  -authenticationKeyIssuerID "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" \
-  -authenticationKeyID "XXXXXXXXXX" \
-  -authenticationKeyPath ./ios/fastlane/app-store-connect-api-key.p8
+  -scheme 'prod' \
+  -configuration 'Release-prod' \
+  -archivePath ./build/ios/Runner.xcarchive
 
 # iOSネイティブをipaファイルにエクスポート
 xcodebuild -exportArchive \
   -archivePath ./build/ios/Runner.xcarchive \
   -exportPath ./build/ios/ipa \
   -exportOptionsPlist "${EXPORT_OPTIONS_PLIST_RELATIVE_PATH}" \
-  -allowProvisioningUpdates \
-  -authenticationKeyIssuerID "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" \
-  -authenticationKeyID "XXXXXXXXXX" \
-  -authenticationKeyPath ./ios/fastlane/app-store-connect-api-key.p8
+  -allowProvisioningUpdates
 ```
 
 :::message
