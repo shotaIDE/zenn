@@ -52,8 +52,13 @@ xcodebuild -exportArchive \
   -allowProvisioningUpdates
 ```
 
-:::message
+:::message  
 このような段階を踏んだビルド方法を取っていたのは、ローカルマシンの開発時には Automatic Signing を有効にしておきたかったためです。
+:::
+
+:::message
+改めて考えると、Xcode プロジェクトファイルの設定と実際のビルド時の設定を付け替えるのは、そもそもトリッキーですね...😇
+後述していますが、これが原因だったっぽいです。
 :::
 
 `-exportOptionsPlist` オプションのファイルには、以下のような内容を指定していました。
