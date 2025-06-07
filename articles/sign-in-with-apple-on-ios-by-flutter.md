@@ -3,7 +3,7 @@ title: "FlutterによるiOSアプリでTestFlightにアップロードしたア�
 emoji: "🍎"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["flutter", "ios", "xcode", "apple"]
-published: false
+published: true
 ---
 
 <!-- cSpell:ignore textlint, xcarchive -->
@@ -26,7 +26,7 @@ Flutter プロジェクトで「Apple でサインイン」を実装している
 - Flutter プロジェクトにおける iOS アプリ
 - Apple でサインイン機能を実装済み
 
-また、Xcode プロジェクトファイルの設定で、**Automatic Signing を有効に**しています。
+また、**Xcode プロジェクトファイルの設定で、Automatic Signing を有効**にしています。
 
 ![Automatic Signingが有効](/images/sign-in-with-apple-on-ios-by-flutter/automatic-signing.png)
 
@@ -62,7 +62,7 @@ xcodebuild -exportArchive \
 :::
 
 `-exportOptionsPlist` オプションのファイルには、以下のような内容を指定していました。
-**Manual Signing の設定が含まれた**ものになっています。
+Manual Signing の設定が含まれたものになっています。
 
 ```xml:./ios/ExportOptions.plist
 <?xml version="1.0" encoding="UTF-8"?>
@@ -91,14 +91,14 @@ xcodebuild -exportArchive \
 
 ## 結論
 
-Xcode プロジェクトの構成を Manual Signing に変更し、ビルドコマンド時に署名周りの設定を付け替える必要がないようにしました。
+Xcode プロジェクトの構成を Manual Signing に変更し、**ビルドコマンド時に署名周りの設定を付け替える必要がないようにしました**。
 この設定によりビルドしたアプリを Test Flight にアップロードすると、「Apple でサインイン」機能が正常に動作しました。
 
 ## 詳細
 
 具体的には以下の通りの手順で設定しています。
 
-**Xcode プロジェクトファイルの構成そのものを Manual Signing に変更**しました。
+Xcode プロジェクトファイルの構成そのものを Manual Signing に変更しました。
 Test Flight にアップロードする用の構成(`Release-prod`)のみ変更を適用しています。
 
 ![Manual Signingに変更](/images/sign-in-with-apple-on-ios-by-flutter/manual-signing.png)
