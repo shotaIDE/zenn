@@ -2,9 +2,11 @@
 title: "条件に応じてRiverpodの再評価を間引く"
 emoji: "🙆"
 type: "tech" # tech: 技術記事 / idea: アイデア
-topics: []
+topics: ["flutter", "riverpod"]
 published: false
 ---
+
+<!-- cspell:ignore riverpod -->
 
 ## 課題
 
