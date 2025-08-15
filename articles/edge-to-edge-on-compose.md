@@ -30,3 +30,5 @@ https://developer.android.com/develop/ui/compose/modifiers?hl=ja
 https://qiita.com/Nabe1216/items/6fd9e2293f7ae109150a
 
 https://developer.android.com/design/ui/mobile/guides/layout-and-content/edge-to-edge?hl=ja
+
+https://developer.android.com/develop/ui/views/layout/edge-to-edge?hl=ja#enable-edge-to-edge-display
