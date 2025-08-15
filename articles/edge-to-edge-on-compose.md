@@ -28,3 +28,5 @@ https://developers-jp.googleblog.com/2019/10/gesture-navigation-handling-visual-
 https://developer.android.com/develop/ui/compose/modifiers?hl=ja
 
 https://qiita.com/Nabe1216/items/6fd9e2293f7ae109150a
+
+https://developer.android.com/design/ui/mobile/guides/layout-and-content/edge-to-edge?hl=ja
