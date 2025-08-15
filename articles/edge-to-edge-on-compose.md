@@ -18,7 +18,7 @@ https://developers-jp.googleblog.com/2019/10/gesture-navigation-handling-visual-
 一方で、 `contentPadding` によるパディングは、`LazyColumn` のスクロール領域に対して適用されます。
 そのため、`contentPadding` によるパディングを設定することが適切です。
 
-`WindowInsets.safeDrawing` を利用することで、切り欠きを避けて描画することができる。
+`WindowInsets.safeDrawing` を利用することで、切り欠きを避けて描画できる。
 
 以下のような方針で実装することで、いい感じにできそうです。
 
