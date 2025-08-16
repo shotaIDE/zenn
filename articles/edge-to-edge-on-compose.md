@@ -205,7 +205,7 @@ fun MyScaffold() {
 
 ### `WindowInsets.safeDrawing` により切り欠きを避けて描画する
 
-`WindowInsets.safeDrawing` には、デバイスごとのノッチやパンチホールなどの「切り欠き」領域を避けて描画するための情報が含まれています。
+`WindowInsets.safeDrawing` には、ノッチやパンチホールなどの「切り欠き」領域を避けて描画するための情報が含まれています。
 これを利用し、上下左右のうち必要な要素だけを取り出して、`Modifier.windowInsetsPadding` に渡すことで、切り欠きを避けて描画することができます。
 
 ```diff kotlin:MainActivity.kt
@@ -236,20 +236,13 @@ fun MyScaffold() {
             // ...
 ```
 
+:::message
+`WindowInsets.safeContent` や、
+:::
+
 https://developer.android.com/develop/ui/compose/system/material-insets?hl=ja#override-default
 
 https://developers-jp.googleblog.com/2019/10/gesture-navigation-handling-visual-overlaps.html
-
-`modifier` におけるパディングは、`LazyColumn` のスクロール領域外に対して適用されます。
-一方で、 `contentPadding` によるパディングは、`LazyColumn` のスクロール領域に対して適用されます。
-そのため、`contentPadding` によるパディングを設定することが適切です。
-
-`WindowInsets.safeDrawing` を利用することで、切り欠きを避けて描画できる。
-
-| 項目          | Android 15                                       | Android 14                                           |
-| ------------- | ------------------------------------------------ | ---------------------------------------------------- |
-| `safeDrawing` | 端末を横にした際、ノッチを避けるようになっている | 端末を横にした際、ノッチを避けるようになっていない？ |
-| `safeContent` | 端末を横にした際、ノッチを避けるようになっている | 端末を横にした際、ノッチを避けるようになっている？   |
 
 以下のような方針で実装することで、いい感じにできそうです。
 
@@ -263,7 +256,3 @@ https://qiita.com/Nabe1216/items/6fd9e2293f7ae109150a
 https://developer.android.com/design/ui/mobile/guides/layout-and-content/edge-to-edge?hl=ja
 
 https://developer.android.com/develop/ui/views/layout/edge-to-edge?hl=ja#enable-edge-to-edge-display
-
-```
-
-```
