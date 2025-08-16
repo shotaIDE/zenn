@@ -184,7 +184,7 @@ fun MyScaffold() {
 最初、`modifier` で `Modifier.padding` を利用して余白を設定していました。
 この場合、スクロールコンテンツが描画される領域の外側にパディングが適用されます。
 
-```diff kotlin:
+```diff kotlin:MainActivity.kt
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -203,12 +203,12 @@ fun MyScaffold() {
 +            ),
 ```
 
-###　`WindowInsets.safeDrawing` により切り欠きを避けて描画する
+### `WindowInsets.safeDrawing` により切り欠きを避けて描画する
 
 `WindowInsets.safeDrawing` には、デバイスごとのノッチやパンチホールなどの「切り欠き」領域を避けて描画するための情報が含まれています。
 これを利用し、上下左右のうち必要な要素だけを取り出して、`Modifier.windowInsetsPadding` に渡すことで、切り欠きを避けて描画することができます。
 
-```diff kotlin:
+```diff kotlin:MainActivity.kt
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
