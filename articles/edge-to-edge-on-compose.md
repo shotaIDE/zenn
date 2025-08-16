@@ -248,8 +248,6 @@ fun MyScaffold() {
 `WindowInsets.safeContent` や、
 :::
 
-https://developer.android.com/develop/ui/compose/system/material-insets?hl=ja#override-default
-
 https://developers-jp.googleblog.com/2019/10/gesture-navigation-handling-visual-overlaps.html
 
 以下のような方針で実装することで、いい感じにできそうです。
@@ -259,8 +257,10 @@ https://developers-jp.googleblog.com/2019/10/gesture-navigation-handling-visual-
 
 https://developer.android.com/develop/ui/compose/modifiers?hl=ja
 
-https://qiita.com/Nabe1216/items/6fd9e2293f7ae109150a
+https://developer.android.com/develop/ui/views/layout/edge-to-edge?hl=ja#enable-edge-to-edge-display
+
+## 参考
 
 https://developer.android.com/design/ui/mobile/guides/layout-and-content/edge-to-edge?hl=ja
 
-https://developer.android.com/develop/ui/views/layout/edge-to-edge?hl=ja#enable-edge-to-edge-display
+https://qiita.com/Nabe1216/items/6fd9e2293f7ae109150a
