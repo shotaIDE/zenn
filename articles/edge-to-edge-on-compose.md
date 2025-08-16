@@ -179,7 +179,7 @@ fun MyScaffold() {
 
 ## 解説
 
-### `LazyColumn` の `modifier` ではなく `contentPadding` を利用して余白を設定する
+### `LazyColumn` の `modifier` ではなく `contentPadding` を利用してシステム UI 分の余白を設定する
 
 前提として、`Scaffold` の内部に渡される `innerPadding.bottom` には、システム UI の高さ分の余白が含まれています。
 そのため、この値をスクロールコンテンツの余白にうまく適用してやることで、やりたいことが実現できます。
