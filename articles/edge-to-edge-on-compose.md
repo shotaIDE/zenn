@@ -10,10 +10,21 @@ published: false
 
 エッジツーエッジで没入感のあるスクロール画面を実現したい。
 
-| 画面の向き | Before                                                         | After                                                         |
-| ---------- | -------------------------------------------------------------- | ------------------------------------------------------------- |
-| 縦         | ![](/images/edge-to-edge-on-compose/01-a_portrait-before.gif)  | ![](/images/edge-to-edge-on-compose/01-b_portrait-after.gif)  |
-| 横         | ![](/images/edge-to-edge-on-compose/02-a_landscape-before.gif) | ![](/images/edge-to-edge-on-compose/02-b_landscape-after.gif) |
+| 向き | これを                                                         | こうしたい                                                    |
+| ---- | -------------------------------------------------------------- | ------------------------------------------------------------- |
+| 縦   | ![](/images/edge-to-edge-on-compose/01-a_portrait-before.gif)  | ![](/images/edge-to-edge-on-compose/01-b_portrait-after.gif)  |
+| 横   | ![](/images/edge-to-edge-on-compose/02-a_landscape-before.gif) | ![](/images/edge-to-edge-on-compose/02-b_landscape-after.gif) |
+
+文字で書くと以下のような感じです。
+
+- システム UI の下にもスクロールビューのコンテンツが描画される
+- 一番下までスクロールした際に、最後のアイテムのタップ領域がシステム UI に重ならない
+- 左右にシステム UI や切り欠きがあった場合、描画が重ならない
+
+![](/images/edge-to-edge-on-compose/03-a_portrait-behind-system-ui.png =300x)
+![](/images/edge-to-edge-on-compose/03-b_portrait-over-scroll.png =300x)
+![](/images/edge-to-edge-on-compose/04-a_landscape-behind-system-ui.png =x300)
+![](/images/edge-to-edge-on-compose/04-b_landscape-over-scroll.png =x300)
 
 ```kotlin:MainActivity.kt
 class MainActivity : ComponentActivity() {
