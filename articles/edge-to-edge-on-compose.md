@@ -26,6 +26,10 @@ published: false
 ![](/images/edge-to-edge-on-compose/04-a_landscape-behind-system-ui.png =x300)
 ![](/images/edge-to-edge-on-compose/04-b_landscape-over-scroll.png =x300)
 
+## 結論
+
+元々以下のようなコードを書いていました。
+
 ```kotlin:MainActivity.kt
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,7 +83,9 @@ fun MyScaffold() {
 }
 ```
 
-```kotlin:MainActivity.kt
+これを以下のように修正しました。
+
+```diff kotlin:MainActivity.kt
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,13 +107,13 @@ fun MyScaffold() {
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
-                modifier = Modifier
-                    .windowInsetsPadding(
-                        WindowInsets.safeDrawing.only(WindowInsetsSides.Start)
-                    )
-                    .windowInsetsPadding(
-                        WindowInsets.safeDrawing.only(WindowInsetsSides.End)
-                    ),
++                modifier = Modifier
++                    .windowInsetsPadding(
++                        WindowInsets.safeDrawing.only(WindowInsetsSides.Start)
++                    )
++                    .windowInsetsPadding(
++                        WindowInsets.safeDrawing.only(WindowInsetsSides.End)
++                    ),
                 title = {
                     Text(
                         text = "Edge to edge",
@@ -119,22 +125,24 @@ fun MyScaffold() {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .windowInsetsPadding(
-                    WindowInsets.safeDrawing.only(WindowInsetsSides.Start)
-                )
-                .windowInsetsPadding(
-                    WindowInsets.safeDrawing.only(WindowInsetsSides.End)
-                ),
-            contentPadding = PaddingValues(
-                start = 16.dp + innerPadding.calculateStartPadding(
-                    LocalLayoutDirection.current
-                ),
-                top = 16.dp + innerPadding.calculateTopPadding(),
-                end = 16.dp + innerPadding.calculateStartPadding(
-                    LocalLayoutDirection.current
-                ),
-                bottom = 16.dp + innerPadding.calculateBottomPadding(),
-            ),
+-                .padding(innerPadding),
++                .windowInsetsPadding(
++                    WindowInsets.safeDrawing.only(WindowInsetsSides.Start)
++                )
++                .windowInsetsPadding(
++                    WindowInsets.safeDrawing.only(WindowInsetsSides.End)
++                ),
+-            contentPadding = PaddingValues(16.dp),
++            contentPadding = PaddingValues(
++                start = 16.dp + innerPadding.calculateStartPadding(
++                    LocalLayoutDirection.current
++                ),
++                top = 16.dp + innerPadding.calculateTopPadding(),
++                end = 16.dp + innerPadding.calculateStartPadding(
++                    LocalLayoutDirection.current
++                ),
++                bottom = 16.dp + innerPadding.calculateBottomPadding(),
++            ),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items((1..14).toList()) { index ->
