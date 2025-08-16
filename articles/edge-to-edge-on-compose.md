@@ -1,19 +1,41 @@
 ---
-title: "Composeで没入感のあるエッジツーエッジのUIを実現する"
+title: "Jetpack Composeでエッジツーエッジの没入感があるスクロールUIを実現する"
 emoji: "🌟"
 type: "idea" # tech: 技術記事 / idea: アイデア
 topics: ["android", "compose"]
 published: false
 ---
 
+<!-- cspell:ignore jetpack -->
+
+Jetpack Compose を利用して、システム UI の領域を超えてエッジツーエッジでスクロール UI を描画し、没入感を演出する方法について書きます。
+
+公式ドキュメントなどでドンピシャなサンプルコードや説明がなく少し手間取ったので、メモしておきます。
+
 ## やりたいこと
 
-エッジツーエッジで没入感のあるスクロール画面を実現したい。
+普通に作ると Before のような状態になってしまうのですが、これを After のようにしたいです。
 
-| 画面の向き | Before                                                         | After                                                         |
-| ---------- | -------------------------------------------------------------- | ------------------------------------------------------------- |
-| 縦         | ![](/images/edge-to-edge-on-compose/01-a_portrait-before.gif)  | ![](/images/edge-to-edge-on-compose/01-b_portrait-after.gif)  |
-| 横         | ![](/images/edge-to-edge-on-compose/02-a_landscape-before.gif) | ![](/images/edge-to-edge-on-compose/02-b_landscape-after.gif) |
+| 向き | Before                                                         | After                                                         |
+| ---- | -------------------------------------------------------------- | ------------------------------------------------------------- |
+| 縦   | ![](/images/edge-to-edge-on-compose/01-a_portrait-before.gif)  | ![](/images/edge-to-edge-on-compose/01-b_portrait-after.gif)  |
+| 横   | ![](/images/edge-to-edge-on-compose/02-a_landscape-before.gif) | ![](/images/edge-to-edge-on-compose/02-b_landscape-after.gif) |
+
+具体的に説明すると以下のような感じです。
+
+- システム UI（ナビゲーションバー） の下にスクロールビューのコンテンツが描画され、一番下までスクロールした際に最後のアイテムがシステム UI に重ならない
+- 左右にシステム UI や切り欠きがあった場合、描画が重ならない
+
+![](/images/edge-to-edge-on-compose/03-a_portrait-behind-system-ui.png =300x)
+![](/images/edge-to-edge-on-compose/03-b_portrait-over-scroll.png =300x)
+![](/images/edge-to-edge-on-compose/04-a_landscape-behind-system-ui.png =x300)
+![](/images/edge-to-edge-on-compose/04-b_landscape-over-scroll.png =x300)
+
+## 結論
+
+### Before のコード
+
+元々以下のようなコードを書いていました。
 
 ```kotlin:MainActivity.kt
 class MainActivity : ComponentActivity() {
@@ -68,7 +90,19 @@ fun MyScaffold() {
 }
 ```
 
-```kotlin:MainActivity.kt
+上記を実行すると、以下のような状態となります。
+
+- システム UI（ナビゲーションバー） の領域にスクロールビューのコンテンツが描画されていない
+- 左右にシステム UI や切り欠きがあった場合、描画が重なってしまう
+
+![](/images/edge-to-edge-on-compose/01-a_portrait-before.gif)
+![](/images/edge-to-edge-on-compose/02-a_landscape-before.gif)
+
+### After のコード
+
+これを以下のように修正しました。
+
+```diff kotlin:MainActivity.kt
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,13 +124,13 @@ fun MyScaffold() {
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
-                modifier = Modifier
-                    .windowInsetsPadding(
-                        WindowInsets.safeDrawing.only(WindowInsetsSides.Start)
-                    )
-                    .windowInsetsPadding(
-                        WindowInsets.safeDrawing.only(WindowInsetsSides.End)
-                    ),
++                modifier = Modifier
++                    .windowInsetsPadding(
++                        WindowInsets.safeDrawing.only(WindowInsetsSides.Start)
++                    )
++                    .windowInsetsPadding(
++                        WindowInsets.safeDrawing.only(WindowInsetsSides.End)
++                    ),
                 title = {
                     Text(
                         text = "Edge to edge",
@@ -108,22 +142,24 @@ fun MyScaffold() {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .windowInsetsPadding(
-                    WindowInsets.safeDrawing.only(WindowInsetsSides.Start)
-                )
-                .windowInsetsPadding(
-                    WindowInsets.safeDrawing.only(WindowInsetsSides.End)
-                ),
-            contentPadding = PaddingValues(
-                start = 16.dp + innerPadding.calculateStartPadding(
-                    LocalLayoutDirection.current
-                ),
-                top = 16.dp + innerPadding.calculateTopPadding(),
-                end = 16.dp + innerPadding.calculateStartPadding(
-                    LocalLayoutDirection.current
-                ),
-                bottom = 16.dp + innerPadding.calculateBottomPadding(),
-            ),
+-                .padding(innerPadding),
++                .windowInsetsPadding(
++                    WindowInsets.safeDrawing.only(WindowInsetsSides.Start)
++                )
++                .windowInsetsPadding(
++                    WindowInsets.safeDrawing.only(WindowInsetsSides.End)
++                ),
+-            contentPadding = PaddingValues(16.dp),
++            contentPadding = PaddingValues(
++                start = 16.dp + innerPadding.calculateStartPadding(
++                    LocalLayoutDirection.current
++                ),
++                top = 16.dp + innerPadding.calculateTopPadding(),
++                end = 16.dp + innerPadding.calculateStartPadding(
++                    LocalLayoutDirection.current
++                ),
++                bottom = 16.dp + innerPadding.calculateBottomPadding(),
++            ),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items((1..14).toList()) { index ->
@@ -142,34 +178,89 @@ fun MyScaffold() {
 }
 ```
 
-残件
+上記を実行すると以下のような状態となり、元々やりたかったことが達成できました。
 
-- [ ] Android 15 未満でエッジツーエッジを適用する方法を調査する
+![](/images/edge-to-edge-on-compose/01-b_portrait-after.gif)
+![](/images/edge-to-edge-on-compose/02-b_landscape-after.gif)
 
-https://developer.android.com/develop/ui/compose/system/material-insets?hl=ja#override-default
+## 解説
 
-https://developers-jp.googleblog.com/2019/10/gesture-navigation-handling-visual-overlaps.html
+### `LazyColumn` の `modifier` ではなく `contentPadding` を利用してシステム UI 分の余白を設定する
 
-`modifier` におけるパディングは、`LazyColumn` のスクロール領域外に対して適用されます。
-一方で、 `contentPadding` によるパディングは、`LazyColumn` のスクロール領域に対して適用されます。
-そのため、`contentPadding` によるパディングを設定することが適切です。
+前提として、`Scaffold` の内部に渡される `innerPadding.bottom` は、**システム UI（ナビゲーションバー）の高さ分の余白を含みます**。
+そのため、この値をスクロールビューの余白にうまく適用してやることで、やりたいことが実現できます。
 
-`WindowInsets.safeDrawing` を利用することで、切り欠きを避けて描画できる。
+`LazyColumn` の `modifier` で余白を設定した場合、**スクロールコンテンツが描画される領域の外側に余白が適用**されます。
+そのため、スクロールコンテンツの描画領域がシステム UI に重ならないような状態となっていました。
 
-| 項目          | Android 15                                       | Android 14                                           |
-| ------------- | ------------------------------------------------ | ---------------------------------------------------- |
-| `safeDrawing` | 端末を横にした際、ノッチを避けるようになっている | 端末を横にした際、ノッチを避けるようになっていない？ |
-| `safeContent` | 端末を横にした際、ノッチを避けるようになっている | 端末を横にした際、ノッチを避けるようになっている？   |
+一方で、`LazyColumn` の `contentPadding` を利用すると、**スクロールコンテンツの中身に余白が適用**されます。
+これを利用することで、スクロールコンテンツの中身にシステム UI の高さ分だけ余白を設定できます。
 
-以下のような方針で実装することで、いい感じにできそうです。
+これらを踏まえると、以下の方針とすることで、やりたいことが実現できます。
 
-スクロール可能な方向における端は、セーフエリアを飛び出して画面いっぱいまで描画し、セーフエリア内にスクロールできるようにスクロール内部のパディングを設定する。
-スクロール不能な方向における端は、セーフエリアを飛び出さないように描画する。
+- `LazyColumn` の `modifier` における余白設定をしない。これにより、システム UI の領域にもスクロールコンテンツの描画領域が広がる。
+- `LazyColumn` の `contentPadding` を利用してシステム UI の高さ分だけ余白を設定する。これにより、スクロールコンテンツの中身がシステム UI に重ならないところまでスクロールできるようになる。
 
-https://developer.android.com/develop/ui/compose/modifiers?hl=ja
+```diff kotlin:MainActivity.kt
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+-                .padding(innerPadding),
+                // ...
+-            contentPadding = PaddingValues(16.dp),
++            contentPadding = PaddingValues(
++                start = 16.dp + innerPadding.calculateStartPadding(
++                    LocalLayoutDirection.current
++                ),
++                top = 16.dp + innerPadding.calculateTopPadding(),
++                end = 16.dp + innerPadding.calculateStartPadding(
++                    LocalLayoutDirection.current
++                ),
++                bottom = 16.dp + innerPadding.calculateBottomPadding(),
++            ),
+```
+
+### `WindowInsets.safeDrawing` により切り欠きを避けて描画する
+
+`WindowInsets.safeDrawing` には、ノッチやパンチホールなどの「切り欠き」領域を避けて描画するための情報が含まれています。
+これを利用し、上下左右のうち必要な要素だけを取り出して、`Modifier.windowInsetsPadding` に渡すことで、切り欠きを避けて描画できます。
+
+```diff kotlin:MainActivity.kt
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            TopAppBar(
++                modifier = Modifier
++                    .windowInsetsPadding(
++                        WindowInsets.safeDrawing.only(WindowInsetsSides.Start)
++                    )
++                    .windowInsetsPadding(
++                        WindowInsets.safeDrawing.only(WindowInsetsSides.End)
++                    ),
+                // ...
+            )
+        }
+    ) { innerPadding ->
+        LazyColumn(
+            modifier = Modifier
+                // ...
++                .windowInsetsPadding(
++                    WindowInsets.safeDrawing.only(WindowInsetsSides.Start)
++                )
++                .windowInsetsPadding(
++                    WindowInsets.safeDrawing.only(WindowInsetsSides.End)
++                ),
+            // ...
+```
+
+## 参考
+
+https://developer.android.com/design/ui/mobile/guides/layout-and-content/edge-to-edge?hl=ja
 
 https://qiita.com/Nabe1216/items/6fd9e2293f7ae109150a
 
-https://developer.android.com/design/ui/mobile/guides/layout-and-content/edge-to-edge?hl=ja
+https://developers-jp.googleblog.com/2019/10/gesture-navigation-handling-visual-overlaps.html
+
+https://developer.android.com/develop/ui/compose/modifiers?hl=ja
 
 https://developer.android.com/develop/ui/views/layout/edge-to-edge?hl=ja#enable-edge-to-edge-display
