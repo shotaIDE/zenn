@@ -10,7 +10,7 @@ published: false
 
 エッジツーエッジで没入感のあるスクロール画面を実現したい。
 
-| 向き | これを                                                         | こうしたい                                                    |
+| 向き | Before                                                         | After                                                         |
 | ---- | -------------------------------------------------------------- | ------------------------------------------------------------- |
 | 縦   | ![](/images/edge-to-edge-on-compose/01-a_portrait-before.gif)  | ![](/images/edge-to-edge-on-compose/01-b_portrait-after.gif)  |
 | 横   | ![](/images/edge-to-edge-on-compose/02-a_landscape-before.gif) | ![](/images/edge-to-edge-on-compose/02-b_landscape-after.gif) |
@@ -27,6 +27,8 @@ published: false
 ![](/images/edge-to-edge-on-compose/04-b_landscape-over-scroll.png =x300)
 
 ## 結論
+
+### Before
 
 元々以下のようなコードを書いていました。
 
@@ -82,6 +84,13 @@ fun MyScaffold() {
     }
 }
 ```
+
+上記を実行すると、以下のような状態となります。
+
+![](/images/edge-to-edge-on-compose/01-a_portrait-before.gif)
+![](/images/edge-to-edge-on-compose/02-a_landscape-before.gif)
+
+### After
 
 これを以下のように修正しました。
 
@@ -161,9 +170,12 @@ fun MyScaffold() {
 }
 ```
 
-残件
+上記を実行すると、以下のような状態となります。
 
-- [ ] Android 15 未満でエッジツーエッジを適用する方法を調査する
+![](/images/edge-to-edge-on-compose/01-b_portrait-after.gif)
+![](/images/edge-to-edge-on-compose/02-b_landscape-after.gif)
+
+## 解説
 
 https://developer.android.com/develop/ui/compose/system/material-insets?hl=ja#override-default
 
