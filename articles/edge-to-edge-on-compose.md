@@ -218,7 +218,7 @@ fun MyScaffold() {
 ### `WindowInsets.safeDrawing` により切り欠きを避けて描画する
 
 `WindowInsets.safeDrawing` には、ノッチやパンチホールなどの「切り欠き」領域を避けて描画するための情報が含まれています。
-これを利用し、上下左右のうち必要な要素だけを取り出して、`Modifier.windowInsetsPadding` に渡すことで、切り欠きを避けて描画することができます。
+これを利用し、上下左右のうち必要な要素だけを取り出して、`Modifier.windowInsetsPadding` に渡すことで、切り欠きを避けて描画できます。
 
 ```diff kotlin:MainActivity.kt
     Scaffold(
