@@ -30,7 +30,7 @@ Compose を利用して、エッジツーエッジで没入感のあるスクロ
 
 ## 結論
 
-### Before
+### Before のコード
 
 元々以下のようなコードを書いていました。
 
@@ -92,7 +92,7 @@ fun MyScaffold() {
 ![](/images/edge-to-edge-on-compose/01-a_portrait-before.gif)
 ![](/images/edge-to-edge-on-compose/02-a_landscape-before.gif)
 
-### After
+### After のコード
 
 これを以下のように修正しました。
 
@@ -179,6 +179,63 @@ fun MyScaffold() {
 
 ## 解説
 
+### `LazyColumn` の `modifier` ではなく `contentPadding` を利用して余白を設定する
+
+最初、`modifier` で `Modifier.padding` を利用して余白を設定していました。
+この場合、スクロールコンテンツが描画される領域の外側にパディングが適用されます。
+
+```diff kotlin:
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+-                .padding(innerPadding),
+                // ...
+-            contentPadding = PaddingValues(16.dp),
++            contentPadding = PaddingValues(
++                start = 16.dp + innerPadding.calculateStartPadding(
++                    LocalLayoutDirection.current
++                ),
++                top = 16.dp + innerPadding.calculateTopPadding(),
++                end = 16.dp + innerPadding.calculateStartPadding(
++                    LocalLayoutDirection.current
++                ),
++                bottom = 16.dp + innerPadding.calculateBottomPadding(),
++            ),
+```
+
+###　`WindowInsets.safeDrawing` により切り欠きを避けて描画する
+
+`WindowInsets.safeDrawing` には、デバイスごとのノッチやパンチホールなどの「切り欠き」領域を避けて描画するための情報が含まれています。
+これを利用し、上下左右のうち必要な要素だけを取り出して、`Modifier.windowInsetsPadding` に渡すことで、切り欠きを避けて描画することができます。
+
+```diff kotlin:
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            TopAppBar(
++                modifier = Modifier
++                    .windowInsetsPadding(
++                        WindowInsets.safeDrawing.only(WindowInsetsSides.Start)
++                    )
++                    .windowInsetsPadding(
++                        WindowInsets.safeDrawing.only(WindowInsetsSides.End)
++                    ),
+                // ...
+            )
+        }
+    ) { innerPadding ->
+        LazyColumn(
+            modifier = Modifier
+                // ...
++                .windowInsetsPadding(
++                    WindowInsets.safeDrawing.only(WindowInsetsSides.Start)
++                )
++                .windowInsetsPadding(
++                    WindowInsets.safeDrawing.only(WindowInsetsSides.End)
++                ),
+            // ...
+```
+
 https://developer.android.com/develop/ui/compose/system/material-insets?hl=ja#override-default
 
 https://developers-jp.googleblog.com/2019/10/gesture-navigation-handling-visual-overlaps.html
@@ -206,3 +263,7 @@ https://qiita.com/Nabe1216/items/6fd9e2293f7ae109150a
 https://developer.android.com/design/ui/mobile/guides/layout-and-content/edge-to-edge?hl=ja
 
 https://developer.android.com/develop/ui/views/layout/edge-to-edge?hl=ja#enable-edge-to-edge-display
+
+```
+
+```
