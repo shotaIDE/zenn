@@ -14,17 +14,16 @@ Jetpack Compose を利用して、システム UI の領域を超えてエッジ
 
 ## やりたいこと
 
-エッジツーエッジで没入感のあるスクロール画面を実現したい。
+普通に作ると Before のような状態になってしまうのですが、これを After のようにしたいです。
 
 | 向き | Before                                                         | After                                                         |
 | ---- | -------------------------------------------------------------- | ------------------------------------------------------------- |
 | 縦   | ![](/images/edge-to-edge-on-compose/01-a_portrait-before.gif)  | ![](/images/edge-to-edge-on-compose/01-b_portrait-after.gif)  |
 | 横   | ![](/images/edge-to-edge-on-compose/02-a_landscape-before.gif) | ![](/images/edge-to-edge-on-compose/02-b_landscape-after.gif) |
 
-文字で書くと以下のような感じです。
+具体的に説明すると以下のような感じです。
 
-- システム UI の下にもスクロールビューのコンテンツが描画される
-- 一番下までスクロールした際に、最後のアイテムのタップ領域がシステム UI に重ならない
+- システム UI（ナビゲーションバー） の下にスクロールビューのコンテンツが描画され、一番下までスクロールした際に最後のアイテムがシステム UI に重ならない
 - 左右にシステム UI や切り欠きがあった場合、描画が重ならない
 
 ![](/images/edge-to-edge-on-compose/03-a_portrait-behind-system-ui.png =300x)
@@ -92,6 +91,9 @@ fun MyScaffold() {
 ```
 
 上記を実行すると、以下のような状態となります。
+
+- システム UI（ナビゲーションバー） の領域にスクロールビューのコンテンツが描画されていない
+- 左右にシステム UI や切り欠きがあった場合、描画が重なってしまう
 
 ![](/images/edge-to-edge-on-compose/01-a_portrait-before.gif)
 ![](/images/edge-to-edge-on-compose/02-a_landscape-before.gif)
@@ -176,7 +178,7 @@ fun MyScaffold() {
 }
 ```
 
-上記を実行すると、以下のような状態となります。
+上記を実行すると以下のような状態となり、元々やりたかったことが達成できました。
 
 ![](/images/edge-to-edge-on-compose/01-b_portrait-after.gif)
 ![](/images/edge-to-edge-on-compose/02-b_landscape-after.gif)
@@ -185,16 +187,19 @@ fun MyScaffold() {
 
 ### `LazyColumn` の `modifier` ではなく `contentPadding` を利用してシステム UI 分の余白を設定する
 
-前提として、`Scaffold` の内部に渡される `innerPadding.bottom` には、システム UI の高さ分の余白が含まれています。
-そのため、この値をスクロールコンテンツの余白にうまく適用してやることで、やりたいことが実現できます。
+前提として、`Scaffold` の内部に渡される `innerPadding.bottom` に、**システム UI（ナビゲーションバー）の高さ分の余白が含まれています**。
+そのため、この値をスクロールビューの余白にうまく適用してやることで、やりたいことが実現できます。
 
-最初、`modifier` で `Modifier.padding` を利用して余白を設定していました。
-この場合、スクロールコンテンツが描画される領域の外側に余白が適用されます。
+`LazyColumn` の `modifier` で余白を設定した場合、**スクロールコンテンツが描画される領域の外側に余白が適用**されます。
+そのため、スクロールコンテンツの描画領域がシステム UI に重ならないような状態となっていました。
 
-一方で、`contentPadding` を利用すると、スクロールコンテンツの中身に余白が適用されます。
+一方で、`LazyColumn` の `contentPadding` を利用すると、**スクロールコンテンツの中身に余白が適用**されます。
+これを利用することで、スクロールコンテンツの中身にシステム UI の高さ分だけ余白を設定することができます。
 
-今回、システム UI の下にスクロールコンテンツを描画しつつ、最後のアイテムをシステム UI に重ならない位置までスクロールできるようにしたいです。
-そのため、`contentPadding` を利用してスクロールコンテンツの中身にシステム UI の高さ分だけ余白を設定する方針が妥当です。
+これらを踏まえると、以下の方針とすることで、やりたいことが実現できます。
+
+- `LazyColumn` の `modifier` における余白設定をしない。これにより、システム UI の領域にもスクロールコンテンツの描画領域が広がる。
+- `LazyColumn` の `contentPadding` を利用してシステム UI の高さ分だけ余白を設定する。これにより、スクロールコンテンツの中身がシステム UI に重ならないところまでスクロールできるようになる。
 
 ```diff kotlin:MainActivity.kt
         LazyColumn(
