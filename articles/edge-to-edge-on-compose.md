@@ -1,12 +1,16 @@
 ---
-title: "Composeで没入感のあるエッジツーエッジのUIを実現する"
+title: "Jetpack Composeでエッジツーエッジの没入感があるスクロールUIを実現する"
 emoji: "🌟"
 type: "idea" # tech: 技術記事 / idea: アイデア
 topics: ["android", "compose"]
 published: false
 ---
 
-Compose を利用して、エッジツーエッジで没入感のあるスクロール画面を実現する方法について、やり方をメモしておきます。
+<!-- cspell:ignore jetpack -->
+
+Jetpack Compose を利用して、システム UI の領域を超えてエッジツーエッジでスクロール UI を描画し、没入感を演出する方法について書きます。
+
+公式ドキュメントなどでドンピシャなサンプルコードや説明がなく少し手間取ったので、メモしておきます。
 
 ## やりたいこと
 
