@@ -14,7 +14,7 @@ Jetpack Compose を利用して、システム UI の領域を超えてエッジ
 
 ## 結論
 
-`Scaffold` の内部に渡される `PaddingValues` には画面下部のナビゲーションバーの高さが含まれています。
+`Scaffold` の子 Compose に渡される `PaddingValues` には画面下部のナビゲーションバーの高さが含まれています。
 これを `LazyColumn` の `contentPadding` にスクロール内部の余白として指定します。
 
 また、`WindowInsets.safeDrawing` にはナビゲーションバー以外のシステム UI や切り欠きのサイズが含まれています。
