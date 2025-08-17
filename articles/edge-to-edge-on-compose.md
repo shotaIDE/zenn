@@ -12,6 +12,14 @@ Jetpack Compose を利用して、システム UI の領域を超えてエッジ
 
 公式ドキュメントなどでドンピシャなサンプルコードや説明がなく少し手間取ったので、メモしておきます。
 
+## 結論
+
+`Scaffold` の内部に渡される `PaddingValues` には画面下部のナビゲーションバーの高さが含まれています。
+これを `LazyColumn` の `contentPadding` にスクロール内部の余白として指定します。
+
+また、`WindowInsets.safeDrawing` にはナビゲーションバー以外のシステム UI や切り欠きのサイズが含まれています。
+これを、`TopAppBar` や `LazyColumn` の `windowInsetsPadding` に左右のサイズだけを取り出して指定します。
+
 ## やりたいこと
 
 普通に作ると Before のような状態になってしまうのですが、これを After のようにしたいです。
@@ -31,7 +39,7 @@ Jetpack Compose を利用して、システム UI の領域を超えてエッジ
 ![システムUIの背景にスクロールビューが描画されていて、左右にシステムUIや切り欠きがあった場合描画されない・横画面](/images/edge-to-edge-on-compose/04-a_landscape-behind-system-ui.png =x300)
 ![一番したまでスクロールした際に最後のアイテムがシステムUIに重ならない・横画面](/images/edge-to-edge-on-compose/04-b_landscape-over-scroll.png =x300)
 
-## 結論
+## コードの詳細
 
 ### Before のコード
 
