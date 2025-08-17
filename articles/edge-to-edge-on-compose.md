@@ -16,20 +16,20 @@ Jetpack Compose を利用して、システム UI の領域を超えてエッジ
 
 普通に作ると Before のような状態になってしまうのですが、これを After のようにしたいです。
 
-| 向き | Before                                                         | After                                                         |
-| ---- | -------------------------------------------------------------- | ------------------------------------------------------------- |
-| 縦   | ![](/images/edge-to-edge-on-compose/01-a_portrait-before.gif)  | ![](/images/edge-to-edge-on-compose/01-b_portrait-after.gif)  |
-| 横   | ![](/images/edge-to-edge-on-compose/02-a_landscape-before.gif) | ![](/images/edge-to-edge-on-compose/02-b_landscape-after.gif) |
+| 向き | Before                                                                                                                   | After                                                                                                                   |
+| ---- | ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
+| 縦   | ![システムUIを避けてスクロールビューが描画されている・縦画面](/images/edge-to-edge-on-compose/01-a_portrait-before.gif)  | ![システムUIの背景にスクロールビューが描画されている・縦画面](/images/edge-to-edge-on-compose/01-b_portrait-after.gif)  |
+| 横   | ![システムUIを避けてスクロールビューが描画されている・横画面](/images/edge-to-edge-on-compose/02-a_landscape-before.gif) | ![システムUIの背景にスクロールビューが描画されている・横画面](/images/edge-to-edge-on-compose/02-b_landscape-after.gif) |
 
 具体的に説明すると以下のような感じです。
 
 - システム UI（ナビゲーションバー） の下にスクロールビューのコンテンツが描画され、一番下までスクロールした際に最後のアイテムがシステム UI に重ならない
 - 左右にシステム UI や切り欠きがあった場合、描画が重ならない
 
-![](/images/edge-to-edge-on-compose/03-a_portrait-behind-system-ui.png =300x)
-![](/images/edge-to-edge-on-compose/03-b_portrait-over-scroll.png =300x)
-![](/images/edge-to-edge-on-compose/04-a_landscape-behind-system-ui.png =x300)
-![](/images/edge-to-edge-on-compose/04-b_landscape-over-scroll.png =x300)
+![システムUIの背景にスクロールビューが描画されている・縦画面](/images/edge-to-edge-on-compose/03-a_portrait-behind-system-ui.png =300x)
+![一番したまでスクロールした際に最後のアイテムがシステムUIに重ならない・縦画面](/images/edge-to-edge-on-compose/03-b_portrait-over-scroll.png =300x)
+![システムUIの背景にスクロールビューが描画されていて、左右にシステムUIや切り欠きがあった場合描画されない・横画面](/images/edge-to-edge-on-compose/04-a_landscape-behind-system-ui.png =x300)
+![一番したまでスクロールした際に最後のアイテムがシステムUIに重ならない・横画面](/images/edge-to-edge-on-compose/04-b_landscape-over-scroll.png =x300)
 
 ## 結論
 
