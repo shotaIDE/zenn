@@ -193,7 +193,7 @@ fun MyScaffold() {
 
 ## 解説
 
-### `LazyColumn` の `modifier` ではなく `contentPadding` を利用してシステム UI 分の余白を設定する
+### `LazyColumn` の `contentPadding` を利用してシステム UI 分の余白を設定する
 
 前提として、`Scaffold` の内部に渡される `innerPadding.bottom` は、**システム UI（ナビゲーションバー）の高さ分の余白を含みます**。
 そのため、この値をスクロールビューの余白にうまく適用してやることで、やりたいことが実現できます。
