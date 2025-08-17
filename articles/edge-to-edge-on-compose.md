@@ -95,8 +95,8 @@ fun MyScaffold() {
 - システム UI（ナビゲーションバー） の領域にスクロールビューのコンテンツが描画されていない
 - 左右にシステム UI や切り欠きがあった場合、描画が重なってしまう
 
-![](/images/edge-to-edge-on-compose/01-a_portrait-before.gif)
-![](/images/edge-to-edge-on-compose/02-a_landscape-before.gif)
+![システムUIを避けてスクロールビューが描画されている・縦画面](/images/edge-to-edge-on-compose/01-a_portrait-before.gif)
+![システムUIを避けてスクロールビューが描画されている・横画面](/images/edge-to-edge-on-compose/02-a_landscape-before.gif)
 
 ### After のコード
 
@@ -180,8 +180,8 @@ fun MyScaffold() {
 
 上記を実行すると以下のような状態となり、元々やりたかったことが達成できました。
 
-![](/images/edge-to-edge-on-compose/01-b_portrait-after.gif)
-![](/images/edge-to-edge-on-compose/02-b_landscape-after.gif)
+![システムUIの背景にスクロールビューが描画されている・縦画面](/images/edge-to-edge-on-compose/01-b_portrait-after.gif)
+![システムUIの背景にスクロールビューが描画されている・横画面](/images/edge-to-edge-on-compose/02-b_landscape-after.gif)
 
 ## 解説
 
