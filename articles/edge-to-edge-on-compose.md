@@ -20,6 +20,8 @@ Jetpack Compose を利用して、システム UI の領域を超えてエッジ
 また、`WindowInsets.safeDrawing` にはナビゲーションバー以外のシステム UI や切り欠きのサイズが含まれています。
 これを、`TopAppBar` や `LazyColumn` の `windowInsetsPadding` に左右のサイズだけを取り出して指定します。
 
+上記を行うことで、端末の画面いっぱいまでコンテンツが描画されつつ、視認性や操作感を損なわない UI が実現できます。
+
 ## やりたいこと
 
 普通に作ると Before のような状態になってしまうのですが、これを After のようにしたいです。
