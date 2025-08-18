@@ -200,6 +200,8 @@ fun MyScaffold() {
 前提として、`Scaffold` の内部に渡される `innerPadding.bottom` は、**システム UI（ナビゲーションバー）の高さ分の余白を含みます**。
 そのため、この値をスクロールビューの余白にうまく適用してやることで、やりたいことが実現できます。
 
+![ScaffoldのinnerPaddingのサイズ](/images/edge-to-edge-on-compose/scaffold-inner-padding.gif)
+
 `LazyColumn` の `modifier` で余白を設定した場合、**スクロールコンテンツが描画される領域の外側に余白が適用**されます。
 そのため、スクロールコンテンツの描画領域がシステム UI に重ならないような状態となっていました。
 
