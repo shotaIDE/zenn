@@ -45,6 +45,9 @@ jobs:
         uses: ./.github/actions/setup-node
       - name: Run textlint on articles
         run: npx textlint -f checkstyle "articles/*.md" >> .textlint.log
+      - name: Display textlint results
+        if: failure()
+        run: cat .textlint.log
       - name: Run reviewdog
         if: failure()
         env:
