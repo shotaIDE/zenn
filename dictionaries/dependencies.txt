@@ -32,6 +32,7 @@ sigint
 simctl
 siri
 stdlib
+textlint
 tibdex
 udid
 uiuxdesign

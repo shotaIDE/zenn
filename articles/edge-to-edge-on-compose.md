@@ -12,26 +12,40 @@ Jetpack Compose を利用して、システム UI の領域を超えてエッジ
 
 公式ドキュメントなどでドンピシャなサンプルコードや説明がなく少し手間取ったので、メモしておきます。
 
+## 結論
+
+`Scaffold` の子 Compose に渡される `PaddingValues` には画面下部のナビゲーションバーの高さが含まれています。
+これを `LazyColumn` の `contentPadding` にスクロール内部の余白として指定します。
+
+また、`WindowInsets.safeDrawing` にはナビゲーションバー以外のシステム UI や切り欠きのサイズが含まれています。
+これを、`TopAppBar` や `LazyColumn` の `windowInsetsPadding` に左右のサイズだけを取り出して指定します。
+
+上記を行うことで、端末の画面いっぱいまでコンテンツが描画されつつ、視認性や操作感を損なわない UI が実現できます。
+
 ## やりたいこと
 
 普通に作ると Before のような状態になってしまうのですが、これを After のようにしたいです。
 
-| 向き | Before                                                         | After                                                         |
-| ---- | -------------------------------------------------------------- | ------------------------------------------------------------- |
-| 縦   | ![](/images/edge-to-edge-on-compose/01-a_portrait-before.gif)  | ![](/images/edge-to-edge-on-compose/01-b_portrait-after.gif)  |
-| 横   | ![](/images/edge-to-edge-on-compose/02-a_landscape-before.gif) | ![](/images/edge-to-edge-on-compose/02-b_landscape-after.gif) |
+| 向き | Before                                                                                                                   | After                                                                                                                   |
+| ---- | ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
+| 縦   | ![システムUIを避けてスクロールビューが描画されている・縦画面](/images/edge-to-edge-on-compose/01-a_portrait-before.gif)  | ![システムUIの背景にスクロールビューが描画されている・縦画面](/images/edge-to-edge-on-compose/01-b_portrait-after.gif)  |
+| 横   | ![システムUIを避けてスクロールビューが描画されている・横画面](/images/edge-to-edge-on-compose/02-a_landscape-before.gif) | ![システムUIの背景にスクロールビューが描画されている・横画面](/images/edge-to-edge-on-compose/02-b_landscape-after.gif) |
 
 具体的に説明すると以下のような感じです。
 
 - システム UI（ナビゲーションバー） の下にスクロールビューのコンテンツが描画され、一番下までスクロールした際に最後のアイテムがシステム UI に重ならない
 - 左右にシステム UI や切り欠きがあった場合、描画が重ならない
 
-![](/images/edge-to-edge-on-compose/03-a_portrait-behind-system-ui.png =300x)
-![](/images/edge-to-edge-on-compose/03-b_portrait-over-scroll.png =300x)
-![](/images/edge-to-edge-on-compose/04-a_landscape-behind-system-ui.png =x300)
-![](/images/edge-to-edge-on-compose/04-b_landscape-over-scroll.png =x300)
+<!-- textlint-disable ja-technical-writing/sentence-length -->
 
-## 結論
+![システムUIの背景にスクロールビューが描画されている・縦画面](/images/edge-to-edge-on-compose/03-a_portrait-behind-system-ui.png =300x)
+![一番したまでスクロールした際に最後のアイテムがシステムUIに重ならない・縦画面](/images/edge-to-edge-on-compose/03-b_portrait-over-scroll.png =300x)
+![システムUIの背景にスクロールビューが描画されていて、左右にシステムUIや切り欠きがあった場合描画されない・横画面](/images/edge-to-edge-on-compose/04-a_landscape-behind-system-ui.png =x300)
+![一番したまでスクロールした際に最後のアイテムがシステムUIに重ならない・横画面](/images/edge-to-edge-on-compose/04-b_landscape-over-scroll.png =x300)
+
+<!-- textlint-enable ja-technical-writing/sentence-length -->
+
+## コードの詳細
 
 ### Before のコード
 
@@ -95,8 +109,8 @@ fun MyScaffold() {
 - システム UI（ナビゲーションバー） の領域にスクロールビューのコンテンツが描画されていない
 - 左右にシステム UI や切り欠きがあった場合、描画が重なってしまう
 
-![](/images/edge-to-edge-on-compose/01-a_portrait-before.gif)
-![](/images/edge-to-edge-on-compose/02-a_landscape-before.gif)
+![システムUIを避けてスクロールビューが描画されている・縦画面](/images/edge-to-edge-on-compose/01-a_portrait-before.gif)
+![システムUIを避けてスクロールビューが描画されている・横画面](/images/edge-to-edge-on-compose/02-a_landscape-before.gif)
 
 ### After のコード
 
@@ -180,21 +194,35 @@ fun MyScaffold() {
 
 上記を実行すると以下のような状態となり、元々やりたかったことが達成できました。
 
-![](/images/edge-to-edge-on-compose/01-b_portrait-after.gif)
-![](/images/edge-to-edge-on-compose/02-b_landscape-after.gif)
+![システムUIの背景にスクロールビューが描画されている・縦画面](/images/edge-to-edge-on-compose/01-b_portrait-after.gif)
+![システムUIの背景にスクロールビューが描画されている・横画面](/images/edge-to-edge-on-compose/02-b_landscape-after.gif)
 
 ## 解説
 
-### `LazyColumn` の `modifier` ではなく `contentPadding` を利用してシステム UI 分の余白を設定する
+### `LazyColumn` の `contentPadding` を利用してシステム UI 分の余白を設定する
 
 前提として、`Scaffold` の内部に渡される `innerPadding.bottom` は、**システム UI（ナビゲーションバー）の高さ分の余白を含みます**。
 そのため、この値をスクロールビューの余白にうまく適用してやることで、やりたいことが実現できます。
 
+![ScaffoldのinnerPaddingのサイズ](/images/edge-to-edge-on-compose/scaffold-inner-padding.gif)
+
 `LazyColumn` の `modifier` で余白を設定した場合、**スクロールコンテンツが描画される領域の外側に余白が適用**されます。
 そのため、スクロールコンテンツの描画領域がシステム UI に重ならないような状態となっていました。
 
+![modifierで余白指定した場合のスクロールの様子](/images/edge-to-edge-on-compose/scroll-abstract-image_01-modifier.gif)
+
+レイヤー構造としては、`LazyColumn` のビューポートの外側に余白が適用されている状態となります。
+
+![modifierで余白指定した場合のレイヤー構造](/images/edge-to-edge-on-compose/layers-abstract-image_01-modifier.gif)
+
 一方で、`LazyColumn` の `contentPadding` を利用すると、**スクロールコンテンツの中身に余白が適用**されます。
 これを利用することで、スクロールコンテンツの中身にシステム UI の高さ分だけ余白を設定できます。
+
+![contentPaddingで余白指定した場合のスクロールの様子](/images/edge-to-edge-on-compose/scroll-abstract-image_02-contentPadding.gif)
+
+レイヤー構造としては、`LazyColumn` のスクロールコンテンツ内部に余白が適用されている状態となります。
+
+![contentPaddingで余白指定した場合のレイヤー構造](/images/edge-to-edge-on-compose/layers-abstract-image_02-contentPadding.gif)
 
 これらを踏まえると、以下の方針とすることで、やりたいことが実現できます。
 
