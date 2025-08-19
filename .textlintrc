@@ -1,4 +1,7 @@
 {
+  "filters": {
+    "comments": true
+  },
   "rules": {
     "@textlint-rule/no-unmatched-pair": true,
     "date-weekday-mismatch": true,
