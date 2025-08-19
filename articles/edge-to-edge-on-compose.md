@@ -205,8 +205,20 @@ fun MyScaffold() {
 `LazyColumn` の `modifier` で余白を設定した場合、**スクロールコンテンツが描画される領域の外側に余白が適用**されます。
 そのため、スクロールコンテンツの描画領域がシステム UI に重ならないような状態となっていました。
 
+![modifierで余白指定した場合のスクロールの様子](/images/edge-to-edge-on-compose/scroll-abstract-image_01-modifier.gif)
+
+レイヤー構造としては、`LazyColumn` のビューポートの外側に余白が適用されている状態となります。
+
+![modifierで余白指定した場合のレイヤー構造](/images/edge-to-edge-on-compose/layers-abstract-image_01-modifier.gif)
+
 一方で、`LazyColumn` の `contentPadding` を利用すると、**スクロールコンテンツの中身に余白が適用**されます。
 これを利用することで、スクロールコンテンツの中身にシステム UI の高さ分だけ余白を設定できます。
+
+![contentPaddingで余白指定した場合のスクロールの様子](/images/edge-to-edge-on-compose/scroll-abstract-image_02-contentPadding.gif)
+
+レイヤー構造としては、`LazyColumn` のスクロールコンテンツ内部に余白が適用されている状態となります。
+
+![contentPaddingで余白指定した場合のレイヤー構造](/images/edge-to-edge-on-compose/layers-abstract-image_02-contentPadding.gif)
 
 これらを踏まえると、以下の方針とすることで、やりたいことが実現できます。
 
