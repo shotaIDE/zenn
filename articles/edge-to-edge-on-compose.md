@@ -36,10 +36,10 @@ Jetpack Compose を利用して、システム UI の領域を超えてエッジ
 
 <!-- textlint-disable ja-technical-writing/sentence-length -->
 
-![システムUIの背景にスクロールビューが描画されている・縦画面](/images/edge-to-edge-on-compose/03-a_portrait-behind-system-ui.png =300x)
-![一番したまでスクロールした際に最後のアイテムがシステムUIに重ならない・縦画面](/images/edge-to-edge-on-compose/03-b_portrait-over-scroll.png =300x)
-![システムUIの背景にスクロールビューが描画されていて、左右にシステムUIや切り欠きがあった場合描画されない・横画面](/images/edge-to-edge-on-compose/04-a_landscape-behind-system-ui.png =x300)
-![一番したまでスクロールした際に最後のアイテムがシステムUIに重ならない・横画面](/images/edge-to-edge-on-compose/04-b_landscape-over-scroll.png =x300)
+![システムUIの背景にスクロールビューが描画されている・縦画面](/images/edge-to-edge-on-compose/goal_03-a_portrait-behind-system-ui.png =300x)
+![一番したまでスクロールした際に最後のアイテムがシステムUIに重ならない・縦画面](/images/edge-to-edge-on-compose/goal_03-b_portrait-over-scroll.png =300x)
+![システムUIの背景にスクロールビューが描画されていて、左右にシステムUIや切り欠きがあった場合描画されない・横画面](/images/edge-to-edge-on-compose/goal_04-a_landscape-behind-system-ui.png =x300)
+![一番したまでスクロールした際に最後のアイテムがシステムUIに重ならない・横画面](/images/edge-to-edge-on-compose/goal_04-b_landscape-over-scroll.png =x300)
 
 <!-- textlint-enable ja-technical-writing/sentence-length -->
 
