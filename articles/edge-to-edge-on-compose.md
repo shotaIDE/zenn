@@ -10,6 +10,11 @@ published: false
 
 Jetpack Compose を利用して、システム UI の領域を超えてエッジツーエッジでスクロール UI を描画し、没入感を演出する方法について書きます。
 
+| 向き | これを                                                                                                                        | こうしたい                                                                                                                   |
+| ---- | ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| 縦   | ![システムUIを避けてスクロールビューが描画されている・縦画面](/images/edge-to-edge-on-compose/goal_01-a_portrait-before.gif)  | ![システムUIの背景にスクロールビューが描画されている・縦画面](/images/edge-to-edge-on-compose/goal_01-b_portrait-after.gif)  |
+| 横   | ![システムUIを避けてスクロールビューが描画されている・横画面](/images/edge-to-edge-on-compose/goal_02-a_landscape-before.gif) | ![システムUIの背景にスクロールビューが描画されている・横画面](/images/edge-to-edge-on-compose/goal_02-b_landscape-after.gif) |
+
 公式ドキュメントなどでドンピシャなサンプルコードや説明がなく少し手間取ったので、メモしておきます。
 
 ## 結論
@@ -25,11 +30,6 @@ Jetpack Compose を利用して、システム UI の領域を超えてエッジ
 ## やりたいこと
 
 普通に作ると Before のような状態になってしまうのですが、これを After のようにしたいです。
-
-| 向き | Before                                                                                                                   | After                                                                                                                   |
-| ---- | ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
-| 縦   | ![システムUIを避けてスクロールビューが描画されている・縦画面](/images/edge-to-edge-on-compose/01-a_portrait-before.gif)  | ![システムUIの背景にスクロールビューが描画されている・縦画面](/images/edge-to-edge-on-compose/01-b_portrait-after.gif)  |
-| 横   | ![システムUIを避けてスクロールビューが描画されている・横画面](/images/edge-to-edge-on-compose/02-a_landscape-before.gif) | ![システムUIの背景にスクロールビューが描画されている・横画面](/images/edge-to-edge-on-compose/02-b_landscape-after.gif) |
 
 具体的に説明すると以下のような感じです。
 
@@ -109,8 +109,8 @@ fun MyScaffold() {
 - システム UI（ナビゲーションバー） の領域にスクロールビューのコンテンツが描画されていない
 - 左右にシステム UI や切り欠きがあった場合、描画が重なってしまう
 
-![システムUIを避けてスクロールビューが描画されている・縦画面](/images/edge-to-edge-on-compose/01-a_portrait-before.gif)
-![システムUIを避けてスクロールビューが描画されている・横画面](/images/edge-to-edge-on-compose/02-a_landscape-before.gif)
+![システムUIを避けてスクロールビューが描画されている・縦画面](/images/edge-to-edge-on-compose/goal_01-a_portrait-before.gif)
+![システムUIを避けてスクロールビューが描画されている・横画面](/images/edge-to-edge-on-compose/goal_02-a_landscape-before.gif)
 
 ### After のコード
 
