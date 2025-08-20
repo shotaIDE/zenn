@@ -3,6 +3,7 @@ title: "Jetpack Composeでエッジツーエッジの没入感があるスクロ
 emoji: "🌟"
 type: "idea" # tech: 技術記事 / idea: アイデア
 topics: ["android", "jetpackcompose"]
+publication_name: "sun_asterisk"
 published: false
 ---
 
