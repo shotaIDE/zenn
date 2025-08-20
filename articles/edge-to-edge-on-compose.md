@@ -2,7 +2,7 @@
 title: "Jetpack Composeでエッジツーエッジの没入感があるスクロールUIを実現する"
 emoji: "🌟"
 type: "idea" # tech: 技術記事 / idea: アイデア
-topics: ["android", "compose"]
+topics: ["android", "jetpackcompose"]
 published: false
 ---
 
