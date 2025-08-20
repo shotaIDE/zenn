@@ -2,13 +2,18 @@
 title: "Jetpack Composeでエッジツーエッジの没入感があるスクロールUIを実現する"
 emoji: "🌟"
 type: "idea" # tech: 技術記事 / idea: アイデア
-topics: ["android", "compose"]
+topics: ["android", "jetpackcompose"]
 published: false
 ---
 
-<!-- cspell:ignore jetpack -->
+<!-- cspell:ignore jetpack, jetpackcompose -->
 
 Jetpack Compose を利用して、システム UI の領域を超えてエッジツーエッジでスクロール UI を描画し、没入感を演出する方法について書きます。
+
+| 向き | これを(Before)                                                                                                                | こうしたい(After)                                                                                                            |
+| ---- | ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| 縦   | ![システムUIを避けてスクロールビューが描画されている・縦画面](/images/edge-to-edge-on-compose/goal_01-a_portrait-before.gif)  | ![システムUIの背景にスクロールビューが描画されている・縦画面](/images/edge-to-edge-on-compose/goal_01-b_portrait-after.gif)  |
+| 横   | ![システムUIを避けてスクロールビューが描画されている・横画面](/images/edge-to-edge-on-compose/goal_02-a_landscape-before.gif) | ![システムUIの背景にスクロールビューが描画されている・横画面](/images/edge-to-edge-on-compose/goal_02-b_landscape-after.gif) |
 
 公式ドキュメントなどでドンピシャなサンプルコードや説明がなく少し手間取ったので、メモしておきます。
 
@@ -22,30 +27,23 @@ Jetpack Compose を利用して、システム UI の領域を超えてエッジ
 
 上記を行うことで、端末の画面いっぱいまでコンテンツが描画されつつ、視認性や操作感を損なわない UI が実現できます。
 
-## やりたいこと
+## やりたいことの補足説明
 
-普通に作ると Before のような状態になってしまうのですが、これを After のようにしたいです。
-
-| 向き | Before                                                                                                                   | After                                                                                                                   |
-| ---- | ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
-| 縦   | ![システムUIを避けてスクロールビューが描画されている・縦画面](/images/edge-to-edge-on-compose/01-a_portrait-before.gif)  | ![システムUIの背景にスクロールビューが描画されている・縦画面](/images/edge-to-edge-on-compose/01-b_portrait-after.gif)  |
-| 横   | ![システムUIを避けてスクロールビューが描画されている・横画面](/images/edge-to-edge-on-compose/02-a_landscape-before.gif) | ![システムUIの背景にスクロールビューが描画されている・横画面](/images/edge-to-edge-on-compose/02-b_landscape-after.gif) |
-
-具体的に説明すると以下のような感じです。
+前提として、やりたいことをもう少し具体的に説明すると、以下のような感じです。
 
 - システム UI（ナビゲーションバー） の下にスクロールビューのコンテンツが描画され、一番下までスクロールした際に最後のアイテムがシステム UI に重ならない
 - 左右にシステム UI や切り欠きがあった場合、描画が重ならない
 
 <!-- textlint-disable ja-technical-writing/sentence-length -->
 
-![システムUIの背景にスクロールビューが描画されている・縦画面](/images/edge-to-edge-on-compose/03-a_portrait-behind-system-ui.png =300x)
-![一番したまでスクロールした際に最後のアイテムがシステムUIに重ならない・縦画面](/images/edge-to-edge-on-compose/03-b_portrait-over-scroll.png =300x)
-![システムUIの背景にスクロールビューが描画されていて、左右にシステムUIや切り欠きがあった場合描画されない・横画面](/images/edge-to-edge-on-compose/04-a_landscape-behind-system-ui.png =x300)
-![一番したまでスクロールした際に最後のアイテムがシステムUIに重ならない・横画面](/images/edge-to-edge-on-compose/04-b_landscape-over-scroll.png =x300)
+![システムUIの背景にスクロールビューが描画されている・縦画面](/images/edge-to-edge-on-compose/goal_03-a_portrait-behind-system-ui.png =300x)
+![一番したまでスクロールした際に最後のアイテムがシステムUIに重ならない・縦画面](/images/edge-to-edge-on-compose/goal_03-b_portrait-over-scroll.png =300x)
+![システムUIの背景にスクロールビューが描画されていて、左右にシステムUIや切り欠きがあった場合描画されない・横画面](/images/edge-to-edge-on-compose/goal_04-a_landscape-behind-system-ui.png =x300)
+![一番したまでスクロールした際に最後のアイテムがシステムUIに重ならない・横画面](/images/edge-to-edge-on-compose/goal_04-b_landscape-over-scroll.png =x300)
 
 <!-- textlint-enable ja-technical-writing/sentence-length -->
 
-## コードの詳細
+## コードを用いた詳細な解説
 
 ### Before のコード
 
@@ -104,114 +102,26 @@ fun MyScaffold() {
 }
 ```
 
-上記を実行すると、以下のような状態となります。
+上記を実行すると、やりたいことの Before の状態となります。
 
 - システム UI（ナビゲーションバー） の領域にスクロールビューのコンテンツが描画されていない
 - 左右にシステム UI や切り欠きがあった場合、描画が重なってしまう
 
-![システムUIを避けてスクロールビューが描画されている・縦画面](/images/edge-to-edge-on-compose/01-a_portrait-before.gif)
-![システムUIを避けてスクロールビューが描画されている・横画面](/images/edge-to-edge-on-compose/02-a_landscape-before.gif)
+### After のコードへの修正
 
-### After のコード
+#### 1. `LazyColumn` の `contentPadding` を利用してシステム UI 分の余白を設定する
 
-これを以下のように修正しました。
-
-```diff kotlin:MainActivity.kt
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        enableEdgeToEdge()
-
-        setContent {
-            MaterialTheme {
-                MyScaffold()
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MyScaffold() {
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            TopAppBar(
-+                modifier = Modifier
-+                    .windowInsetsPadding(
-+                        WindowInsets.safeDrawing.only(WindowInsetsSides.Start)
-+                    )
-+                    .windowInsetsPadding(
-+                        WindowInsets.safeDrawing.only(WindowInsetsSides.End)
-+                    ),
-                title = {
-                    Text(
-                        text = "Edge to edge",
-                    )
-                }
-            )
-        }
-    ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
--                .padding(innerPadding),
-+                .windowInsetsPadding(
-+                    WindowInsets.safeDrawing.only(WindowInsetsSides.Start)
-+                )
-+                .windowInsetsPadding(
-+                    WindowInsets.safeDrawing.only(WindowInsetsSides.End)
-+                ),
--            contentPadding = PaddingValues(16.dp),
-+            contentPadding = PaddingValues(
-+                start = 16.dp + innerPadding.calculateStartPadding(
-+                    LocalLayoutDirection.current
-+                ),
-+                top = 16.dp + innerPadding.calculateTopPadding(),
-+                end = 16.dp + innerPadding.calculateStartPadding(
-+                    LocalLayoutDirection.current
-+                ),
-+                bottom = 16.dp + innerPadding.calculateBottomPadding(),
-+            ),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items((1..14).toList()) { index ->
-                Card(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = "$index",
-                        modifier = Modifier.padding(16.dp),
-                        fontSize = 18.sp,
-                    )
-                }
-            }
-        }
-    }
-}
-```
-
-上記を実行すると以下のような状態となり、元々やりたかったことが達成できました。
-
-![システムUIの背景にスクロールビューが描画されている・縦画面](/images/edge-to-edge-on-compose/01-b_portrait-after.gif)
-![システムUIの背景にスクロールビューが描画されている・横画面](/images/edge-to-edge-on-compose/02-b_landscape-after.gif)
-
-## 解説
-
-### `LazyColumn` の `contentPadding` を利用してシステム UI 分の余白を設定する
-
-前提として、`Scaffold` の内部に渡される `innerPadding.bottom` は、**システム UI（ナビゲーションバー）の高さ分の余白を含みます**。
+前提として、`Scaffold` の内部に渡される `innerPadding` の `bottom` は、**システム UI（ナビゲーションバー）の高さ分の余白を含みます**。
 そのため、この値をスクロールビューの余白にうまく適用してやることで、やりたいことが実現できます。
 
 ![ScaffoldのinnerPaddingのサイズ](/images/edge-to-edge-on-compose/scaffold-inner-padding.gif)
 
-`LazyColumn` の `modifier` で余白を設定した場合、**スクロールコンテンツが描画される領域の外側に余白が適用**されます。
+Before のコードのように `LazyColumn` の `modifier` で余白を設定した場合、**スクロールコンテンツが描画される領域（ビューポート）の外側に余白が適用**されます。
 そのため、スクロールコンテンツの描画領域がシステム UI に重ならないような状態となっていました。
 
 ![modifierで余白指定した場合のスクロールの様子](/images/edge-to-edge-on-compose/scroll-abstract-image_01-modifier.gif)
 
-レイヤー構造としては、`LazyColumn` のビューポートの外側に余白が適用されている状態となります。
+レイヤー構造としては、以下のようなイメージです。
 
 ![modifierで余白指定した場合のレイヤー構造](/images/edge-to-edge-on-compose/layers-abstract-image_01-modifier.gif)
 
@@ -220,7 +130,7 @@ fun MyScaffold() {
 
 ![contentPaddingで余白指定した場合のスクロールの様子](/images/edge-to-edge-on-compose/scroll-abstract-image_02-contentPadding.gif)
 
-レイヤー構造としては、`LazyColumn` のスクロールコンテンツ内部に余白が適用されている状態となります。
+レイヤー構造としては、以下のようなイメージです。
 
 ![contentPaddingで余白指定した場合のレイヤー構造](/images/edge-to-edge-on-compose/layers-abstract-image_02-contentPadding.gif)
 
@@ -248,9 +158,12 @@ fun MyScaffold() {
 +            ),
 ```
 
-### `WindowInsets.safeDrawing` により切り欠きを避けて描画する
+#### 2. `WindowInsets.safeDrawing` により切り欠きを避けて描画する
 
 `WindowInsets.safeDrawing` には、ノッチやパンチホールなどの「切り欠き」領域を避けて描画するための情報が含まれています。
+
+![WindowInsets.safeDrawingのサイズ](/images/edge-to-edge-on-compose/window-insets-safe-drawing.gif)
+
 これを利用し、上下左右のうち必要な要素だけを取り出して、`Modifier.windowInsetsPadding` に渡すことで、切り欠きを避けて描画できます。
 
 ```diff kotlin:MainActivity.kt
@@ -279,6 +192,84 @@ fun MyScaffold() {
 +                    WindowInsets.safeDrawing.only(WindowInsetsSides.End)
 +                ),
             // ...
+```
+
+### 完全なコード
+
+最終的に以下のようなコードになりました。
+
+```kotlin:MainActivity.kt
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        enableEdgeToEdge()
+
+        setContent {
+            MaterialTheme {
+                MyScaffold()
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MyScaffold() {
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            TopAppBar(
+                modifier = Modifier
+                    .windowInsetsPadding(
+                        WindowInsets.safeDrawing.only(WindowInsetsSides.Start)
+                    )
+                    .windowInsetsPadding(
+                        WindowInsets.safeDrawing.only(WindowInsetsSides.End)
+                    ),
+                title = {
+                    Text(
+                        text = "Edge to edge",
+                    )
+                }
+            )
+        }
+    ) { innerPadding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .windowInsetsPadding(
+                    WindowInsets.safeDrawing.only(WindowInsetsSides.Start)
+                )
+                .windowInsetsPadding(
+                    WindowInsets.safeDrawing.only(WindowInsetsSides.End)
+                ),
+            contentPadding = PaddingValues(
+                start = 16.dp + innerPadding.calculateStartPadding(
+                    LocalLayoutDirection.current
+                ),
+                top = 16.dp + innerPadding.calculateTopPadding(),
+                end = 16.dp + innerPadding.calculateStartPadding(
+                    LocalLayoutDirection.current
+                ),
+                bottom = 16.dp + innerPadding.calculateBottomPadding(),
+            ),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items((1..14).toList()) { index ->
+                Card(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = "$index",
+                        modifier = Modifier.padding(16.dp),
+                        fontSize = 18.sp,
+                    )
+                }
+            }
+        }
+    }
+}
 ```
 
 ## 参考
