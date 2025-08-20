@@ -6,7 +6,7 @@ topics: ["android", "jetpackcompose"]
 published: false
 ---
 
-<!-- cspell:ignore jetpack -->
+<!-- cspell:ignore jetpack, jetpackcompose -->
 
 Jetpack Compose を利用して、システム UI の領域を超えてエッジツーエッジでスクロール UI を描画し、没入感を演出する方法について書きます。
 
