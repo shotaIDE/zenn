@@ -4,7 +4,7 @@ emoji: "🌟"
 type: "idea" # tech: 技術記事 / idea: アイデア
 topics: ["android", "jetpackcompose"]
 publication_name: "sun_asterisk"
-published: false
+published: true
 ---
 
 <!-- cspell:ignore jetpack, jetpackcompose -->
@@ -152,7 +152,7 @@ Before のコードのように `LazyColumn` の `modifier` で余白を設定�
 +                    LocalLayoutDirection.current
 +                ),
 +                top = 16.dp + innerPadding.calculateTopPadding(),
-+                end = 16.dp + innerPadding.calculateStartPadding(
++                end = 16.dp + innerPadding.calculateEndPadding(
 +                    LocalLayoutDirection.current
 +                ),
 +                bottom = 16.dp + innerPadding.calculateBottomPadding(),
