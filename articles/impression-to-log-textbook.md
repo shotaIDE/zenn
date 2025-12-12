@@ -6,7 +6,7 @@ topics: ["読んでみて"]
 published: false
 ---
 
-<!-- textlint-disable .ja-technical-writing/ja-no-weak-phrase -->
+<!-- textlint-disable ja-technical-writing/ja-no-weak-phrase -->
 
 Sun Asterisk では、学習用の書籍の購入制度があります。
 定期的に利用しつつ、知識のアップデートを図っています。
