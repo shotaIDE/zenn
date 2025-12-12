@@ -3,6 +3,7 @@ title: "『実務で役立つ ログの教科書』を読んでみて"
 emoji: "🪵"
 type: "idea" # tech: 技術記事 / idea: アイデア
 topics: ["読んでみて"]
+publication_name: "sun_asterisk"
 published: false
 ---
 
